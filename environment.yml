@@ -1,0 +1,34 @@
+name: farm-analog
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  # gridded data
+  - xarray
+  - rioxarray
+  - rasterio
+  - netcdf4
+  - dask
+  - xclim
+  # analysis
+  - numpy
+  - scipy
+  - scikit-learn
+  - pandas
+  - geopandas
+  - pyarrow
+  # Earth Engine
+  - earthengine-api
+  - geemap
+  # app and charts
+  - streamlit
+  - leafmap
+  - plotly
+  # notebooks and utilities
+  - jupyterlab
+  - ipykernel
+  - python-dotenv
+  - requests
+  - pip
+  - pip:
+      - anthropic
