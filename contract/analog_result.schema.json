@@ -1,0 +1,451 @@
+{
+  "$defs": {
+    "Analog": {
+      "additionalProperties": false,
+      "description": "One place whose climate today matches the farm's future climate.",
+      "properties": {
+        "climograph": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Climograph"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "crops": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/CropShare"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Crops"
+        },
+        "fingerprint": {
+          "$ref": "#/$defs/SeasonalFingerprint"
+        },
+        "lat": {
+          "maximum": 90,
+          "minimum": -90,
+          "title": "Lat",
+          "type": "number"
+        },
+        "lon": {
+          "maximum": 180,
+          "minimum": -180,
+          "title": "Lon",
+          "type": "number"
+        },
+        "match_quality": {
+          "enum": [
+            "strong",
+            "good",
+            "weak",
+            "none"
+          ],
+          "title": "Match Quality",
+          "type": "string"
+        },
+        "models_agree": {
+          "minimum": 0,
+          "title": "Models Agree",
+          "type": "integer"
+        },
+        "models_total": {
+          "minimum": 1,
+          "title": "Models Total",
+          "type": "integer"
+        },
+        "place_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Place Name"
+        },
+        "rank": {
+          "minimum": 1,
+          "title": "Rank",
+          "type": "integer"
+        },
+        "sigma": {
+          "minimum": 0,
+          "title": "Sigma",
+          "type": "number"
+        },
+        "soil": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SoilProfile"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "rank",
+        "lon",
+        "lat",
+        "sigma",
+        "match_quality",
+        "models_agree",
+        "models_total",
+        "fingerprint"
+      ],
+      "title": "Analog",
+      "type": "object"
+    },
+    "Climograph": {
+      "additionalProperties": false,
+      "description": "Data for the comparison chart: the farm today, the farm in the future, the analog today.",
+      "properties": {
+        "analog_today": {
+          "$ref": "#/$defs/MonthlyClimate"
+        },
+        "farm_future": {
+          "$ref": "#/$defs/MonthlyClimate"
+        },
+        "farm_today": {
+          "$ref": "#/$defs/MonthlyClimate"
+        }
+      },
+      "required": [
+        "farm_today",
+        "farm_future",
+        "analog_today"
+      ],
+      "title": "Climograph",
+      "type": "object"
+    },
+    "CropShare": {
+      "additionalProperties": false,
+      "properties": {
+        "crop": {
+          "title": "Crop",
+          "type": "string"
+        },
+        "share": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Share",
+          "type": "number"
+        }
+      },
+      "required": [
+        "crop",
+        "share"
+      ],
+      "title": "CropShare",
+      "type": "object"
+    },
+    "MonthlyClimate": {
+      "additionalProperties": false,
+      "description": "Twelve monthly values, January first. Temperatures in \u00b0C, precipitation in mm.",
+      "properties": {
+        "ppt": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 12,
+          "minItems": 12,
+          "title": "Ppt",
+          "type": "array"
+        },
+        "tmax": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 12,
+          "minItems": 12,
+          "title": "Tmax",
+          "type": "array"
+        },
+        "tmin": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 12,
+          "minItems": 12,
+          "title": "Tmin",
+          "type": "array"
+        }
+      },
+      "required": [
+        "tmax",
+        "tmin",
+        "ppt"
+      ],
+      "title": "MonthlyClimate",
+      "type": "object"
+    },
+    "SeasonalFingerprint": {
+      "additionalProperties": false,
+      "description": "The 12 climate values used for matching.\n\nTemperatures are seasonal means of the monthly average daily high (tmax) and low (tmin),\nin \u00b0C. Precipitation is the seasonal total in mm. Seasons: DJF = Dec-Feb, MAM = Mar-May,\nJJA = Jun-Aug, SON = Sep-Nov. (The matching step log-transforms precipitation; the\ncontract keeps plain millimeters so the frontend can show them directly.)",
+      "properties": {
+        "ppt_djf": {
+          "minimum": 0,
+          "title": "Ppt Djf",
+          "type": "number"
+        },
+        "ppt_jja": {
+          "minimum": 0,
+          "title": "Ppt Jja",
+          "type": "number"
+        },
+        "ppt_mam": {
+          "minimum": 0,
+          "title": "Ppt Mam",
+          "type": "number"
+        },
+        "ppt_son": {
+          "minimum": 0,
+          "title": "Ppt Son",
+          "type": "number"
+        },
+        "tmax_djf": {
+          "title": "Tmax Djf",
+          "type": "number"
+        },
+        "tmax_jja": {
+          "title": "Tmax Jja",
+          "type": "number"
+        },
+        "tmax_mam": {
+          "title": "Tmax Mam",
+          "type": "number"
+        },
+        "tmax_son": {
+          "title": "Tmax Son",
+          "type": "number"
+        },
+        "tmin_djf": {
+          "title": "Tmin Djf",
+          "type": "number"
+        },
+        "tmin_jja": {
+          "title": "Tmin Jja",
+          "type": "number"
+        },
+        "tmin_mam": {
+          "title": "Tmin Mam",
+          "type": "number"
+        },
+        "tmin_son": {
+          "title": "Tmin Son",
+          "type": "number"
+        }
+      },
+      "required": [
+        "tmax_djf",
+        "tmax_mam",
+        "tmax_jja",
+        "tmax_son",
+        "tmin_djf",
+        "tmin_mam",
+        "tmin_jja",
+        "tmin_son",
+        "ppt_djf",
+        "ppt_mam",
+        "ppt_jja",
+        "ppt_son"
+      ],
+      "title": "SeasonalFingerprint",
+      "type": "object"
+    },
+    "SoilProfile": {
+      "additionalProperties": false,
+      "description": "Soil summary; any value can be missing where the soil survey has no data.",
+      "properties": {
+        "available_water_capacity_cm": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Available Water Capacity Cm"
+        },
+        "clay_pct": {
+          "anyOf": [
+            {
+              "maximum": 100,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Clay Pct"
+        },
+        "depth_to_restrictive_layer_cm": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Depth To Restrictive Layer Cm"
+        },
+        "organic_matter_pct": {
+          "anyOf": [
+            {
+              "maximum": 100,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Organic Matter Pct"
+        },
+        "sand_pct": {
+          "anyOf": [
+            {
+              "maximum": 100,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sand Pct"
+        }
+      },
+      "title": "SoilProfile",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Everything the app shows for one field.",
+  "properties": {
+    "analogs": {
+      "items": {
+        "$ref": "#/$defs/Analog"
+      },
+      "title": "Analogs",
+      "type": "array"
+    },
+    "baseline_years": {
+      "maxItems": 2,
+      "minItems": 2,
+      "prefixItems": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "integer"
+        }
+      ],
+      "title": "Baseline Years",
+      "type": "array"
+    },
+    "farm_future": {
+      "$ref": "#/$defs/SeasonalFingerprint"
+    },
+    "farm_soil": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SoilProfile"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "farm_today": {
+      "$ref": "#/$defs/SeasonalFingerprint"
+    },
+    "field_id": {
+      "title": "Field Id",
+      "type": "string"
+    },
+    "future_years": {
+      "maxItems": 2,
+      "minItems": 2,
+      "prefixItems": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "integer"
+        }
+      ],
+      "title": "Future Years",
+      "type": "array"
+    },
+    "models": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Models",
+      "type": "array"
+    },
+    "novel_climate": {
+      "title": "Novel Climate",
+      "type": "boolean"
+    },
+    "scenario": {
+      "enum": [
+        "ssp245",
+        "ssp585"
+      ],
+      "title": "Scenario",
+      "type": "string"
+    },
+    "source": {
+      "enum": [
+        "computed",
+        "fixture"
+      ],
+      "title": "Source",
+      "type": "string"
+    }
+  },
+  "required": [
+    "source",
+    "field_id",
+    "scenario",
+    "baseline_years",
+    "future_years",
+    "models",
+    "farm_today",
+    "farm_future",
+    "novel_climate",
+    "analogs"
+  ],
+  "title": "AnalogResult",
+  "type": "object"
+}
