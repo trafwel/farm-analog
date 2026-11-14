@@ -28,7 +28,8 @@ flowchart TD
     FIX["Fake results fixture<br/><b>built [M0]</b>"]
     API["api.py + pipeline.py: FastAPI GET /health, POST /analogs<br/>field checks, live or offline-demo mode<br/><b>built [M5]</b>"]
     UI["frontend/: React + Leaflet map, list, fingerprint table<br/><b>built [M6]</b> · <i>comparison panel planned [M8]</i>"]
-    BILL["Bill (Gemini): parse + summarize<br/><i>planned [M9]</i>"]
+    BILL["assistant/: Bill (Gemini) parse + summarize, grounding check, template fallback<br/>POST /bill/parse, /bill/summary<br/><b>built [M9]</b> · <i>UI not wired yet</i>"]
+    GEMINI[("Gemini API: gemini-3.5-flash-lite<br/>server-side key, optional")]
     FARMER(["Farmer"])
 
     PRISM --> FT
@@ -64,7 +65,9 @@ flowchart TD
     EVID --> API
     API --> UI
     API --> BILL
-    BILL --> UI
+    BILL -. planned: UI shows the summary .-> UI
+    BILL <--> GEMINI
+    CONTRACT -. AnalogResult in .-> BILL
     FARMER <--> UI
 ```
 
@@ -73,6 +76,8 @@ flowchart TD
 Dotted arrows are build-time relationships (shared types and fake data), not runtime data flow.
 
 ## Changelog
+
+- 2026-11-14 (M9): Added Bill (`assistant/`): a text → `FarmProfile` parser using Gemini structured output, and a summarizer that sends derived numbers only (no coordinates), checks every number in the reply against its input, and falls back to a template. Plus a prompt-injection guard, and `POST /bill/parse` and `POST /bill/summary` in `api.py` (Gemini set up once at startup, optional; summaries cached). Bill's models stay out of `contract/`. The frontend isn't changed.
 
 - 2026-11-14 (M7): Added `evidence.py` (crop shares from CDL, OpenLandMap soil, monthly climographs, county names) attached to the top 3 analogs in live mode; `FarmToday` keeps its monthly table and `FarmFuture` its per-model changes; the live pipeline returns the match even if evidence fails.
 

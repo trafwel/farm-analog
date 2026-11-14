@@ -282,3 +282,53 @@ Map polish and comparison panel (M8); whether to retire the Streamlit preview (t
 
 ### Moved to OPEN_ISSUES.md
 Live evidence test, organic-carbon unit check, soil source decision, showing evidence in the UI (M8).
+
+---
+
+## M9 — Bill (Gemini) (2026-11-14)
+
+**Built:** `src/farm_analog/assistant/`:
+- `llm.py`: the `LLM` protocol and `GeminiLLM`, the only file that imports the `google-genai` SDK.
+- `guard.py`: the prompt-injection guard.
+- `parser.py`: farmer text → `FarmProfile` via Gemini structured output, validated with Pydantic.
+- `summarizer.py`: a summary input of derived values only, the grounding check, a template fallback, and notices written by code.
+
+`POST /bill/parse` and `POST /bill/summary` in `api.py`. Settings in `config.py` (`GEMINI_MODEL = "gemini-3.5-flash-lite"`, minimal thinking, 20 s timeout, text and summary limits). `google-genai` is added to `environment.yml` and installed in the env, and `GEMINI_API_KEY=` is in `.env.example`. 49 new tests in `tests/test_assistant_*.py`, all using fake clients (`tests/assistant_fakes.py`); 146 tests in all. The frontend is unchanged (team instruction: M8 skipped, UI left as it was).
+
+**Rebased onto M7.** The summarizer now reads the 8-value fingerprint: each quarter's average temperature (`tmean_jfm` ...) and precipitation (`ppt_jfm` ...), today, future and change. It also passes the result's own `notes` to Gemini as caveats, and uses `place_name` and `crops` when M7 supplies them.
+
+### Efficiency
+- One Gemini call per farmer message and one per new result. The summary input is about 2.2 KB (roughly 600 tokens): derived values for the top 5 analogs, not the full result.
+- Summaries are cached in memory by a SHA-256 of the result JSON (64 entries, the same limit as `/analogs`). A template fallback caused by a Gemini failure is not cached, so the next request tries again.
+- Thinking is set to minimal: Bill restates, so reasoning tokens would be wasted (and against the rule).
+
+### Integration (what was run and checked)
+- `ruff check .` passes. `pytest` gives 146 passed, with no network: the fakes replace both the `LLM` protocol and the `genai.Client`, and `/analogs` runs in offline-demo mode.
+- Each of the 5 M9 commits was checked on its own: the settings and package commits with the 97 M1–M7 tests, the test commit with 135, the API commit with 146.
+- End to end through the API: `POST /analogs` (offline Palouse demo) → `POST /bill/summary` gives a template summary with the quarterly temperatures, the precipitation change and the 5 closest cells, and no demo notice (the result is `computed`). On the fixtures, `fake-colfax` gets the demo notice, and `fake-lind` gets the demo and no-match notices.
+- Contract unchanged: `contract/*.schema.json` doesn't mention `ParseResult` or `BillSummary` (a test checks this), so the frontend's generated types and CI's types-in-sync check are untouched. Bill's models appear only in the API's OpenAPI schema.
+- `cdl.py` (the team's CDL importer on `main`) isn't on the M1–M7 stack, which was built on an older M0. No M9 commit touches it. A test merge of `m9-bill` with `m0-foundation` keeps it.
+- **Not checked:** a live Gemini call. There's no `GEMINI_API_KEY` in `.env`, so the model id and the `MINIMAL` thinking level are unverified. If either is rejected, every summary falls back to the template. That's safe, but Bill's prose never appears.
+
+### Security and privacy
+- **Location privacy:** the summary input carries no polygon and no coordinates (farm or analog). A test checks for `lon`/`lat`/`coordinates` keys and for the analogs' coordinate values. The endpoints never log the request; a test checks the logs for farmer text and analog coordinates.
+- **Secrets:** `GEMINI_API_KEY` is read on the server only, once at startup. Nothing reaches the frontend bundle.
+- **Prompt injection, farmer text:** the text is cleaned (Unicode-normalized; control characters and `farmer_text` look-alike tags removed), capped at 2,000 characters (and at 10,000 by the endpoint), and wrapped in a block with a random id. The reply must match a strict schema. Farmer text never reaches the summarizer.
+- **Prompt injection, result text:** `POST /bill/summary` accepts an `AnalogResult` from the browser, so place names, crop names and notes are untrusted too. They're cleaned and capped (80, 40 and 300 characters), the prompt says they're data, and the grounding check still applies. The worst case: a client changes the wording of its own summary.
+- **No leaks through errors:** SDK exceptions are reduced to the error type and status code, and the chained exception is dropped. Parser errors never echo the reply.
+- **Data use:** on Gemini's free tier, Google may use prompts to improve its products. Logged as a team decision.
+
+### Other flaws
+- **The grounding check checks numbers, not claims.** For example, "a strong match" for a weak one passes. Whole numbers within 0.5 of any input value pass, spelled-out numbers aren't checked, and the advice filter is a word list. The demo and no-match warnings are written by code, so they can't be dropped. Logged.
+- **No rate limit on Bill's endpoints,** like `/analogs` (M5). Each uncached summary or parse is a paid call. Logged with M5's item.
+- `/bill/parse` without a key returns `ok: false` with a clear message. It doesn't fall back to any rule-based parsing.
+
+### Fixed in this milestone
+- The parser prompt first asked Gemini to convert hectares to acres, which is arithmetic. Now any size that isn't in acres goes to `unparsed_notes` as written.
+- The number pattern first skipped digits attached to letters ("SSP2", "37bu"). Now every digit run is checked.
+- Template wording: "(none match)" became "(no real match)", and "1 climate model projects" is now singular.
+- [M1 → M9] Old fingerprint names: switched to `tmean_*` / `ppt_*` during the rebase.
+- [M9 → M5] Bill wasn't reachable from the app: the two endpoints, startup setup and summary cache are now built.
+
+### Moved to OPEN_ISSUES.md
+The live Gemini check, wiring the UI to Bill (and rendering his text as plain text), Bill's models in the contract (deferred), rate limiting, how strict grounding should be, and free-tier data use.
