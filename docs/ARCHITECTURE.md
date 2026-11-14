@@ -9,6 +9,10 @@ flowchart TD
     PRISM["PRISM monthly (Earth Engine)<br/><i>planned [M1, M3]</i>"]
     CMIP["NEX-GDDP-CMIP6 (Earth Engine)<br/><i>planned [M2]</i>"]
     CDL["Cropland Data Layer + SSURGO<br/><i>planned [M3, M7]</i>"]
+    SMAP["SMAP soil moisture importer (data.py)<br/><b>built (team)</b>"]
+    ECO["ECOSTRESS surface temperature importer<br/><b>built (team)</b>"]
+    CLIM["climate.py: one-model 2050 regional summary<br/><b>built (team), first step toward M2</b>"]
+    PREVIEW["Streamlit local preview (app/app.py)<br/><b>built (team), until M6</b>"]
 
     FT["Farm today: fingerprint + year-to-year<br/><i>planned [M1]</i>"]
     F50["Farm 2050: delta method<br/><i>planned [M2]</i>"]
@@ -36,6 +40,11 @@ flowchart TD
     MATCH --> EVID
     CDL --> EVID
     MATCH --> API
+    CMIP --> CLIM
+    CLIM --> PREVIEW
+    SMAP --> PREVIEW
+    SMAP -. hazards / field view .-> EVID
+    ECO -. hazards / field view .-> EVID
     CONTRACT -. defines shape .-> API
     CONTRACT -. types .-> UI
     FIX -. fake data until M5 .-> UI
@@ -53,5 +62,6 @@ Dotted arrows are build-time relationships (shared types and fake data), not run
 
 ## Changelog
 
+- 2026-11-14 (M0 rebase): Added the team's SMAP and ECOSTRESS importers, the one-model 2050 summary (`climate.py`) and the Streamlit preview. Importers feed the evidence step later (M7).
 - 2026-11-14 (M0): Added the JSON contract (Pydantic models exported to JSON Schema), the fake-results fixture, settings, test and lint setup, and backend CI.
 - 2026-11-14: Initial graph. Built: environment setup and `sigma_dissimilarity()`. Everything else planned (M1–M10).

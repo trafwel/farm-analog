@@ -52,3 +52,13 @@ Template:
 ### Moved to OPEN_ISSUES.md
 CI speed, CI not yet run, TypeScript generation untested, region and area checks, self-intersecting polygons, the novel-climate definition, the Streamlit placeholder and dependencies, the Anthropic SDK vs. Gemini, the outdated plan documents, and 3-D coordinates.
 
+
+### Addendum: rebase onto the team's new main (2026-11-14)
+
+`main` gained three teammate commits (SMAP and ECOSTRESS importers, a first 2050 climate download, Streamlit preview updates). M0 was rebased onto it with no conflicts; 24 tests still pass.
+
+**Lint fix for the new files.** M0's CI lint check failed on the new files (30 long lines, 1 semicolon statement, 3 `timezone.utc`, 1 import order). Fixed by `ruff check --fix`, `ruff format` on those four files, and splitting long text strings into adjacent pieces (Python joins them, so the text is unchanged).
+
+**Proof it's format-only:** compared each file's syntax tree with the version on `main`. `app/app.py` is identical. `climate.py` and `data.py` differ only by `timezone.utc` → `datetime.UTC`, which are the same object in Python 3.11 (checked). `ecostress.py` additionally differs by the order of two `import` lines inside a function. The Streamlit preview runs with no exceptions and shows all four sections (checked with Streamlit's `AppTest`).
+
+**New open items** (in OPEN_ISSUES.md): `climate.py` vs. what M2 needs, the time-period mismatch, no tests for the importers, the Palouse box defined twice, and `data.py` naming.
