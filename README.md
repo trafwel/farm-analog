@@ -34,3 +34,13 @@ not measurements of individual fields or projections for 2050.
 
 Source: [NASA SMAP L4 v8 on Earth Engine](https://developers.google.com/earth-engine/datasets/catalog/NASA_SMAP_SPL4SMGP_008).
 DOI: [10.5067/T5RUATAQREF8](https://doi.org/10.5067/T5RUATAQREF8).
+
+## First 2050 climate comparison
+
+Run `PYTHONPATH=src python -m farm_analog.climate` after Earth Engine setup.
+This downloads monthly Palouse summaries for ACCESS-CM2: a 1995–2014 historical
+model baseline and a 2041–2060 projection under SSP2-4.5. Small CSV/JSON outputs
+are saved in `data/samples/`. This first prototype uses one model, not an ensemble.
+The baseline is modeled climate, not observed weather. Temperature is converted
+from kelvin to Celsius; precipitation flux is integrated into mean monthly totals
+in millimetres. Both periods must contain complete, unique daily timestamps.

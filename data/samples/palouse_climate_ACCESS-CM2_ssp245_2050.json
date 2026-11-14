@@ -1,0 +1,38 @@
+{
+  "collection": "NASA/GDDP-CMIP6",
+  "source": "https://developers.google.com/earth-engine/datasets/catalog/NASA_GDDP-CMIP6",
+  "model": "ACCESS-CM2",
+  "scenario": "SSP2-4.5",
+  "bounds_west_south_east_north": [
+    -118.2,
+    46.5,
+    -117.0,
+    47.2
+  ],
+  "baseline": "1995\u20132014 historical model simulation; not observations",
+  "future": "2041\u20132060 (20-year climate centered around 2050)",
+  "temperature": "Monthly mean daily near-surface temperature in \u00b0C; tas minus 273.15",
+  "precipitation": "Mean monthly precipitation total in mm; sum(pr) \u00d7 86400 / 20 years",
+  "spatial_aggregation": "Regional mean at source projection and nominal scale",
+  "grid_degrees": 0.25,
+  "data_checks": [
+    {
+      "period": "baseline",
+      "count": 7305,
+      "unique_dates": 7305,
+      "versions": {
+        "1.1": 7305
+      }
+    },
+    {
+      "period": "future",
+      "count": 7305,
+      "unique_dates": 7305,
+      "versions": {
+        "1.1": 7305
+      }
+    }
+  ],
+  "limitations": "One model and one scenario for a first prototype. Not an ensemble or a daily weather forecast; no analogs calculated yet. Source may include interpolated calendar days.",
+  "downloaded_utc": "2026-11-14T21:44:42.509633+00:00"
+}
