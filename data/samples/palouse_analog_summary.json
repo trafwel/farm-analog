@@ -1,0 +1,53 @@
+{
+  "target_future": {
+    "temperature_0": 4.210139972137137,
+    "precipitation_0": 165.19019826183663,
+    "temperature_1": 14.479400346506841,
+    "precipitation_1": 125.08104201973674,
+    "temperature_2": 23.442332885129535,
+    "precipitation_2": 28.5786142460901,
+    "temperature_3": 6.698399448041978,
+    "precipitation_3": 173.79300348332936
+  },
+  "target_observed": {
+    "temperature_0": 2.5645986371583027,
+    "precipitation_0": 148.34523035503204,
+    "temperature_1": 12.334536205504566,
+    "precipitation_1": 108.36384578462798,
+    "temperature_2": 19.398120441793374,
+    "precipitation_2": 36.25801472411868,
+    "temperature_3": 4.435279063013228,
+    "precipitation_3": 156.0028709584358
+  },
+  "quarters": [
+    "Jan\u2013Mar",
+    "Apr\u2013Jun",
+    "Jul\u2013Sep",
+    "Oct\u2013Dec"
+  ],
+  "model": "ACCESS-CM2",
+  "scenario": "SSP2-4.5",
+  "future_years": [
+    2041,
+    2060
+  ],
+  "reference_years": [
+    1995,
+    2014
+  ],
+  "candidate_count": 784,
+  "search_bounds": [
+    -121,
+    44,
+    -116,
+    49
+  ],
+  "method": "Quarterly temperature additive delta and precipitation multiplicative ratio applied to PRISM. PCA-whitened Mahalanobis distance using 20 annual regional PRISM vectors, converted to one-dimensional sigma. Standardized Euclidean baseline also provided.",
+  "spatial_support": "Palouse regional mean vs sampled native PRISM cells on a sparse 20-km search grid. Not field-level matching.",
+  "limitations": "Exploratory single-model ranking, not validated advice. Reference is 1995\u20132014, not current live climate. No soil, agricultural-land, irrigation, or crop filter. Quarter means omit extremes. Model tas and PRISM tmean definitions differ. No ensemble confidence or backtest yet.",
+  "sources": [
+    "https://developers.google.com/earth-engine/datasets/catalog/OREGONSTATE_PRISM_ANm",
+    "https://developers.google.com/earth-engine/datasets/catalog/NASA_GDDP-CMIP6"
+  ],
+  "created_utc": "2026-11-14T22:06:57.531891+00:00"
+}
