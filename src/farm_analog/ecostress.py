@@ -10,11 +10,12 @@ Needs a NASA Earthdata login in ~/.netrc (or %USERPROFILE%\\_netrc on Windows):
 Run from the repo root:
     PYTHONPATH=src python -m farm_analog.ecostress
 """
+
 import argparse
 import csv
 import json
 import time
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 ECOSTRESS_SHORT_NAME = "ECO_L2T_LSTE"
@@ -23,8 +24,18 @@ ECOSTRESS_DOI = "10.5067/ECOSTRESS/ECO_L2T_LSTE.002"
 CMR_GRANULES = "https://cmr.earthdata.nasa.gov/search/granules.json"
 # Same approximate Washington Palouse demo extent as the SMAP importer.
 PALOUSE_BOUNDS = (-118.2, 46.5, -117.0, 47.2)
-FIELDS = ["timestamp_utc", "granule_id", "tile", "lst_mean_k", "lst_std_k",
-          "lst_min_k", "lst_max_k", "lst_valid_count", "cloud_count", "pixel_count"]
+FIELDS = [
+    "timestamp_utc",
+    "granule_id",
+    "tile",
+    "lst_mean_k",
+    "lst_std_k",
+    "lst_min_k",
+    "lst_max_k",
+    "lst_valid_count",
+    "cloud_count",
+    "pixel_count",
+]
 
 
 def validate_request(start, end, bounds):
@@ -42,7 +53,8 @@ def validate_request(start, end, bounds):
 def search_granules(session, start, end, bounds):
     """Return [(granule_id, {suffix: url})] for tiles intersecting the region."""
     params = {
-        "short_name": ECOSTRESS_SHORT_NAME, "version": ECOSTRESS_VERSION,
+        "short_name": ECOSTRESS_SHORT_NAME,
+        "version": ECOSTRESS_VERSION,
         "bounding_box": ",".join(str(v) for v in bounds),
         "temporal": f"{start}T00:00:00Z,{end}T00:00:00Z",
         "page_size": 2000,
@@ -70,9 +82,11 @@ def download(session, url, cache_dir):
             response = session.get(url, timeout=300)
             if response.status_code < 500 or attempt == 3:
                 break
-            time.sleep(2 ** attempt * 5)
+            time.sleep(2**attempt * 5)
         if response.status_code in (401, 403):
-            raise RuntimeError("Earthdata login rejected; check your netrc and that LP DAAC is authorized.")
+            raise RuntimeError(
+                "Earthdata login rejected; check your netrc and that LP DAAC is authorized."
+            )
         response.raise_for_status()
         tmp = path.with_suffix(".part")
         tmp.write_bytes(response.content)
@@ -91,7 +105,9 @@ def summarize_tile(lst_path, cloud_path, bounds):
         box = transform_bounds("EPSG:4326", lst_src.crs, *bounds, densify_pts=21)
         window = from_bounds(*box, transform=lst_src.transform).round_offsets().round_lengths()
         try:
-            window = window.intersection(rasterio.windows.Window(0, 0, lst_src.width, lst_src.height))
+            window = window.intersection(
+                rasterio.windows.Window(0, 0, lst_src.width, lst_src.height)
+            )
         except rasterio.errors.WindowError:
             return None  # CMR footprint touches the box, but no tile pixels fall inside it.
         lst = lst_src.read(1, window=window).astype("float64")
@@ -101,16 +117,28 @@ def summarize_tile(lst_path, cloud_path, bounds):
     # defensively. Pixels that are NaN but not cloudy are outside the swath or other fill.
     cloudy = cloud == 1
     clear = lst[np.isfinite(lst) & ~cloudy]
-    stats = {"lst_valid_count": int(clear.size), "cloud_count": int(cloudy.sum()),
-             "pixel_count": int(lst.size)}
+    stats = {
+        "lst_valid_count": int(clear.size),
+        "cloud_count": int(cloudy.sum()),
+        "pixel_count": int(lst.size),
+    }
     if clear.size:
-        stats.update(lst_mean_k=float(clear.mean()), lst_std_k=float(clear.std()),
-                     lst_min_k=float(clear.min()), lst_max_k=float(clear.max()))
+        stats.update(
+            lst_mean_k=float(clear.mean()),
+            lst_std_k=float(clear.std()),
+            lst_min_k=float(clear.min()),
+            lst_max_k=float(clear.max()),
+        )
     return stats
 
 
-def download_ecostress(start="2025-07-01", end="2025-07-08", bounds=PALOUSE_BOUNDS,
-                       output_dir="data/ecostress", cache_dir=None):
+def download_ecostress(
+    start="2025-07-01",
+    end="2025-07-08",
+    bounds=PALOUSE_BOUNDS,
+    output_dir="data/ecostress",
+    cache_dir=None,
+):
     """Save per-tile clear-sky LST summaries (Kelvin) and provenance.
 
     End date is exclusive. Cloudy or missing pixels are excluded; tiles with no
@@ -118,10 +146,12 @@ def download_ecostress(start="2025-07-01", end="2025-07-08", bounds=PALOUSE_BOUN
     """
     validate_request(start, end, bounds)
     try:
-        import requests
         import rasterio  # noqa: F401
+        import requests
     except ImportError as exc:
-        raise RuntimeError("Install requests, numpy, and rasterio in your Python environment.") from exc
+        raise RuntimeError(
+            "Install requests, numpy, and rasterio in your Python environment."
+        ) from exc
     cache_dir = Path(cache_dir or Path(output_dir) / "raw")
     cache_dir.mkdir(parents=True, exist_ok=True)
     session = requests.Session()
@@ -133,12 +163,23 @@ def download_ecostress(start="2025-07-01", end="2025-07-08", bounds=PALOUSE_BOUN
         # e.g. ECOv002_L2T_LSTE_39657_008_11TMN_20250704T115216_0713_01
         parts = granule_id.split("_")
         tile, stamp = parts[5], parts[6]
-        stats = summarize_tile(download(session, links["LST"], cache_dir),
-                               download(session, links["cloud"], cache_dir), bounds)
+        stats = summarize_tile(
+            download(session, links["LST"], cache_dir),
+            download(session, links["cloud"], cache_dir),
+            bounds,
+        )
         if stats is None:
             continue
-        rows.append({"timestamp_utc": datetime.strptime(stamp, "%Y%m%dT%H%M%S").strftime("%Y-%m-%dT%H:%M:%SZ"),
-                     "granule_id": granule_id, "tile": tile, **stats})
+        rows.append(
+            {
+                "timestamp_utc": datetime.strptime(stamp, "%Y%m%dT%H%M%S").strftime(
+                    "%Y-%m-%dT%H:%M:%SZ"
+                ),
+                "granule_id": granule_id,
+                "tile": tile,
+                **stats,
+            }
+        )
     rows.sort(key=lambda r: (r["timestamp_utc"], r["tile"]))
     if not any(r["lst_valid_count"] for r in rows):
         raise RuntimeError("No clear-sky LST pixels in this region; no files written.")
@@ -150,24 +191,44 @@ def download_ecostress(start="2025-07-01", end="2025-07-08", bounds=PALOUSE_BOUN
         writer.writeheader()
         writer.writerows(rows)
     metadata = {
-        "collection": f"{ECOSTRESS_SHORT_NAME}.{ECOSTRESS_VERSION}", "doi": ECOSTRESS_DOI,
+        "collection": f"{ECOSTRESS_SHORT_NAME}.{ECOSTRESS_VERSION}",
+        "doi": ECOSTRESS_DOI,
         "source": "https://lpdaac.usgs.gov/products/eco_l2t_lstev002/",
         "bounds_west_south_east_north": list(bounds),
-        "region_note": "Approximate demo extent; custom bounds may override it. Pixels are clipped to the box's UTM envelope.",
-        "start_inclusive": start, "end_exclusive": end, "rows": len(rows),
+        "region_note": (
+            "Approximate demo extent; custom bounds may override it. Pixels are clipped to the "
+            "box's UTM envelope."
+        ),
+        "start_inclusive": start,
+        "end_exclusive": end,
+        "rows": len(rows),
         "overpasses": len({r["timestamp_utc"] for r in rows}),
-        "units": "K", "native_resolution_m": 70, "tile_crs": "UTM (MGRS tiles 11T*)",
-        "aggregation": "One row per MGRS tile per overpass: clear-sky pixel stats; counts are pixels in the clipped window. Adjacent tiles overlap, so do not sum counts across tiles.",
-        "cloud_masking": "Pixels with cloud mask == 1 or missing LST are excluded. cloud_count is cloud-flagged pixels in the window; pixel_count minus valid and cloud counts is mostly outside-swath fill.",
-        "limitations": "ISS orbit gives irregular overpass times (often night); timestamps are UTC. LST is land surface skin temperature, not air temperature.",
-        "downloaded_utc": datetime.now(timezone.utc).isoformat(),
+        "units": "K",
+        "native_resolution_m": 70,
+        "tile_crs": "UTM (MGRS tiles 11T*)",
+        "aggregation": (
+            "One row per MGRS tile per overpass: clear-sky pixel stats; counts are pixels in the "
+            "clipped window. Adjacent tiles overlap, so do not sum counts across tiles."
+        ),
+        "cloud_masking": (
+            "Pixels with cloud mask == 1 or missing LST are excluded. cloud_count is "
+            "cloud-flagged pixels in the window; pixel_count minus valid and cloud counts is "
+            "mostly outside-swath fill."
+        ),
+        "limitations": (
+            "ISS orbit gives irregular overpass times (often night); timestamps are UTC. LST is "
+            "land surface skin temperature, not air temperature."
+        ),
+        "downloaded_utc": datetime.now(UTC).isoformat(),
     }
     csv_path.with_suffix(".json").write_text(json.dumps(metadata, indent=2) + "\n")
     return csv_path
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument("--start", default="2025-07-01")
     parser.add_argument("--end", default="2025-07-08")
     parser.add_argument("--bounds", nargs=4, type=float, default=PALOUSE_BOUNDS)
@@ -175,7 +236,9 @@ def main():
     parser.add_argument("--cache-dir", help="Where raw GeoTIFFs go (default: OUTPUT_DIR/raw).")
     args = parser.parse_args()
     try:
-        path = download_ecostress(args.start, args.end, args.bounds, args.output_dir, args.cache_dir)
+        path = download_ecostress(
+            args.start, args.end, args.bounds, args.output_dir, args.cache_dir
+        )
     except Exception as exc:
         parser.exit(1, f"ECOSTRESS import failed: {exc}\n")
     print(f"Saved ECOSTRESS data: {path}")

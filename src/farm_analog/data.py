@@ -3,11 +3,12 @@
 Run from the repo root:
     PYTHONPATH=src python -m farm_analog.data
 """
+
 import argparse
 import csv
 import json
 import os
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 SMAP_COLLECTION = "NASA/SMAP/SPL4SMGP/008"
@@ -27,8 +28,13 @@ def validate_request(start, end, bounds):
         raise ValueError("Bounds must be west south east north in longitude/latitude.")
 
 
-def download_smap(start="2025-07-01", end="2025-07-08",
-                  bounds=PALOUSE_BOUNDS, output_dir="data/smap", project=None):
+def download_smap(
+    start="2025-07-01",
+    end="2025-07-08",
+    bounds=PALOUSE_BOUNDS,
+    output_dir="data/smap",
+    project=None,
+):
     """Save native-timestep regional means, valid-pixel counts, and provenance.
 
     Moisture is volumetric (m³/m³), not percent. L4 combines satellite
@@ -38,16 +44,21 @@ def download_smap(start="2025-07-01", end="2025-07-08",
     validate_request(start, end, bounds)
     try:
         from dotenv import load_dotenv
+
         load_dotenv()
     except ImportError:
         pass
     project = project or os.environ.get("EE_PROJECT")
     if not project:
-        raise RuntimeError("Set EE_PROJECT in .env or pass --project, and run earthengine authenticate.")
+        raise RuntimeError(
+            "Set EE_PROJECT in .env or pass --project, and run earthengine authenticate."
+        )
     try:
         import ee
     except ImportError as exc:
-        raise RuntimeError("Install earthengine-api and python-dotenv in your Python environment.") from exc
+        raise RuntimeError(
+            "Install earthengine-api and python-dotenv in your Python environment."
+        ) from exc
     ee.Initialize(project=project)
     region = ee.Geometry.Rectangle(list(bounds), geodesic=False)
     collection = ee.ImageCollection(SMAP_COLLECTION).filterDate(start, end).select(SMAP_BANDS)
@@ -61,13 +72,18 @@ def download_smap(start="2025-07-01", end="2025-07-08",
     def summarize(item):
         image = ee.Image(item)
         values = image.reduceRegion(
-            reducer=reducer, geometry=region, crs=projection,
-            scale=projection.nominalScale(), maxPixels=10_000_000,
+            reducer=reducer,
+            geometry=region,
+            crs=projection,
+            scale=projection.nominalScale(),
+            maxPixels=10_000_000,
         )
-        return ee.Feature(None, values).set({
-            "timestamp_utc": image.date().format("YYYY-MM-dd'T'HH:mm:ss'Z'"),
-            "image_id": image.get("system:index"),
-        })
+        return ee.Feature(None, values).set(
+            {
+                "timestamp_utc": image.date().format("YYYY-MM-dd'T'HH:mm:ss'Z'"),
+                "image_id": image.get("system:index"),
+            }
+        )
 
     # Map over a list: ImageCollection.map must return images, not features.
     features = ee.FeatureCollection(collection.toList(count).map(summarize)).getInfo()["features"]
@@ -78,23 +94,40 @@ def download_smap(start="2025-07-01", end="2025-07-08",
     directory.mkdir(parents=True, exist_ok=True)
     stem = f"palouse_smap_{start}_{end}"
     csv_path = directory / f"{stem}.csv"
-    fields = ["timestamp_utc", "image_id", "sm_surface_mean", "sm_surface_count",
-              "sm_rootzone_mean", "sm_rootzone_count"]
+    fields = [
+        "timestamp_utc",
+        "image_id",
+        "sm_surface_mean",
+        "sm_surface_count",
+        "sm_rootzone_mean",
+        "sm_rootzone_count",
+    ]
     with csv_path.open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)
     metadata = {
-        "collection": SMAP_COLLECTION, "doi": "10.5067/T5RUATAQREF8",
+        "collection": SMAP_COLLECTION,
+        "doi": "10.5067/T5RUATAQREF8",
         "source": "https://developers.google.com/earth-engine/datasets/catalog/NASA_SMAP_SPL4SMGP_008",
         "bounds_west_south_east_north": list(bounds),
         "region_note": "Approximate demo extent; custom bounds may override it.",
-        "start_inclusive": start, "end_exclusive": end, "rows": len(rows),
-        "units": "m3/m3", "surface_depth_cm": [0, 5], "rootzone_depth_cm": [0, 100],
-        "aggregation": "Regional pixel mean at each native 3-hour timestep; counts are valid pixels.",
-        "native_grid_km": 9, "earth_engine_projection": projection.getInfo(),
-        "limitations": "Satellite-assimilating land model; regional context, not field measurements. During satellite outages, estimates are model-only.",
-        "downloaded_utc": datetime.now(timezone.utc).isoformat(),
+        "start_inclusive": start,
+        "end_exclusive": end,
+        "rows": len(rows),
+        "units": "m3/m3",
+        "surface_depth_cm": [0, 5],
+        "rootzone_depth_cm": [0, 100],
+        "aggregation": (
+            "Regional pixel mean at each native 3-hour timestep; counts are valid pixels."
+        ),
+        "native_grid_km": 9,
+        "earth_engine_projection": projection.getInfo(),
+        "limitations": (
+            "Satellite-assimilating land model; regional context, not field measurements. During "
+            "satellite outages, estimates are model-only."
+        ),
+        "downloaded_utc": datetime.now(UTC).isoformat(),
     }
     csv_path.with_suffix(".json").write_text(json.dumps(metadata, indent=2) + "\n")
     return csv_path

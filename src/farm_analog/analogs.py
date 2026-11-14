@@ -1,4 +1,5 @@
 """Climate analog matching (sigma dissimilarity, Mahony et al. 2017)."""
+
 import numpy as np
 from scipy.stats import chi2
 from sklearn.decomposition import PCA
@@ -17,20 +18,22 @@ def sigma_dissimilarity(target_future, target_icv, candidates, min_var=1e-6):
     target_icv = np.asarray(target_icv, dtype=float)
     candidates = np.asarray(candidates, dtype=float)
     if target_icv.ndim != 2 or candidates.ndim != 2 or target_future.ndim != 1:
-        raise ValueError('Expected a future vector and two data matrices.')
+        raise ValueError("Expected a future vector and two data matrices.")
     if target_icv.shape[1] != len(target_future) or candidates.shape[1] != len(target_future):
-        raise ValueError('Climate feature counts must match.')
+        raise ValueError("Climate feature counts must match.")
     if target_icv.shape[0] <= target_icv.shape[1] or min_var <= 0:
-        raise ValueError('Need more historical years than features and a positive variance threshold.')
+        raise ValueError(
+            "Need more historical years than features and a positive variance threshold."
+        )
     if not all(np.isfinite(x).all() for x in (target_future, target_icv, candidates)):
-        raise ValueError('Climate inputs must be finite; missing data cannot be scored.')
+        raise ValueError("Climate inputs must be finite; missing data cannot be scored.")
     mu, sd = target_icv.mean(0), target_icv.std(0)
     if np.any(sd <= 0):
-        raise ValueError('Historical climate features must have nonzero variability.')
+        raise ValueError("Historical climate features must have nonzero variability.")
     pca = PCA().fit((target_icv - mu) / sd)
     keep = pca.explained_variance_ > min_var
     if not keep.all():
-        raise ValueError('Historical covariance is singular or unstable; revise climate features.')
+        raise ValueError("Historical covariance is singular or unstable; revise climate features.")
 
     def proj(x):
         z = pca.transform((x - mu) / sd)[:, keep]
