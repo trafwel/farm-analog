@@ -6,7 +6,7 @@ Legend: **built** = exists in code; _planned_ = not yet built (milestone in brac
 
 ```mermaid
 flowchart TD
-    PRISM["PRISM monthly (Earth Engine)<br/><i>planned [M1, M3]</i>"]
+    PRISM["PRISM monthly (Earth Engine)<br/><b>built [M1, field]</b> · <i>search grid: team prototype</i>"]
     CMIP["NEX-GDDP-CMIP6 (Earth Engine)<br/><i>planned [M2]</i>"]
     CDL["Cropland Data Layer + SSURGO<br/><i>planned [M3, M7]</i>"]
     SMAP["SMAP soil moisture importer (data.py)<br/><b>built (team)</b>"]
@@ -15,7 +15,8 @@ flowchart TD
     PREVIEW["Streamlit local preview (app/app.py)<br/><b>built (team), until M6</b>"]
     SEARCH["search.py: first regional analog search<br/><b>built (team), prototype of M1–M4</b>"]
 
-    FT["Farm today: fingerprint + year-to-year<br/><i>planned [M1]</i>"]
+    FT["Farm today: farm_today.py<br/>fingerprint + year-to-year (20 yrs)<br/><b>built [M1]</b>"]
+    FPRINT["Shared 8-value fingerprint: fingerprint.py<br/><b>built [M1]</b>"]
     F50["Farm 2050: delta method<br/><i>planned [M2]</i>"]
     CAND["Candidate points (cached Parquet)<br/><i>planned [M3]</i>"]
     SIGMA["sigma_dissimilarity()<br/><b>built</b>"]
@@ -41,6 +42,9 @@ flowchart TD
     MATCH --> EVID
     CDL --> EVID
     MATCH --> API
+    FPRINT -. defines .-> FT
+    FPRINT -. defines .-> CAND
+    FPRINT -. defines .-> CONTRACT
     CMIP --> CLIM
     CLIM --> PREVIEW
     PRISM --> SEARCH
@@ -66,6 +70,8 @@ flowchart TD
 Dotted arrows are build-time relationships (shared types and fake data), not runtime data flow.
 
 ## Changelog
+
+- 2026-11-14 (M1): Added `fingerprint.py` (one 8-value quarterly definition) and `farm_today.py` (PRISM for a drawn field via Earth Engine, plus offline-tested processing). Contract switched to the 8 values; settings switched to IPCC AR6 periods; the Palouse box moved to `config.py`; `search.py` uses the shared definitions and runs from cache without Earth Engine.
 
 - 2026-11-14 (M0 second rebase): Added the team's `search.py`, a working regional prototype of M1–M4 (PRISM 1995–2014 + ACCESS-CM2 delta + sigma dissimilarity on a 20 km grid), feeding the Streamlit preview.
 - 2026-11-14 (M0 rebase): Added the team's SMAP and ECOSTRESS importers, the one-model 2050 summary (`climate.py`) and the Streamlit preview. Importers feed the evidence step later (M7).

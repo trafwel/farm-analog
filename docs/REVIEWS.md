@@ -72,3 +72,43 @@ CI speed, CI not yet run, TypeScript generation untested, region and area checks
 - **Proof it's format-only:** a syntax-tree comparison against the team's versions, allowing only `timezone.utc` → `datetime.UTC` (same object), import order, and `zip(..., strict=False)` (the default). All seven files are identical under those rules. The checker was itself tested: a one-number change to a test file is correctly flagged.
 - **Found on `main`:** leftover merge-conflict markers in `README.md`. Removed (marker lines only).
 - **Checks:** `ruff check .` passes; `pytest` passes (25 tests: 3 analog tests + 22 contract and fixture tests).
+
+## M1 — Farm today (2026-11-14)
+
+**Team decisions going in:** M0 understanding confirmed in chat; use the team's 8-value quarterly fingerprint; use IPCC AR6 periods (1995–2014 → 2041–2060).
+
+**Built:** `fingerprint.py` (the one fingerprint definition, contract conversion), `farm_today.py` (PRISM for a drawn field via Earth Engine, then offline-testable processing into the normal fingerprint and 20 yearly fingerprints), contract switched to 8 values (`tmean_*`, `ppt_*`) and monthly `tmean` for the climograph, fixture and JSON Schemas regenerated, `config.py` on AR6 periods with PRISM settings and the Palouse box, `search.py` refactored to use all of these, 20 new tests (44 total).
+
+### Efficiency
+- `fetch_prism_monthly` makes one Earth Engine request for all 240 months (a mapped list, one `getInfo`), not one per month.
+- `search.py` now skips Earth Engine login entirely when its cache exists. Before, every run logged in even though nothing was downloaded.
+- The fingerprint is computed in one pass per year; nothing is computed twice.
+
+### Integration (what was run and checked)
+- `ruff check .` passes; `pytest`: 44 passed.
+- **Regression:** `test_search.py` reruns the team's search from the committed cache into a temp folder; the 784 rankings and the summary (except its timestamp) match the committed files exactly. The refactor changed no results.
+- The feature names and order match the team's cache (test), so the cache and committed CSV keep working.
+- The fixture still loads and passes the contract's consistency rules; JSON Schemas regenerated; drift tests pass.
+- Streamlit preview: runs with no exceptions, all 5 sections render (AppTest).
+- `tests/test_schema.py` was touched by the formatter only (syntax trees identical).
+- **Not run:** the live Earth Engine download for a field. There are no Earth Engine credentials on this machine. Logged for a teammate who has them.
+- **Breaks M9:** Bill's summarizer reads the old field names. Logged; M9 updates after M1 merges.
+
+### Security and privacy
+- The field polygon goes only to Earth Engine (needed to compute its climate) and is not logged or written to disk by `farm_today.py`.
+- `farm_today_for_field` takes a validated `PolygonGeometry` (closed rings, coordinate ranges, vertex limit from M0), never raw input.
+- No new secrets; `EE_PROJECT` still comes from `.env`.
+
+### Other flaws
+- **Fields smaller than a PRISM cell** (most fields) take the value of the cell under their center. That's reported as `support = "centroid_cell"` rather than hidden. Field-level detail beyond ~4 km isn't possible with PRISM.
+- **"Today" means 1995–2014**, not the last few years. That's the AR6 convention the team chose; the UI should say "recent decades", not "now".
+- **Mean temperature only:** the 8-value fingerprint drops highs and lows, so frost and heat extremes aren't in the match. Hazards (M7) should cover extremes separately.
+- **A field spanning very different cells** (rare for a field) gets one averaged fingerprint.
+
+### Fixed in this milestone
+- Time periods and fingerprint definitions now agree across settings, contract and code (two team-decision items resolved).
+- The Palouse box is defined once.
+- `search.py` can run offline from its cache and write to a chosen folder.
+
+### Moved to OPEN_ISSUES.md
+Live Earth Engine test for fields, Bill's summarizer field names (M9), two different search areas (M3), the delta applied to the regional mean instead of the farm (M2).
