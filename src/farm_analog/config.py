@@ -6,17 +6,28 @@ the docs always agree on periods, thresholds and limits.
 
 from typing import Final
 
-# Present-day climate: PRISM normals and each farm's year-to-year variation.
-BASELINE_YEARS: Final = (1991, 2020)
+# Periods follow the IPCC AR6 convention (team decision, M1): a 1995-2014 reference and a
+# 2041-2060 "mid-century" future. Using the same reference years for PRISM and for the
+# climate models means the model's change is measured over exactly the years it's applied to.
 
-# Climate-model reference period. CMIP6 "historical" runs end in 2014, so the model's own
-# baseline can't be 1991-2020; we use the latest 30 historical years instead.
-MODEL_HISTORICAL_YEARS: Final = (1985, 2014)
+# Present-day climate: PRISM normals and each farm's year-to-year variation (20 years).
+BASELINE_YEARS: Final = (1995, 2014)
 
-# "The 2050s".
-FUTURE_YEARS: Final = (2041, 2070)
+# Climate-model reference period (CMIP6 "historical" runs end in 2014).
+MODEL_HISTORICAL_YEARS: Final = (1995, 2014)
+
+# "Around 2050".
+FUTURE_YEARS: Final = (2041, 2060)
 
 DEFAULT_SCENARIO: Final = "ssp245"
+
+# PRISM monthly grids in Earth Engine (~4 km). AN81 = the long-running monthly series.
+PRISM_COLLECTION: Final = "OREGONSTATE/PRISM/ANm"
+PRISM_DATASET_TYPE: Final = "AN81"
+
+# Approximate Washington Palouse demo extent as (west, south, east, north) in degrees.
+# Not an official regional boundary.
+PALOUSE_BOUNDS: Final = (-118.2, 46.5, -117.0, 47.2)
 
 # Western US search area as (west, south, east, north) in degrees.
 SEARCH_BBOX: Final = (-125.0, 31.0, -100.0, 49.0)

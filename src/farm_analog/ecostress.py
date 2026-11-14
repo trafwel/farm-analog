@@ -18,12 +18,12 @@ import time
 from datetime import UTC, date, datetime
 from pathlib import Path
 
+from farm_analog.config import PALOUSE_BOUNDS  # defined once, in config.py
+
 ECOSTRESS_SHORT_NAME = "ECO_L2T_LSTE"
 ECOSTRESS_VERSION = "002"
 ECOSTRESS_DOI = "10.5067/ECOSTRESS/ECO_L2T_LSTE.002"
 CMR_GRANULES = "https://cmr.earthdata.nasa.gov/search/granules.json"
-# Same approximate Washington Palouse demo extent as the SMAP importer.
-PALOUSE_BOUNDS = (-118.2, 46.5, -117.0, 47.2)
 FIELDS = [
     "timestamp_utc",
     "granule_id",

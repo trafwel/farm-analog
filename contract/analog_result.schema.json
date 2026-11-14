@@ -157,7 +157,7 @@
     },
     "MonthlyClimate": {
       "additionalProperties": false,
-      "description": "Twelve monthly values, January first. Temperatures in \u00b0C, precipitation in mm.",
+      "description": "Twelve monthly values, January first: mean temperature in \u00b0C, precipitation in mm.",
       "properties": {
         "ppt": {
           "items": {
@@ -168,28 +168,18 @@
           "title": "Ppt",
           "type": "array"
         },
-        "tmax": {
+        "tmean": {
           "items": {
             "type": "number"
           },
           "maxItems": 12,
           "minItems": 12,
-          "title": "Tmax",
-          "type": "array"
-        },
-        "tmin": {
-          "items": {
-            "type": "number"
-          },
-          "maxItems": 12,
-          "minItems": 12,
-          "title": "Tmin",
+          "title": "Tmean",
           "type": "array"
         }
       },
       "required": [
-        "tmax",
-        "tmin",
+        "tmean",
         "ppt"
       ],
       "title": "MonthlyClimate",
@@ -197,74 +187,54 @@
     },
     "SeasonalFingerprint": {
       "additionalProperties": false,
-      "description": "The 12 climate values used for matching.\n\nTemperatures are seasonal means of the monthly average daily high (tmax) and low (tmin),\nin \u00b0C. Precipitation is the seasonal total in mm. Seasons: DJF = Dec-Feb, MAM = Mar-May,\nJJA = Jun-Aug, SON = Sep-Nov. (The matching step log-transforms precipitation; the\ncontract keeps plain millimeters so the frontend can show them directly.)",
+      "description": "The 8 climate values used for matching (definition in ``farm_analog.fingerprint``).\n\nFor each calendar quarter: average temperature (``tmean_``, the mean of the three monthly\nmean temperatures, \u00b0C) and total precipitation (``ppt_``, mm). Quarters: ``jfm`` =\nJan-Mar, ``amj`` = Apr-Jun, ``jas`` = Jul-Sep, ``ond`` = Oct-Dec.",
       "properties": {
-        "ppt_djf": {
+        "ppt_amj": {
           "minimum": 0,
-          "title": "Ppt Djf",
+          "title": "Ppt Amj",
           "type": "number"
         },
-        "ppt_jja": {
+        "ppt_jas": {
           "minimum": 0,
-          "title": "Ppt Jja",
+          "title": "Ppt Jas",
           "type": "number"
         },
-        "ppt_mam": {
+        "ppt_jfm": {
           "minimum": 0,
-          "title": "Ppt Mam",
+          "title": "Ppt Jfm",
           "type": "number"
         },
-        "ppt_son": {
+        "ppt_ond": {
           "minimum": 0,
-          "title": "Ppt Son",
+          "title": "Ppt Ond",
           "type": "number"
         },
-        "tmax_djf": {
-          "title": "Tmax Djf",
+        "tmean_amj": {
+          "title": "Tmean Amj",
           "type": "number"
         },
-        "tmax_jja": {
-          "title": "Tmax Jja",
+        "tmean_jas": {
+          "title": "Tmean Jas",
           "type": "number"
         },
-        "tmax_mam": {
-          "title": "Tmax Mam",
+        "tmean_jfm": {
+          "title": "Tmean Jfm",
           "type": "number"
         },
-        "tmax_son": {
-          "title": "Tmax Son",
-          "type": "number"
-        },
-        "tmin_djf": {
-          "title": "Tmin Djf",
-          "type": "number"
-        },
-        "tmin_jja": {
-          "title": "Tmin Jja",
-          "type": "number"
-        },
-        "tmin_mam": {
-          "title": "Tmin Mam",
-          "type": "number"
-        },
-        "tmin_son": {
-          "title": "Tmin Son",
+        "tmean_ond": {
+          "title": "Tmean Ond",
           "type": "number"
         }
       },
       "required": [
-        "tmax_djf",
-        "tmax_mam",
-        "tmax_jja",
-        "tmax_son",
-        "tmin_djf",
-        "tmin_mam",
-        "tmin_jja",
-        "tmin_son",
-        "ppt_djf",
-        "ppt_mam",
-        "ppt_jja",
-        "ppt_son"
+        "tmean_jfm",
+        "tmean_amj",
+        "tmean_jas",
+        "tmean_ond",
+        "ppt_jfm",
+        "ppt_amj",
+        "ppt_jas",
+        "ppt_ond"
       ],
       "title": "SeasonalFingerprint",
       "type": "object"

@@ -66,8 +66,9 @@ class PolygonGeometry(_Model):
                     raise ValueError(f"position out of range: ({lon}, {lat})")
             total += len(ring)
         if total > config.MAX_POLYGON_VERTICES:
-            raise ValueError(f"polygon has {total} vertices; the limit is "
-                             f"{config.MAX_POLYGON_VERTICES}")
+            raise ValueError(
+                f"polygon has {total} vertices; the limit is {config.MAX_POLYGON_VERTICES}"
+            )
         return rings
 
 
@@ -85,33 +86,27 @@ class AnalogRequest(_Model):
 
 
 class SeasonalFingerprint(_Model):
-    """The 12 climate values used for matching.
+    """The 8 climate values used for matching (definition in ``farm_analog.fingerprint``).
 
-    Temperatures are seasonal means of the monthly average daily high (tmax) and low (tmin),
-    in °C. Precipitation is the seasonal total in mm. Seasons: DJF = Dec-Feb, MAM = Mar-May,
-    JJA = Jun-Aug, SON = Sep-Nov. (The matching step log-transforms precipitation; the
-    contract keeps plain millimeters so the frontend can show them directly.)
+    For each calendar quarter: average temperature (``tmean_``, the mean of the three monthly
+    mean temperatures, °C) and total precipitation (``ppt_``, mm). Quarters: ``jfm`` =
+    Jan-Mar, ``amj`` = Apr-Jun, ``jas`` = Jul-Sep, ``ond`` = Oct-Dec.
     """
 
-    tmax_djf: float
-    tmax_mam: float
-    tmax_jja: float
-    tmax_son: float
-    tmin_djf: float
-    tmin_mam: float
-    tmin_jja: float
-    tmin_son: float
-    ppt_djf: float = Field(ge=0)
-    ppt_mam: float = Field(ge=0)
-    ppt_jja: float = Field(ge=0)
-    ppt_son: float = Field(ge=0)
+    tmean_jfm: float
+    tmean_amj: float
+    tmean_jas: float
+    tmean_ond: float
+    ppt_jfm: float = Field(ge=0)
+    ppt_amj: float = Field(ge=0)
+    ppt_jas: float = Field(ge=0)
+    ppt_ond: float = Field(ge=0)
 
 
 class MonthlyClimate(_Model):
-    """Twelve monthly values, January first. Temperatures in °C, precipitation in mm."""
+    """Twelve monthly values, January first: mean temperature in °C, precipitation in mm."""
 
-    tmax: list[float] = Field(min_length=12, max_length=12)
-    tmin: list[float] = Field(min_length=12, max_length=12)
+    tmean: list[float] = Field(min_length=12, max_length=12)
     ppt: list[float] = Field(min_length=12, max_length=12)
 
 
@@ -158,8 +153,10 @@ class Analog(_Model):
     @model_validator(mode="after")
     def _check_consistency(self) -> "Analog":
         if self.match_quality != match_quality(self.sigma):
-            raise ValueError(f"match_quality {self.match_quality!r} does not fit sigma "
-                             f"{self.sigma}; expected {match_quality(self.sigma)!r}")
+            raise ValueError(
+                f"match_quality {self.match_quality!r} does not fit sigma "
+                f"{self.sigma}; expected {match_quality(self.sigma)!r}"
+            )
         if self.models_agree > self.models_total:
             raise ValueError("models_agree cannot exceed models_total")
         return self
@@ -190,8 +187,10 @@ class AnalogResult(_Model):
             raise ValueError("analogs must be sorted by sigma, best first")
         expected_novel = not self.analogs or self.analogs[0].sigma >= config.NOVEL_SIGMA
         if self.novel_climate != expected_novel:
-            raise ValueError(f"novel_climate should be {expected_novel} for best sigma "
-                             f"{sigmas[0] if sigmas else 'n/a'}")
+            raise ValueError(
+                f"novel_climate should be {expected_novel} for best sigma "
+                f"{sigmas[0] if sigmas else 'n/a'}"
+            )
         if any(a.models_total != len(self.models) for a in self.analogs):
             raise ValueError("each analog's models_total must equal the number of models")
         return self

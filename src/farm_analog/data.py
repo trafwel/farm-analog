@@ -11,10 +11,10 @@ import os
 from datetime import UTC, date, datetime
 from pathlib import Path
 
+from farm_analog.config import PALOUSE_BOUNDS  # defined once, in config.py
+
 SMAP_COLLECTION = "NASA/SMAP/SPL4SMGP/008"
 SMAP_BANDS = ["sm_surface", "sm_rootzone"]
-# Approximate Washington Palouse demo extent, not an official regional boundary.
-PALOUSE_BOUNDS = (-118.2, 46.5, -117.0, 47.2)
 
 
 def validate_request(start, end, bounds):
