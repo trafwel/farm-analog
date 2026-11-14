@@ -1,0 +1,57 @@
+# Architecture
+
+Must always match the code on this branch. See rule 5 in [HOW_WE_BUILD.md](HOW_WE_BUILD.md).
+
+Legend: **built** = exists in code; _planned_ = not yet built (milestone in brackets).
+
+```mermaid
+flowchart TD
+    PRISM["PRISM monthly (Earth Engine)<br/><i>planned [M1, M3]</i>"]
+    CMIP["NEX-GDDP-CMIP6 (Earth Engine)<br/><i>planned [M2]</i>"]
+    CDL["Cropland Data Layer + SSURGO<br/><i>planned [M3, M7]</i>"]
+
+    FT["Farm today: fingerprint + year-to-year<br/><i>planned [M1]</i>"]
+    F50["Farm 2050: delta method<br/><i>planned [M2]</i>"]
+    CAND["Candidate points (cached Parquet)<br/><i>planned [M3]</i>"]
+    SIGMA["sigma_dissimilarity()<br/><b>built</b>"]
+    MATCH["Match + novel-climate flag<br/><i>planned [M4]</i>"]
+    EVID["Evidence: crops, soil, climograph<br/><i>planned [M7]</i>"]
+
+    CONTRACT["JSON contract: schema.py + contract/*.schema.json<br/><b>built [M0]</b>"]
+    FIX["Fake results fixture<br/><b>built [M0]</b>"]
+    API["FastAPI POST /analogs<br/><i>planned [M5]</i>"]
+    UI["React + Leaflet map and panels<br/><i>planned [M6, M8]</i>"]
+    BILL["Bill (Gemini): parse + summarize<br/><i>planned [M9]</i>"]
+    FARMER(["Farmer"])
+
+    PRISM --> FT
+    PRISM --> CAND
+    CMIP --> F50
+    FT --> F50
+    CDL --> CAND
+    FT --> MATCH
+    F50 --> MATCH
+    CAND --> MATCH
+    SIGMA --> MATCH
+    MATCH --> EVID
+    CDL --> EVID
+    MATCH --> API
+    CONTRACT -. defines shape .-> API
+    CONTRACT -. types .-> UI
+    FIX -. fake data until M5 .-> UI
+    FIX -. fake data .-> BILL
+    EVID --> API
+    API --> UI
+    API --> BILL
+    BILL --> UI
+    FARMER <--> UI
+```
+
+**Also built:** conda environment (`environment.yml`), setup guide (`SETUP.md`), project layout (`src/farm_analog/`, `app/`, `notebooks/`), settings (`config.py`, M0), `pyproject.toml` with pytest and ruff (M0), CI for the backend (`.github/workflows/ci.yml`, M0).
+
+Dotted arrows are build-time relationships (shared types and fake data), not runtime data flow.
+
+## Changelog
+
+- 2026-11-14 (M0): Added the JSON contract (Pydantic models exported to JSON Schema), the fake-results fixture, settings, test and lint setup, and backend CI.
+- 2026-11-14: Initial graph. Built: environment setup and `sigma_dissimilarity()`. Everything else planned (M1–M10).
