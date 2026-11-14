@@ -43,4 +43,5 @@ dependencies:
   - pip
   - pip:
       - anthropic
+      - google-genai
       - -e .

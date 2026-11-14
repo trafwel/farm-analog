@@ -69,3 +69,12 @@ MAX_FIELD_AREA_KM2: Final = 50.0
 DEFAULT_TOP_N: Final = 20
 MAX_TOP_N: Final = 100
 MAX_POLYGON_VERTICES: Final = 1000
+
+# Bill, the Gemini assistant (M9). Bill only parses farmer text and restates results.
+# Flash-Lite is the cheapest current text model; 3.5 Flash-Lite is the stable release.
+GEMINI_MODEL: Final = "gemini-3.5-flash-lite"
+GEMINI_THINKING_LEVEL: Final = "MINIMAL"  # Bill restates, he doesn't reason
+GEMINI_TIMEOUT_MS: Final = 20_000
+GEMINI_MAX_OUTPUT_TOKENS: Final = 1024
+MAX_FARMER_TEXT_CHARS: Final = 2000  # longer free text is cut before it reaches Gemini
+BILL_TOP_ANALOGS: Final = 5  # how many analogs the summary describes
