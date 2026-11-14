@@ -45,7 +45,6 @@ The baseline is modeled climate, not observed weather. Temperature is converted
 from kelvin to Celsius; precipitation flux is integrated into mean monthly totals
 in millimetres. Both periods must contain complete, unique daily timestamps.
 
-<<<<<<< Updated upstream
 ## Import NASA ECOSTRESS land surface temperature
 
 A matching Palouse sample is included in `data/samples/`: July 1–7, 2025,
@@ -83,7 +82,7 @@ LST is land surface skin temperature, not air temperature.
 
 Source: [ECOSTRESS L2T LSTE v002 at LP DAAC](https://lpdaac.usgs.gov/products/eco_l2t_lstev002/).
 DOI: [10.5067/ECOSTRESS/ECO_L2T_LSTE.002](https://doi.org/10.5067/ECOSTRESS/ECO_L2T_LSTE.002).
-=======
+
 ## First Pacific Northwest analog search
 
 Run `PYTHONPATH=src python -m farm_analog.search` after downloading the climate
@@ -105,4 +104,3 @@ no backtest, and no crop recommendations yet. The Streamlit page is a local prev
 the specified Next.js/FastAPI interface remains to be built.
 
 Check the scoring with `PYTHONPATH=src python -m unittest discover -s tests`.
->>>>>>> Stashed changes

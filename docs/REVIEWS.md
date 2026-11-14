@@ -62,3 +62,13 @@ CI speed, CI not yet run, TypeScript generation untested, region and area checks
 **Proof it's format-only:** compared each file's syntax tree with the version on `main`. `app/app.py` is identical. `climate.py` and `data.py` differ only by `timezone.utc` → `datetime.UTC`, which are the same object in Python 3.11 (checked). `ecostress.py` additionally differs by the order of two `import` lines inside a function. The Streamlit preview runs with no exceptions and shows all four sections (checked with Streamlit's `AppTest`).
 
 **New open items** (in OPEN_ISSUES.md): `climate.py` vs. what M2 needs, the time-period mismatch, no tests for the importers, the Palouse box defined twice, and `data.py` naming.
+
+### Addendum 2: rebase onto the team's analog search (2026-11-14)
+
+`main` moved again: a first analog search (`search.py`), stronger input checks in `analogs.py`, new tests and an analog section in the Streamlit preview. Replayed M0 onto it, rehearsed first in a throwaway copy:
+
+- **Conflict:** `tests/test_analogs.py` (created on both sides). Merged: the team's tests plus M0's finite-distance test.
+- **Format-only lint fix redone** for `app/app.py`, `analogs.py`, `climate.py`, `data.py`, `ecostress.py`, `search.py` and `tests/test_analogs.py`, replacing the earlier format commit (which conflicted with the new app code). One URL line is exempted with `# noqa: E501`.
+- **Proof it's format-only:** a syntax-tree comparison against the team's versions, allowing only `timezone.utc` → `datetime.UTC` (same object), import order, and `zip(..., strict=False)` (the default). All seven files are identical under those rules. The checker was itself tested: a one-number change to a test file is correctly flagged.
+- **Found on `main`:** leftover merge-conflict markers in `README.md`. Removed (marker lines only).
+- **Checks:** `ruff check .` passes; `pytest` passes (25 tests: 3 analog tests + 22 contract and fixture tests).
