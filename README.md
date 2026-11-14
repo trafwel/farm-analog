@@ -45,7 +45,6 @@ The baseline is modeled climate, not observed weather. Temperature is converted
 from kelvin to Celsius; precipitation flux is integrated into mean monthly totals
 in millimetres. Both periods must contain complete, unique daily timestamps.
 
-<<<<<<< Updated upstream
 ## Import NASA ECOSTRESS land surface temperature
 
 A matching Palouse sample is included in `data/samples/`: July 1–7, 2025,
@@ -83,7 +82,7 @@ LST is land surface skin temperature, not air temperature.
 
 Source: [ECOSTRESS L2T LSTE v002 at LP DAAC](https://lpdaac.usgs.gov/products/eco_l2t_lstev002/).
 DOI: [10.5067/ECOSTRESS/ECO_L2T_LSTE.002](https://doi.org/10.5067/ECOSTRESS/ECO_L2T_LSTE.002).
-=======
+
 ## First Pacific Northwest analog search
 
 Run `PYTHONPATH=src python -m farm_analog.search` after downloading the climate
@@ -105,4 +104,33 @@ no backtest, and no crop recommendations yet. The Streamlit page is a local prev
 the specified Next.js/FastAPI interface remains to be built.
 
 Check the scoring with `PYTHONPATH=src python -m unittest discover -s tests`.
->>>>>>> Stashed changes
+
+## Import USDA Cropland Data Layer (CDL)
+
+A matching Palouse sample is included in `data/samples/`: the 2025 CDL, with
+40 crop and land-cover classes. The CSV and provenance JSON can be used without
+downloading the national file.
+
+The importer downloads the national 30 m CDL release zip from USDA NASS
+(about 1.9 GB for 2025), reads only the Palouse window, and counts pixels whose
+centers fall inside the same approximate bounding box as SMAP and ECOSTRESS.
+NASS throttles each connection, so the zip downloads in 8 parallel, resumable
+segments; expect roughly 15–90 minutes. It is cached in `data/cdl/raw/`, and the
+CSV and provenance JSON are saved in `data/cdl/` (all gitignored). To download the
+zip yourself, save it as `data/cdl/raw/{YEAR}_30m_cdls.zip`. No login is needed.
+
+```bash
+PYTHONPATH=src python -m farm_analog.cdl --year 2025
+```
+
+Years from 2008 onward are supported. Override the region with
+`--bounds WEST SOUTH EAST NORTH`.
+
+Each row is one CDL class with its code, name, pixel count, acres, hectares,
+and percent of mapped pixels; background/no-data (code 0) is excluded.
+The same data is browsable in [CropScape](https://nassgeodata.gmu.edu/CropScape/),
+but its web service is often slow or unavailable, so the importer uses the
+release file. CDL is a classified satellite product: per-class accuracy varies,
+and pixel-counted acreage is not an official NASS acreage estimate.
+
+Source: [USDA NASS Cropland Data Layer](https://www.nass.usda.gov/Research_and_Science/Cropland/Release/index.php).
