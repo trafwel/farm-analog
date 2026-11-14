@@ -1,0 +1,40 @@
+{
+  "collection": "NASA/SMAP/SPL4SMGP/008",
+  "doi": "10.5067/T5RUATAQREF8",
+  "source": "https://developers.google.com/earth-engine/datasets/catalog/NASA_SMAP_SPL4SMGP_008",
+  "bounds_west_south_east_north": [
+    -118.2,
+    46.5,
+    -117.0,
+    47.2
+  ],
+  "region_note": "Approximate demo extent; custom bounds may override it.",
+  "start_inclusive": "2025-07-01",
+  "end_exclusive": "2025-07-08",
+  "rows": 56,
+  "units": "m3/m3",
+  "surface_depth_cm": [
+    0,
+    5
+  ],
+  "rootzone_depth_cm": [
+    0,
+    100
+  ],
+  "aggregation": "Regional pixel mean at each native 3-hour timestep; counts are valid pixels.",
+  "native_grid_km": 9,
+  "earth_engine_projection": {
+    "type": "Projection",
+    "crs": "EPSG:4326",
+    "transform": [
+      0.09516256938937351,
+      0,
+      -180,
+      0,
+      -0.09516149300142858,
+      85.0445018795655
+    ]
+  },
+  "limitations": "Satellite-assimilating land model; regional context, not field measurements. During satellite outages, estimates are model-only.",
+  "downloaded_utc": "2026-11-14T21:27:11.242600+00:00"
+}

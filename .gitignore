@@ -17,7 +17,11 @@ venv/
 .env
 
 # data: never commit rasters or large exports
-data/
+data/*
+!data/samples/
+data/samples/*
+!data/samples/*.csv
+!data/samples/*.json
 *.tif
 *.nc
 *.parquet
