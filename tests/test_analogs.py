@@ -19,4 +19,14 @@ class AnalogTests(unittest.TestCase):
         for history in [np.ones((20,4)),np.full((20,4),np.nan)]:
             with self.assertRaises(ValueError): sigma_dissimilarity(np.ones(4),history,np.ones((2,4)))
 
+
+# Added in M0: very distant climates must stay finite (cdf/ppf would round to inf).
+def test_sigma_grows_with_distance_and_stays_finite():
+    rng = np.random.default_rng(0)
+    icv = rng.normal(size=(30, 4))
+    t = icv.mean(0)
+    s = sigma_dissimilarity(t, icv, np.vstack([t, t + 1, t + 2, t + 50]))
+    assert np.all(np.diff(s) > 0)
+    assert np.all(np.isfinite(s))
+
 if __name__=='__main__': unittest.main()

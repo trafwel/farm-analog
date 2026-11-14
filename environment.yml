@@ -24,11 +24,17 @@ dependencies:
   - streamlit
   - leafmap
   - plotly
+  # data contract
+  - pydantic>=2
   # notebooks and utilities
   - jupyterlab
   - ipykernel
   - python-dotenv
   - requests
+  # testing and linting
+  - pytest
+  - ruff
   - pip
   - pip:
       - anthropic
+      - -e .
