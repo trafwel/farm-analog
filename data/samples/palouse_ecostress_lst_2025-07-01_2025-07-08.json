@@ -1,0 +1,23 @@
+{
+  "collection": "ECO_L2T_LSTE.002",
+  "doi": "10.5067/ECOSTRESS/ECO_L2T_LSTE.002",
+  "source": "https://lpdaac.usgs.gov/products/eco_l2t_lstev002/",
+  "bounds_west_south_east_north": [
+    -118.2,
+    46.5,
+    -117.0,
+    47.2
+  ],
+  "region_note": "Approximate demo extent; custom bounds may override it. Pixels are clipped to the box's UTM envelope.",
+  "start_inclusive": "2025-07-01",
+  "end_exclusive": "2025-07-08",
+  "rows": 30,
+  "overpasses": 11,
+  "units": "K",
+  "native_resolution_m": 70,
+  "tile_crs": "UTM (MGRS tiles 11T*)",
+  "aggregation": "One row per MGRS tile per overpass: clear-sky pixel stats; counts are pixels in the clipped window. Adjacent tiles overlap, so do not sum counts across tiles.",
+  "cloud_masking": "Pixels with cloud mask == 1 or missing LST are excluded. cloud_count is cloud-flagged pixels in the window; pixel_count minus valid and cloud counts is mostly outside-swath fill.",
+  "limitations": "ISS orbit gives irregular overpass times (often night); timestamps are UTC. LST is land surface skin temperature, not air temperature.",
+  "downloaded_utc": "2026-11-14T21:51:45.722156+00:00"
+}

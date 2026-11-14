@@ -44,3 +44,41 @@ are saved in `data/samples/`. This first prototype uses one model, not an ensemb
 The baseline is modeled climate, not observed weather. Temperature is converted
 from kelvin to Celsius; precipitation flux is integrated into mean monthly totals
 in millimetres. Both periods must contain complete, unique daily timestamps.
+
+## Import NASA ECOSTRESS land surface temperature
+
+A matching Palouse sample is included in `data/samples/`: July 1–7, 2025,
+with 30 rows covering 11 ECOSTRESS overpasses. The CSV and provenance JSON
+can be used without an Earthdata login.
+
+The importer searches NASA CMR for ECOSTRESS L2T LSTE v002 tiles (70 m,
+MGRS-tiled), downloads each tile's LST and cloud-mask GeoTIFFs from LP DAAC,
+and clips them to the same approximate Palouse bounding box as SMAP.
+It saves a CSV and provenance JSON in `data/ecostress/`, with raw GeoTIFFs
+cached in `data/ecostress/raw/` (all gitignored).
+
+Create a free [NASA Earthdata account](https://urs.earthdata.nasa.gov/users/new),
+then add it to `~/.netrc` (`%USERPROFILE%\_netrc` on Windows):
+
+```
+machine urs.earthdata.nasa.gov login YOUR_USERNAME password YOUR_PASSWORD
+```
+
+Then run:
+
+```bash
+PYTHONPATH=src python -m farm_analog.ecostress --start 2025-07-01 --end 2025-07-08
+```
+
+The end date is exclusive. Override the region with
+`--bounds WEST SOUTH EAST NORTH`; requests are limited to 31 days.
+
+Each row is one MGRS tile at one overpass, with clear-sky LST mean, standard
+deviation, minimum and maximum in kelvin, plus valid, cloud-flagged and total
+pixel counts. Tiles with no clear pixels keep empty LST values. Adjacent tiles
+overlap, so do not sum counts across tiles. The ISS orbit gives irregular
+overpass times; every pass in the sample week was at night (local time).
+LST is land surface skin temperature, not air temperature.
+
+Source: [ECOSTRESS L2T LSTE v002 at LP DAAC](https://lpdaac.usgs.gov/products/eco_l2t_lstev002/).
+DOI: [10.5067/ECOSTRESS/ECO_L2T_LSTE.002](https://doi.org/10.5067/ECOSTRESS/ECO_L2T_LSTE.002).
