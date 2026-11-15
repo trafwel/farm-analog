@@ -176,6 +176,8 @@ class AnalogResult(_Model):
     farm_soil: SoilProfile | None = None
     novel_climate: bool  # True when the best analog's sigma is at or above NOVEL_SIGMA
     analogs: list[Analog]
+    # Plain-language caveats about how this result was produced (shown under the result).
+    notes: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def _check_consistency(self) -> "AnalogResult":

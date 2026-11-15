@@ -861,7 +861,8 @@
         "soil": null,
         "climograph": null
       }
-    ]
+    ],
+    "notes": []
   },
   {
     "source": "fixture",
@@ -1449,6 +1450,7 @@
         "soil": null,
         "climograph": null
       }
-    ]
+    ],
+    "notes": []
   }
 ]

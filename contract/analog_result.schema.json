@@ -383,6 +383,13 @@
       "title": "Models",
       "type": "array"
     },
+    "notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Notes",
+      "type": "array"
+    },
     "novel_climate": {
       "title": "Novel Climate",
       "type": "boolean"
