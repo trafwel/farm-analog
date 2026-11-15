@@ -11,7 +11,7 @@ describe('static demo', () => {
         expect(r.scenario).toBe(scenario);
         expect(r.analogs).toHaveLength(5);
         expect(r.models).toHaveLength(8);
-        expect(r.notes![0]).toContain(`Saved live result for the ${f.label} test field (0.0 km`);
+        expect(r.notes?.[0]).toContain(`nearby example field at ${f.label}.`);
       }
     }
   });
@@ -20,7 +20,8 @@ describe('static demo', () => {
     const colfax = TEST_FIELDS.find((f) => f.id === 'colfax')!;
     const near = testFieldRing({ ...colfax, lat: colfax.lat + 0.03 }); // ~3.3 km north
     const r = analyzeStatic(buildAnalogRequest(near, 'ssp245'));
-    expect(r.notes![0]).toMatch(/Colfax test field \(3\.\d km/);
+    expect(r.field_id).toBe('static-colfax');
+    expect(r.notes?.[0]).toContain('nearby example field at Colfax.');
     expect(r.rotations?.length).toBeGreaterThanOrEqual(3);
     expect(r.farm_hazards).toBeTruthy();
 
