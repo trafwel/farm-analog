@@ -435,6 +435,17 @@
           "title": "Risks",
           "type": "array"
         },
+        "traits": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RotationTraits"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
         "why": {
           "title": "Why",
           "type": "string"
@@ -453,6 +464,71 @@
         "gaps"
       ],
       "title": "RotationStrategy",
+      "type": "object"
+    },
+    "RotationTraits": {
+      "additionalProperties": false,
+      "description": "Share of a rotation's years with each crop trait (M19), from the fixed crop-traits table\nin ``rotations.TRAITS``. A cycle counts each year once; a flexible mix counts each of its\nmain crops as one year (an approximation, since their order and frequency vary). The\nfrontend scores farmer priorities from these numbers.",
+      "properties": {
+        "break_crop": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Break Crop",
+          "type": "number"
+        },
+        "fallow": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Fallow",
+          "type": "number"
+        },
+        "high_residue": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "High Residue",
+          "type": "number"
+        },
+        "high_water": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "High Water",
+          "type": "number"
+        },
+        "low_cover": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Low Cover",
+          "type": "number"
+        },
+        "low_water": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Low Water",
+          "type": "number"
+        },
+        "n_fixing": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "N Fixing",
+          "type": "number"
+        },
+        "years": {
+          "minimum": 1,
+          "title": "Years",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "years",
+        "n_fixing",
+        "high_residue",
+        "low_cover",
+        "fallow",
+        "low_water",
+        "high_water",
+        "break_crop"
+      ],
+      "title": "RotationTraits",
       "type": "object"
     },
     "SeasonalFingerprint": {

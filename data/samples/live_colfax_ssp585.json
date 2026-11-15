@@ -1084,7 +1084,17 @@
         "Pest and disease pressure, yields and prices are not measured here.",
         "Analog areas' rotations also reflect their markets, equipment and soils, not only climate.",
         "Check with your county extension agent before changing a rotation."
-      ]
+      ],
+      "traits": {
+        "years": 3,
+        "n_fixing": 0.333,
+        "high_residue": 0.333,
+        "low_cover": 0.333,
+        "fallow": 0.0,
+        "low_water": 0.333,
+        "high_water": 0.0,
+        "break_crop": 0.333
+      }
     },
     {
       "name": "Winter wheat → Pulses",
@@ -1116,7 +1126,17 @@
         "Pest and disease pressure, yields and prices are not measured here.",
         "Analog areas' rotations also reflect their markets, equipment and soils, not only climate.",
         "Check with your county extension agent before changing a rotation."
-      ]
+      ],
+      "traits": {
+        "years": 2,
+        "n_fixing": 0.5,
+        "high_residue": 0.5,
+        "low_cover": 0.5,
+        "fallow": 0.0,
+        "low_water": 0.5,
+        "high_water": 0.0,
+        "break_crop": 0.5
+      }
     },
     {
       "name": "Winter wheat → Spring wheat → Pulses",
@@ -1151,7 +1171,17 @@
         "Pest and disease pressure, yields and prices are not measured here.",
         "Analog areas' rotations also reflect their markets, equipment and soils, not only climate.",
         "Check with your county extension agent before changing a rotation."
-      ]
+      ],
+      "traits": {
+        "years": 3,
+        "n_fixing": 0.333,
+        "high_residue": 0.333,
+        "low_cover": 0.333,
+        "fallow": 0.0,
+        "low_water": 0.333,
+        "high_water": 0.0,
+        "break_crop": 0.333
+      }
     },
     {
       "name": "Flexible mix of pulses, spring wheat, winter wheat",
@@ -1186,7 +1216,17 @@
         "Pest and disease pressure, yields and prices are not measured here.",
         "Analog areas' rotations also reflect their markets, equipment and soils, not only climate.",
         "Check with your county extension agent before changing a rotation."
-      ]
+      ],
+      "traits": {
+        "years": 3,
+        "n_fixing": 0.333,
+        "high_residue": 0.333,
+        "low_cover": 0.333,
+        "fallow": 0.0,
+        "low_water": 0.333,
+        "high_water": 0.0,
+        "break_crop": 0.333
+      }
     }
   ],
   "notes": [

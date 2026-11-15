@@ -23,7 +23,7 @@ flowchart TD
     SIGMA["sigma_dissimilarity()<br/><b>built</b>"]
     MATCH["match.py: per-model sigma, median, agreement,<br/>baseline, AnalogResult + offline Palouse demo<br/><b>built [M4]</b>"]
     SAVED["saved.py: 5 test fields run live, saved for offline demos<br/><b>built [M11]</b>"]
-    ROT["rotations.py: CDL crop sequences 2016–2023 → rotation strategies<br/>(current first; why / evidence / benefits / risks / gaps)<br/><b>built [M12]</b>"]
+    ROT["rotations.py: CDL crop sequences 2016–2023 → rotation strategies<br/>(current first; why / evidence / benefits / risks / gaps)<br/><b>built [M12]</b> · trait shares per rotation <b>built [M19]</b>"]
     HAZ["hazards.py: heat, frost (PRISM daily), extreme rain (GPM IMERG),<br/>soil moisture (SMAP), bare months (Landsat NDVI)<br/><b>built [M13]</b>"]
     PROOF["proof.py: self-check, sigma vs. baseline,<br/>crop backtest (live) + day-length check<br/><b>built [M10]</b>"]
     EVID["evidence.py: crops (CDL), soil (OpenLandMap), climograph,<br/>county names for the top 3 (live mode)<br/><b>built [M7]</b>"]
@@ -31,7 +31,7 @@ flowchart TD
     CONTRACT["JSON contract: schema.py + contract/*.schema.json<br/><b>built [M0]</b>"]
     FIX["Fake results fixture<br/><b>built [M0]</b>"]
     API["api.py + pipeline.py: FastAPI GET /health, POST /analogs<br/>field checks, live or offline-demo mode<br/><b>built [M5]</b>"]
-    UI["frontend/: React + Leaflet map, list, fingerprint table<br/><b>built [M6]</b> · comparison, rotation cards, hazard outlook, glossary <b>built [M8]</b> · SMAP soil-water chart <b>built [M16]</b>"]
+    UI["frontend/: React + Leaflet map, list, fingerprint table<br/><b>built [M6]</b> · comparison, rotation cards, hazard outlook, glossary <b>built [M8]</b> · SMAP soil-water chart <b>built [M16]</b> · farmer priorities <b>built [M19]</b>"]
     BILL["assistant/: Bill (Gemini) parse + summarize, grounding check, template fallback<br/>POST /bill/parse, /bill/summary<br/><b>built [M9]</b> · <i>UI not wired yet</i>"]
     GEMINI[("Gemini API: gemini-3.5-flash-lite<br/>server-side key, optional")]
     FARMER(["Farmer"])
@@ -89,6 +89,8 @@ flowchart TD
 Dotted arrows are build-time relationships (shared types and fake data), not runtime data flow.
 
 ## Changelog
+
+- 2026-11-15 (M19): Farmer priorities. `rotations.traits_summary` adds `RotationStrategy.traits` (shares of years with each crop trait); the frontend scores and sorts rotation options by the farmer's chosen priorities. Saved results got traits offline (`saved.py --traits-only`).
 
 - 2026-11-15 (M16): The comparison panel shows SMAP root-zone soil moisture: a driest-month row in the hazard table and a monthly chart (field vs. match). Frontend only; the data was already in the M13 results.
 

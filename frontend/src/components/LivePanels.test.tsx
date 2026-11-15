@@ -23,6 +23,22 @@ describe('M8 panels on a live result', () => {
     expect(section).toHaveTextContent('Check with your county extension agent');
   });
 
+  it('sorts rotation options by the farmer’s priorities, current rotation first', () => {
+    const colfax = JSON.parse(
+      readFileSync(resolve(__dirname, '../../../data/samples/live_colfax_ssp245.json'), 'utf8'),
+    ) as AnalogResult;
+    render(<ResultsPanel result={colfax} selectedRank={null} onSelect={() => {}} />);
+    const section = screen.getByRole('region', { name: /Rotation options/ });
+    const names = () => within(section).getAllByRole('heading', { level: 4 }).map((h) => h.textContent);
+    expect(names()[1]).toContain('Flexible mix of fallow');
+    fireEvent.click(within(section).getByRole('checkbox', { name: 'Add nitrogen' }));
+    expect(names()[0]).toContain('Winter wheat → Barley → Pulses');
+    expect(names()[1]).toContain('Winter wheat → Spring wheat → Pulses');
+    expect(section).toHaveTextContent('nitrogen-fixing crop in 1 of 3 years');
+    expect(within(section).getAllByText('Best fit for your choices')).toHaveLength(2);
+    expect(section).toHaveTextContent('Income, markets and equipment aren’t measured here');
+  });
+
   it('compares the best match by default, then the selected place', () => {
     const { rerender } = render(<ResultsPanel result={cook} selectedRank={null} onSelect={() => {}} />);
     const best = cook.analogs[0]!;

@@ -35,7 +35,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from farm_analog.schema import AnalogResult, RotationStrategy
+from farm_analog.schema import AnalogResult, RotationStrategy, RotationTraits
 
 ROTATION_YEARS = (2016, 2023)  # 8 years: two full cycles of a 2-, 3- or 4-year rotation
 ANALOGS_FOR_ROTATIONS = 5  # top analog areas sampled
@@ -123,6 +123,44 @@ TRAITS = {
                     "benefit": "Diversifies the rotation",
                     "risk": "Markets and practices not assessed here"},
 }
+
+# Crops that break cereal disease and weed cycles (M19). Cereals, fallow and the catch-all
+# groups don't count.
+BREAK_CROPS = {"Pulses", "Canola", "Hay and forage", "Potatoes and beets"}
+
+
+def traits_summary(crops: list[str] | tuple[str, ...]) -> RotationTraits:
+    """Share of the rotation's years with each trait in ``TRAITS`` (M19).
+
+    ``crops`` is a rotation's cycle, one entry per year ("Winter wheat → Winter wheat →
+    Fallow" is three years), or a flexible mix's main crops, each counted as one year.
+    """
+    years = [TRAITS[c] for c in crops]
+    n = len(years)
+
+    def share(test) -> float:
+        return round(sum(1 for t in years if test(t)) / n, 3)
+
+    return RotationTraits(
+        years=n,
+        n_fixing=share(lambda t: t["n_fixing"]),
+        high_residue=share(lambda t: t["residue"] == "high"),
+        low_cover=share(lambda t: t["residue"] == "low"),
+        fallow=round(sum(1 for c in crops if c == "Fallow") / n, 3),
+        low_water=share(lambda t: t["water"] in ("low", "none")),
+        high_water=share(lambda t: t["water"] == "high"),
+        break_crop=round(sum(1 for c in crops if c in BREAK_CROPS) / n, 3),
+    )
+
+
+def add_traits(result: AnalogResult) -> AnalogResult:
+    """Fill in ``traits`` on every rotation from its crops (for results saved before M19)."""
+    if not result.rotations:
+        return result
+    return result.model_copy(update={"rotations": [
+        r.model_copy(update={"traits": traits_summary(r.crops)}) for r in result.rotations
+    ]})
+
 
 ALWAYS_GAPS = (
     "Pest and disease pressure, yields and prices are not measured here.",
@@ -276,6 +314,7 @@ def strategies(
             benefits=benefits,
             risks=risks,
             gaps=gaps + [CHECK_LOCALLY],
+            traits=traits_summary(rotation.crops),
         ))
         if len(out) >= max(minimum, 4):
             break

@@ -4,6 +4,8 @@ Someone with Earth Engine runs ``python -m farm_analog.saved`` once. It analyzes
 field in ``config.TEST_FIELDS`` live, for every scenario, and saves each ``AnalogResult`` as
 ``data/samples/live_<field>_<scenario>.json`` (committed). In offline mode, a drawn field near
 a test field gets that saved result, with a note saying so.
+``python -m farm_analog.saved --traits-only`` adds M19's rotation traits to the saved files
+without Earth Engine.
 
 Data flow:
 Inputs:  live mode: pipeline.analyze on each test field (Earth Engine via M1-M4, M7);
@@ -106,8 +108,31 @@ def save_all(folder: Path = SAVED_DIR) -> list[Path]:
     return written
 
 
-if __name__ == "__main__":
-    from dotenv import load_dotenv
+def add_traits_to_saved(folder: Path = SAVED_DIR) -> list[Path]:
+    """Add M19's rotation traits to results saved before M19. Offline: the traits come from a
+    fixed table, so no Earth Engine run is needed and nothing else in the files changes."""
+    from farm_analog import rotations
 
-    load_dotenv()
-    save_all()
+    written = []
+    for name in config.TEST_FIELDS:
+        for scenario in SCENARIOS:
+            path = path_for(name, scenario, folder)
+            if not path.exists():
+                continue
+            result = rotations.add_traits(AnalogResult.model_validate_json(path.read_text()))
+            path.write_text(result.model_dump_json(indent=2) + "\n")
+            written.append(path)
+    return written
+
+
+if __name__ == "__main__":
+    import sys
+
+    if "--traits-only" in sys.argv:
+        for p in add_traits_to_saved():
+            print("traits added:", p.name)
+    else:
+        from dotenv import load_dotenv
+
+        load_dotenv()
+        save_all()
