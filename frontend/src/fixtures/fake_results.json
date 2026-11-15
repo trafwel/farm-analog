@@ -1,0 +1,1456 @@
+[
+  {
+    "source": "fixture",
+    "field_id": "fake-colfax",
+    "scenario": "ssp245",
+    "baseline_years": [
+      1995,
+      2014
+    ],
+    "future_years": [
+      2041,
+      2060
+    ],
+    "models": [
+      "fake-model-a",
+      "fake-model-b",
+      "fake-model-c",
+      "fake-model-d",
+      "fake-model-e"
+    ],
+    "farm_today": {
+      "tmean_jfm": 2.6,
+      "tmean_amj": 12.3,
+      "tmean_jas": 19.4,
+      "tmean_ond": 4.4,
+      "ppt_jfm": 148.0,
+      "ppt_amj": 108.0,
+      "ppt_jas": 36.0,
+      "ppt_ond": 156.0
+    },
+    "farm_future": {
+      "tmean_jfm": 5.1,
+      "tmean_amj": 14.8,
+      "tmean_jas": 21.9,
+      "tmean_ond": 6.9,
+      "ppt_jfm": 159.84,
+      "ppt_amj": 111.24,
+      "ppt_jas": 28.8,
+      "ppt_ond": 163.8
+    },
+    "farm_soil": {
+      "available_water_capacity_cm": 22.0,
+      "clay_pct": 20.0,
+      "sand_pct": 12.0,
+      "organic_matter_pct": 3.0,
+      "depth_to_restrictive_layer_cm": 150.0
+    },
+    "novel_climate": false,
+    "analogs": [
+      {
+        "rank": 1,
+        "lon": -118.2035,
+        "lat": 45.5875,
+        "place_name": "Example area 1",
+        "sigma": 0.51,
+        "match_quality": "strong",
+        "models_agree": 3,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 5.01,
+          "tmean_amj": 14.69,
+          "tmean_jas": 21.8,
+          "tmean_ond": 7.05,
+          "ppt_jfm": 159.92,
+          "ppt_amj": 111.19,
+          "ppt_jas": 28.78,
+          "ppt_ond": 163.57
+        },
+        "crops": [
+          {
+            "crop": "Winter wheat",
+            "share": 0.45
+          },
+          {
+            "crop": "Fallow",
+            "share": 0.25
+          },
+          {
+            "crop": "Dry peas",
+            "share": 0.12
+          },
+          {
+            "crop": "Chickpeas",
+            "share": 0.08
+          },
+          {
+            "crop": "Other",
+            "share": 0.1
+          }
+        ],
+        "soil": {
+          "available_water_capacity_cm": 18.0,
+          "clay_pct": 24.3,
+          "sand_pct": 20.4,
+          "organic_matter_pct": 2.41,
+          "depth_to_restrictive_layer_cm": 150.0
+        },
+        "climograph": {
+          "farm_today": {
+            "tmean": [
+              1.85,
+              2.6,
+              3.35,
+              11.55,
+              12.3,
+              13.05,
+              18.65,
+              19.4,
+              20.15,
+              3.65,
+              4.4,
+              5.15
+            ],
+            "ppt": [
+              49.33,
+              49.33,
+              49.33,
+              36.0,
+              36.0,
+              36.0,
+              12.0,
+              12.0,
+              12.0,
+              52.0,
+              52.0,
+              52.0
+            ]
+          },
+          "farm_future": {
+            "tmean": [
+              4.35,
+              5.1,
+              5.85,
+              14.05,
+              14.8,
+              15.55,
+              21.15,
+              21.9,
+              22.65,
+              6.15,
+              6.9,
+              7.65
+            ],
+            "ppt": [
+              53.28,
+              53.28,
+              53.28,
+              37.08,
+              37.08,
+              37.08,
+              9.6,
+              9.6,
+              9.6,
+              54.6,
+              54.6,
+              54.6
+            ]
+          },
+          "analog_today": {
+            "tmean": [
+              4.26,
+              5.01,
+              5.76,
+              13.94,
+              14.69,
+              15.44,
+              21.05,
+              21.8,
+              22.55,
+              6.3,
+              7.05,
+              7.8
+            ],
+            "ppt": [
+              53.31,
+              53.31,
+              53.31,
+              37.06,
+              37.06,
+              37.06,
+              9.59,
+              9.59,
+              9.59,
+              54.52,
+              54.52,
+              54.52
+            ]
+          }
+        }
+      },
+      {
+        "rank": 2,
+        "lon": -118.2684,
+        "lat": 45.8294,
+        "place_name": "Example area 2",
+        "sigma": 0.55,
+        "match_quality": "strong",
+        "models_agree": 4,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 4.84,
+          "tmean_amj": 14.77,
+          "tmean_jas": 22.4,
+          "tmean_ond": 7.29,
+          "ppt_jfm": 159.87,
+          "ppt_amj": 111.42,
+          "ppt_jas": 29.11,
+          "ppt_ond": 163.86
+        },
+        "crops": [
+          {
+            "crop": "Winter wheat",
+            "share": 0.45
+          },
+          {
+            "crop": "Fallow",
+            "share": 0.25
+          },
+          {
+            "crop": "Dry peas",
+            "share": 0.12
+          },
+          {
+            "crop": "Chickpeas",
+            "share": 0.08
+          },
+          {
+            "crop": "Other",
+            "share": 0.1
+          }
+        ],
+        "soil": {
+          "available_water_capacity_cm": 17.6,
+          "clay_pct": 22.5,
+          "sand_pct": 14.6,
+          "organic_matter_pct": 2.59,
+          "depth_to_restrictive_layer_cm": 150.0
+        },
+        "climograph": {
+          "farm_today": {
+            "tmean": [
+              1.85,
+              2.6,
+              3.35,
+              11.55,
+              12.3,
+              13.05,
+              18.65,
+              19.4,
+              20.15,
+              3.65,
+              4.4,
+              5.15
+            ],
+            "ppt": [
+              49.33,
+              49.33,
+              49.33,
+              36.0,
+              36.0,
+              36.0,
+              12.0,
+              12.0,
+              12.0,
+              52.0,
+              52.0,
+              52.0
+            ]
+          },
+          "farm_future": {
+            "tmean": [
+              4.35,
+              5.1,
+              5.85,
+              14.05,
+              14.8,
+              15.55,
+              21.15,
+              21.9,
+              22.65,
+              6.15,
+              6.9,
+              7.65
+            ],
+            "ppt": [
+              53.28,
+              53.28,
+              53.28,
+              37.08,
+              37.08,
+              37.08,
+              9.6,
+              9.6,
+              9.6,
+              54.6,
+              54.6,
+              54.6
+            ]
+          },
+          "analog_today": {
+            "tmean": [
+              4.09,
+              4.84,
+              5.59,
+              14.02,
+              14.77,
+              15.52,
+              21.65,
+              22.4,
+              23.15,
+              6.54,
+              7.29,
+              8.04
+            ],
+            "ppt": [
+              53.29,
+              53.29,
+              53.29,
+              37.14,
+              37.14,
+              37.14,
+              9.7,
+              9.7,
+              9.7,
+              54.62,
+              54.62,
+              54.62
+            ]
+          }
+        }
+      },
+      {
+        "rank": 3,
+        "lon": -118.4386,
+        "lat": 46.2074,
+        "place_name": "Example area 3",
+        "sigma": 0.67,
+        "match_quality": "strong",
+        "models_agree": 5,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 5.68,
+          "tmean_amj": 15.13,
+          "tmean_jas": 22.03,
+          "tmean_ond": 7.03,
+          "ppt_jfm": 160.45,
+          "ppt_amj": 110.83,
+          "ppt_jas": 28.62,
+          "ppt_ond": 164.53
+        },
+        "crops": [
+          {
+            "crop": "Winter wheat",
+            "share": 0.45
+          },
+          {
+            "crop": "Fallow",
+            "share": 0.25
+          },
+          {
+            "crop": "Dry peas",
+            "share": 0.12
+          },
+          {
+            "crop": "Chickpeas",
+            "share": 0.08
+          },
+          {
+            "crop": "Other",
+            "share": 0.1
+          }
+        ],
+        "soil": {
+          "available_water_capacity_cm": 13.3,
+          "clay_pct": 19.3,
+          "sand_pct": 14.7,
+          "organic_matter_pct": 2.44,
+          "depth_to_restrictive_layer_cm": 150.0
+        },
+        "climograph": {
+          "farm_today": {
+            "tmean": [
+              1.85,
+              2.6,
+              3.35,
+              11.55,
+              12.3,
+              13.05,
+              18.65,
+              19.4,
+              20.15,
+              3.65,
+              4.4,
+              5.15
+            ],
+            "ppt": [
+              49.33,
+              49.33,
+              49.33,
+              36.0,
+              36.0,
+              36.0,
+              12.0,
+              12.0,
+              12.0,
+              52.0,
+              52.0,
+              52.0
+            ]
+          },
+          "farm_future": {
+            "tmean": [
+              4.35,
+              5.1,
+              5.85,
+              14.05,
+              14.8,
+              15.55,
+              21.15,
+              21.9,
+              22.65,
+              6.15,
+              6.9,
+              7.65
+            ],
+            "ppt": [
+              53.28,
+              53.28,
+              53.28,
+              37.08,
+              37.08,
+              37.08,
+              9.6,
+              9.6,
+              9.6,
+              54.6,
+              54.6,
+              54.6
+            ]
+          },
+          "analog_today": {
+            "tmean": [
+              4.93,
+              5.68,
+              6.43,
+              14.38,
+              15.13,
+              15.88,
+              21.28,
+              22.03,
+              22.78,
+              6.28,
+              7.03,
+              7.78
+            ],
+            "ppt": [
+              53.48,
+              53.48,
+              53.48,
+              36.94,
+              36.94,
+              36.94,
+              9.54,
+              9.54,
+              9.54,
+              54.84,
+              54.84,
+              54.84
+            ]
+          }
+        }
+      },
+      {
+        "rank": 4,
+        "lon": -118.3843,
+        "lat": 45.521,
+        "place_name": "Example area 4",
+        "sigma": 0.67,
+        "match_quality": "strong",
+        "models_agree": 3,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 4.59,
+          "tmean_amj": 14.56,
+          "tmean_jas": 21.75,
+          "tmean_ond": 6.45,
+          "ppt_jfm": 159.97,
+          "ppt_amj": 111.24,
+          "ppt_jas": 28.46,
+          "ppt_ond": 164.02
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 5,
+        "lon": -118.9203,
+        "lat": 45.7453,
+        "place_name": "Example area 5",
+        "sigma": 1.0,
+        "match_quality": "good",
+        "models_agree": 3,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 5.32,
+          "tmean_amj": 15.19,
+          "tmean_jas": 22.02,
+          "tmean_ond": 7.51,
+          "ppt_jfm": 159.92,
+          "ppt_amj": 111.61,
+          "ppt_jas": 29.29,
+          "ppt_ond": 164.13
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 6,
+        "lon": -118.8506,
+        "lat": 46.1368,
+        "place_name": "Example area 6",
+        "sigma": 1.11,
+        "match_quality": "good",
+        "models_agree": 3,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 4.96,
+          "tmean_amj": 14.65,
+          "tmean_jas": 21.3,
+          "tmean_ond": 7.12,
+          "ppt_jfm": 159.84,
+          "ppt_amj": 111.04,
+          "ppt_jas": 29.16,
+          "ppt_ond": 164.13
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 7,
+        "lon": -118.0995,
+        "lat": 46.1,
+        "place_name": "Example area 7",
+        "sigma": 1.2,
+        "match_quality": "good",
+        "models_agree": 3,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 5.46,
+          "tmean_amj": 14.4,
+          "tmean_jas": 21.66,
+          "tmean_ond": 7.18,
+          "ppt_jfm": 159.9,
+          "ppt_amj": 110.73,
+          "ppt_jas": 29.11,
+          "ppt_ond": 163.12
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 8,
+        "lon": -118.7125,
+        "lat": 45.9013,
+        "place_name": "Example area 8",
+        "sigma": 1.44,
+        "match_quality": "good",
+        "models_agree": 2,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 5.15,
+          "tmean_amj": 14.74,
+          "tmean_jas": 21.38,
+          "tmean_ond": 6.14,
+          "ppt_jfm": 160.24,
+          "ppt_amj": 111.03,
+          "ppt_jas": 29.5,
+          "ppt_ond": 164.0
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 9,
+        "lon": -118.7333,
+        "lat": 45.9491,
+        "place_name": "Example area 9",
+        "sigma": 1.62,
+        "match_quality": "good",
+        "models_agree": 4,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 6.36,
+          "tmean_amj": 14.5,
+          "tmean_jas": 20.23,
+          "tmean_ond": 7.18,
+          "ppt_jfm": 160.01,
+          "ppt_amj": 112.39,
+          "ppt_jas": 28.83,
+          "ppt_ond": 163.59
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 10,
+        "lon": -118.6489,
+        "lat": 46.2643,
+        "place_name": "Example area 10",
+        "sigma": 1.84,
+        "match_quality": "good",
+        "models_agree": 1,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 4.62,
+          "tmean_amj": 14.5,
+          "tmean_jas": 22.15,
+          "tmean_ond": 6.59,
+          "ppt_jfm": 161.07,
+          "ppt_amj": 110.43,
+          "ppt_jas": 28.56,
+          "ppt_ond": 164.3
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 11,
+        "lon": -118.1376,
+        "lat": 46.2026,
+        "place_name": "Example area 11",
+        "sigma": 1.85,
+        "match_quality": "good",
+        "models_agree": 5,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 6.46,
+          "tmean_amj": 14.15,
+          "tmean_jas": 22.0,
+          "tmean_ond": 7.18,
+          "ppt_jfm": 158.92,
+          "ppt_amj": 111.4,
+          "ppt_jas": 28.21,
+          "ppt_ond": 164.38
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 12,
+        "lon": -118.6316,
+        "lat": 45.7956,
+        "place_name": "Example area 12",
+        "sigma": 1.98,
+        "match_quality": "good",
+        "models_agree": 1,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 4.51,
+          "tmean_amj": 14.34,
+          "tmean_jas": 22.2,
+          "tmean_ond": 7.9,
+          "ppt_jfm": 159.12,
+          "ppt_amj": 111.9,
+          "ppt_jas": 27.66,
+          "ppt_ond": 164.05
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 13,
+        "lon": -118.7918,
+        "lat": 45.7813,
+        "place_name": "Example area 13",
+        "sigma": 1.99,
+        "match_quality": "good",
+        "models_agree": 4,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 4.64,
+          "tmean_amj": 15.43,
+          "tmean_jas": 23.5,
+          "tmean_ond": 7.4,
+          "ppt_jfm": 160.73,
+          "ppt_amj": 112.7,
+          "ppt_jas": 28.69,
+          "ppt_ond": 163.25
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 14,
+        "lon": -118.8925,
+        "lat": 45.7139,
+        "place_name": "Example area 14",
+        "sigma": 2.46,
+        "match_quality": "weak",
+        "models_agree": 2,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 4.37,
+          "tmean_amj": 14.74,
+          "tmean_jas": 21.92,
+          "tmean_ond": 6.65,
+          "ppt_jfm": 158.64,
+          "ppt_amj": 112.01,
+          "ppt_jas": 29.8,
+          "ppt_ond": 164.44
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 15,
+        "lon": -118.8069,
+        "lat": 45.9421,
+        "place_name": "Example area 15",
+        "sigma": 2.6,
+        "match_quality": "weak",
+        "models_agree": 0,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 6.4,
+          "tmean_amj": 16.07,
+          "tmean_jas": 21.28,
+          "tmean_ond": 9.38,
+          "ppt_jfm": 160.56,
+          "ppt_amj": 111.4,
+          "ppt_jas": 27.37,
+          "ppt_ond": 164.49
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 16,
+        "lon": -118.9764,
+        "lat": 45.6893,
+        "place_name": "Example area 16",
+        "sigma": 2.64,
+        "match_quality": "weak",
+        "models_agree": 0,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 5.05,
+          "tmean_amj": 14.8,
+          "tmean_jas": 20.01,
+          "tmean_ond": 7.95,
+          "ppt_jfm": 159.6,
+          "ppt_amj": 113.79,
+          "ppt_jas": 30.21,
+          "ppt_ond": 163.04
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 17,
+        "lon": -118.7869,
+        "lat": 45.6329,
+        "place_name": "Example area 17",
+        "sigma": 2.84,
+        "match_quality": "weak",
+        "models_agree": 0,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 5.06,
+          "tmean_amj": 13.45,
+          "tmean_jas": 23.28,
+          "tmean_ond": 6.66,
+          "ppt_jfm": 160.25,
+          "ppt_amj": 112.11,
+          "ppt_jas": 28.5,
+          "ppt_ond": 164.43
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 18,
+        "lon": -118.1124,
+        "lat": 45.8889,
+        "place_name": "Example area 18",
+        "sigma": 3.21,
+        "match_quality": "weak",
+        "models_agree": 0,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 5.78,
+          "tmean_amj": 13.81,
+          "tmean_jas": 22.04,
+          "tmean_ond": 8.4,
+          "ppt_jfm": 157.55,
+          "ppt_amj": 112.27,
+          "ppt_jas": 27.77,
+          "ppt_ond": 164.17
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 19,
+        "lon": -118.9142,
+        "lat": 45.5208,
+        "place_name": "Example area 19",
+        "sigma": 3.34,
+        "match_quality": "weak",
+        "models_agree": 0,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 4.56,
+          "tmean_amj": 12.77,
+          "tmean_jas": 21.64,
+          "tmean_ond": 9.27,
+          "ppt_jfm": 159.92,
+          "ppt_amj": 111.81,
+          "ppt_jas": 27.93,
+          "ppt_ond": 164.55
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 20,
+        "lon": -118.1586,
+        "lat": 46.0932,
+        "place_name": "Example area 20",
+        "sigma": 3.39,
+        "match_quality": "weak",
+        "models_agree": 0,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 3.49,
+          "tmean_amj": 15.5,
+          "tmean_jas": 22.72,
+          "tmean_ond": 7.2,
+          "ppt_jfm": 161.61,
+          "ppt_amj": 111.42,
+          "ppt_jas": 27.22,
+          "ppt_ond": 162.46
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      }
+    ],
+    "notes": []
+  },
+  {
+    "source": "fixture",
+    "field_id": "fake-lind",
+    "scenario": "ssp245",
+    "baseline_years": [
+      1995,
+      2014
+    ],
+    "future_years": [
+      2041,
+      2060
+    ],
+    "models": [
+      "fake-model-a",
+      "fake-model-b",
+      "fake-model-c",
+      "fake-model-d",
+      "fake-model-e"
+    ],
+    "farm_today": {
+      "tmean_jfm": 3.6,
+      "tmean_amj": 13.3,
+      "tmean_jas": 20.4,
+      "tmean_ond": 5.4,
+      "ppt_jfm": 74.0,
+      "ppt_amj": 54.0,
+      "ppt_jas": 18.0,
+      "ppt_ond": 78.0
+    },
+    "farm_future": {
+      "tmean_jfm": 6.1,
+      "tmean_amj": 15.8,
+      "tmean_jas": 22.9,
+      "tmean_ond": 7.9,
+      "ppt_jfm": 79.92,
+      "ppt_amj": 55.62,
+      "ppt_jas": 14.4,
+      "ppt_ond": 81.9
+    },
+    "farm_soil": {
+      "available_water_capacity_cm": 22.0,
+      "clay_pct": 20.0,
+      "sand_pct": 12.0,
+      "organic_matter_pct": 3.0,
+      "depth_to_restrictive_layer_cm": 150.0
+    },
+    "novel_climate": true,
+    "analogs": [
+      {
+        "rank": 1,
+        "lon": -118.5432,
+        "lat": 45.6325,
+        "place_name": "Example area 1",
+        "sigma": 4.56,
+        "match_quality": "none",
+        "models_agree": 0,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 7.84,
+          "tmean_amj": 16.63,
+          "tmean_jas": 23.15,
+          "tmean_ond": 6.9,
+          "ppt_jfm": 79.13,
+          "ppt_amj": 55.1,
+          "ppt_jas": 14.24,
+          "ppt_ond": 83.02
+        },
+        "crops": [
+          {
+            "crop": "Winter wheat",
+            "share": 0.45
+          },
+          {
+            "crop": "Fallow",
+            "share": 0.25
+          },
+          {
+            "crop": "Dry peas",
+            "share": 0.12
+          },
+          {
+            "crop": "Chickpeas",
+            "share": 0.08
+          },
+          {
+            "crop": "Other",
+            "share": 0.1
+          }
+        ],
+        "soil": {
+          "available_water_capacity_cm": 13.3,
+          "clay_pct": 15.5,
+          "sand_pct": 13.7,
+          "organic_matter_pct": 2.76,
+          "depth_to_restrictive_layer_cm": 150.0
+        },
+        "climograph": {
+          "farm_today": {
+            "tmean": [
+              2.85,
+              3.6,
+              4.35,
+              12.55,
+              13.3,
+              14.05,
+              19.65,
+              20.4,
+              21.15,
+              4.65,
+              5.4,
+              6.15
+            ],
+            "ppt": [
+              24.67,
+              24.67,
+              24.67,
+              18.0,
+              18.0,
+              18.0,
+              6.0,
+              6.0,
+              6.0,
+              26.0,
+              26.0,
+              26.0
+            ]
+          },
+          "farm_future": {
+            "tmean": [
+              5.35,
+              6.1,
+              6.85,
+              15.05,
+              15.8,
+              16.55,
+              22.15,
+              22.9,
+              23.65,
+              7.15,
+              7.9,
+              8.65
+            ],
+            "ppt": [
+              26.64,
+              26.64,
+              26.64,
+              18.54,
+              18.54,
+              18.54,
+              4.8,
+              4.8,
+              4.8,
+              27.3,
+              27.3,
+              27.3
+            ]
+          },
+          "analog_today": {
+            "tmean": [
+              7.09,
+              7.84,
+              8.59,
+              15.88,
+              16.63,
+              17.38,
+              22.4,
+              23.15,
+              23.9,
+              6.15,
+              6.9,
+              7.65
+            ],
+            "ppt": [
+              26.38,
+              26.38,
+              26.38,
+              18.37,
+              18.37,
+              18.37,
+              4.75,
+              4.75,
+              4.75,
+              27.67,
+              27.67,
+              27.67
+            ]
+          }
+        }
+      },
+      {
+        "rank": 2,
+        "lon": -118.886,
+        "lat": 46.123,
+        "place_name": "Example area 2",
+        "sigma": 4.71,
+        "match_quality": "none",
+        "models_agree": 0,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 5.89,
+          "tmean_amj": 16.24,
+          "tmean_jas": 25.52,
+          "tmean_ond": 9.41,
+          "ppt_jfm": 78.65,
+          "ppt_amj": 55.79,
+          "ppt_jas": 12.64,
+          "ppt_ond": 78.09
+        },
+        "crops": [
+          {
+            "crop": "Winter wheat",
+            "share": 0.45
+          },
+          {
+            "crop": "Fallow",
+            "share": 0.25
+          },
+          {
+            "crop": "Dry peas",
+            "share": 0.12
+          },
+          {
+            "crop": "Chickpeas",
+            "share": 0.08
+          },
+          {
+            "crop": "Other",
+            "share": 0.1
+          }
+        ],
+        "soil": {
+          "available_water_capacity_cm": 23.3,
+          "clay_pct": 17.6,
+          "sand_pct": 27.1,
+          "organic_matter_pct": 3.06,
+          "depth_to_restrictive_layer_cm": 150.0
+        },
+        "climograph": {
+          "farm_today": {
+            "tmean": [
+              2.85,
+              3.6,
+              4.35,
+              12.55,
+              13.3,
+              14.05,
+              19.65,
+              20.4,
+              21.15,
+              4.65,
+              5.4,
+              6.15
+            ],
+            "ppt": [
+              24.67,
+              24.67,
+              24.67,
+              18.0,
+              18.0,
+              18.0,
+              6.0,
+              6.0,
+              6.0,
+              26.0,
+              26.0,
+              26.0
+            ]
+          },
+          "farm_future": {
+            "tmean": [
+              5.35,
+              6.1,
+              6.85,
+              15.05,
+              15.8,
+              16.55,
+              22.15,
+              22.9,
+              23.65,
+              7.15,
+              7.9,
+              8.65
+            ],
+            "ppt": [
+              26.64,
+              26.64,
+              26.64,
+              18.54,
+              18.54,
+              18.54,
+              4.8,
+              4.8,
+              4.8,
+              27.3,
+              27.3,
+              27.3
+            ]
+          },
+          "analog_today": {
+            "tmean": [
+              5.14,
+              5.89,
+              6.64,
+              15.49,
+              16.24,
+              16.99,
+              24.77,
+              25.52,
+              26.27,
+              8.66,
+              9.41,
+              10.16
+            ],
+            "ppt": [
+              26.22,
+              26.22,
+              26.22,
+              18.6,
+              18.6,
+              18.6,
+              4.21,
+              4.21,
+              4.21,
+              26.03,
+              26.03,
+              26.03
+            ]
+          }
+        }
+      },
+      {
+        "rank": 3,
+        "lon": -118.0844,
+        "lat": 46.2975,
+        "place_name": "Example area 3",
+        "sigma": 4.74,
+        "match_quality": "none",
+        "models_agree": 0,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 6.42,
+          "tmean_amj": 15.03,
+          "tmean_jas": 24.95,
+          "tmean_ond": 7.17,
+          "ppt_jfm": 79.76,
+          "ppt_amj": 54.82,
+          "ppt_jas": 12.97,
+          "ppt_ond": 82.81
+        },
+        "crops": [
+          {
+            "crop": "Winter wheat",
+            "share": 0.45
+          },
+          {
+            "crop": "Fallow",
+            "share": 0.25
+          },
+          {
+            "crop": "Dry peas",
+            "share": 0.12
+          },
+          {
+            "crop": "Chickpeas",
+            "share": 0.08
+          },
+          {
+            "crop": "Other",
+            "share": 0.1
+          }
+        ],
+        "soil": {
+          "available_water_capacity_cm": 18.5,
+          "clay_pct": 15.6,
+          "sand_pct": 19.2,
+          "organic_matter_pct": 3.03,
+          "depth_to_restrictive_layer_cm": 150.0
+        },
+        "climograph": {
+          "farm_today": {
+            "tmean": [
+              2.85,
+              3.6,
+              4.35,
+              12.55,
+              13.3,
+              14.05,
+              19.65,
+              20.4,
+              21.15,
+              4.65,
+              5.4,
+              6.15
+            ],
+            "ppt": [
+              24.67,
+              24.67,
+              24.67,
+              18.0,
+              18.0,
+              18.0,
+              6.0,
+              6.0,
+              6.0,
+              26.0,
+              26.0,
+              26.0
+            ]
+          },
+          "farm_future": {
+            "tmean": [
+              5.35,
+              6.1,
+              6.85,
+              15.05,
+              15.8,
+              16.55,
+              22.15,
+              22.9,
+              23.65,
+              7.15,
+              7.9,
+              8.65
+            ],
+            "ppt": [
+              26.64,
+              26.64,
+              26.64,
+              18.54,
+              18.54,
+              18.54,
+              4.8,
+              4.8,
+              4.8,
+              27.3,
+              27.3,
+              27.3
+            ]
+          },
+          "analog_today": {
+            "tmean": [
+              5.67,
+              6.42,
+              7.17,
+              14.28,
+              15.03,
+              15.78,
+              24.2,
+              24.95,
+              25.7,
+              6.42,
+              7.17,
+              7.92
+            ],
+            "ppt": [
+              26.59,
+              26.59,
+              26.59,
+              18.27,
+              18.27,
+              18.27,
+              4.32,
+              4.32,
+              4.32,
+              27.6,
+              27.6,
+              27.6
+            ]
+          }
+        }
+      },
+      {
+        "rank": 4,
+        "lon": -118.8308,
+        "lat": 45.7993,
+        "place_name": "Example area 4",
+        "sigma": 4.75,
+        "match_quality": "none",
+        "models_agree": 0,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 5.27,
+          "tmean_amj": 13.49,
+          "tmean_jas": 25.99,
+          "tmean_ond": 6.55,
+          "ppt_jfm": 80.49,
+          "ppt_amj": 56.77,
+          "ppt_jas": 12.72,
+          "ppt_ond": 81.84
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 5,
+        "lon": -118.5453,
+        "lat": 45.62,
+        "place_name": "Example area 5",
+        "sigma": 5.1,
+        "match_quality": "none",
+        "models_agree": 0,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 5.43,
+          "tmean_amj": 15.35,
+          "tmean_jas": 25.02,
+          "tmean_ond": 8.51,
+          "ppt_jfm": 83.37,
+          "ppt_amj": 56.24,
+          "ppt_jas": 12.65,
+          "ppt_ond": 77.46
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 6,
+        "lon": -118.2859,
+        "lat": 45.9747,
+        "place_name": "Example area 6",
+        "sigma": 5.13,
+        "match_quality": "none",
+        "models_agree": 0,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 4.63,
+          "tmean_amj": 18.42,
+          "tmean_jas": 26.67,
+          "tmean_ond": 7.86,
+          "ppt_jfm": 81.07,
+          "ppt_amj": 55.1,
+          "ppt_jas": 12.2,
+          "ppt_ond": 82.4
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 7,
+        "lon": -118.967,
+        "lat": 45.9121,
+        "place_name": "Example area 7",
+        "sigma": 5.64,
+        "match_quality": "none",
+        "models_agree": 0,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 5.57,
+          "tmean_amj": 15.43,
+          "tmean_jas": 17.95,
+          "tmean_ond": 5.56,
+          "ppt_jfm": 80.44,
+          "ppt_amj": 52.72,
+          "ppt_jas": 16.01,
+          "ppt_ond": 79.18
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      },
+      {
+        "rank": 8,
+        "lon": -118.1442,
+        "lat": 45.8215,
+        "place_name": "Example area 8",
+        "sigma": 5.94,
+        "match_quality": "none",
+        "models_agree": 0,
+        "models_total": 5,
+        "fingerprint": {
+          "tmean_jfm": 6.0,
+          "tmean_amj": 18.32,
+          "tmean_jas": 21.94,
+          "tmean_ond": 9.29,
+          "ppt_jfm": 76.19,
+          "ppt_amj": 55.28,
+          "ppt_jas": 12.86,
+          "ppt_ond": 80.03
+        },
+        "crops": null,
+        "soil": null,
+        "climograph": null
+      }
+    ],
+    "notes": []
+  }
+]
