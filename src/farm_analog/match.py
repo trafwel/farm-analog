@@ -9,6 +9,17 @@ is kept beside it as a baseline, so we can show sigma dissimilarity adds somethi
 
 ``palouse_demo`` builds a complete result offline from the team's committed data, so the
 app and API work without Earth Engine.
+
+Data flow:
+Inputs:  ``FarmToday`` (farm_today.py), ``FarmFuture`` (future.py), the candidates
+         DataFrame (candidates.py). The offline demo reads
+         data/samples/palouse_prism_analog_inputs.json and
+         data/samples/palouse_climate_ACCESS-CM2_ssp245_2050.csv instead.
+Outputs: ``match`` -> ranked DataFrame (candidate columns + sigma_<model>, sigma,
+         models_agree, models_total, standardized_euclidean, rank); ``to_result`` -> the
+         top N as a schema.AnalogResult; ``palouse_demo`` -> (AnalogResult, table).
+Used by: pipeline.py (both modes), proof.py (palouse_proof uses the demo table),
+         tests/test_match.py (regression against the team's committed rankings).
 """
 
 import json
@@ -117,7 +128,7 @@ def palouse_demo(top_n: int = config.DEFAULT_TOP_N) -> tuple[AnalogResult, pd.Da
     today = palouse_today_from_cache(payload)
     change = quarterly_change(pd.read_csv(TEAM_MODEL_CSV), "ACCESS-CM2")
     future = farm_future(fingerprint.from_contract(today.normal), [change])
-    candidates, candidate_note = cand.load_candidates()
+    candidates, candidate_note = cand.team_candidates()
     table = match(today, future, candidates)
     notes = [
         "Offline Palouse demo: the target is the Palouse-wide average climate from cached "

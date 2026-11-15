@@ -4,6 +4,13 @@ The Pydantic models in ``farm_analog.schema`` are the single source of truth. Th
 writes them out as JSON Schema in ``contract/``; the React app generates its TypeScript
 types from those files (M6), so a field renamed in Python shows up as a type error in the
 frontend instead of a silent bug. A test fails if the committed files fall out of date.
+
+Data flow:
+Inputs:  the Pydantic models ``AnalogRequest`` and ``AnalogResult`` from schema.py.
+Outputs: contract/analog_request.schema.json and contract/analog_result.schema.json.
+Used by: scripts/export_contract.py (writes the files); tests/test_contract.py (fails if
+         the committed files are stale); frontend/scripts/gen-types.mjs (reads contract/ to
+         generate frontend/src/types/contract.ts; CI checks that file is up to date).
 """
 
 import json

@@ -45,6 +45,7 @@
       "organic_matter_pct": 3.0,
       "depth_to_restrictive_layer_cm": 150.0
     },
+    "farm_hazards": null,
     "novel_climate": false,
     "analogs": [
       {
@@ -186,7 +187,8 @@
               54.52
             ]
           }
-        }
+        },
+        "hazards": null
       },
       {
         "rank": 2,
@@ -327,7 +329,8 @@
               54.62
             ]
           }
-        }
+        },
+        "hazards": null
       },
       {
         "rank": 3,
@@ -468,7 +471,8 @@
               54.84
             ]
           }
-        }
+        },
+        "hazards": null
       },
       {
         "rank": 4,
@@ -491,7 +495,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 5,
@@ -514,7 +519,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 6,
@@ -537,7 +543,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 7,
@@ -560,7 +567,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 8,
@@ -583,7 +591,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 9,
@@ -606,7 +615,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 10,
@@ -629,7 +639,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 11,
@@ -652,7 +663,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 12,
@@ -675,7 +687,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 13,
@@ -698,7 +711,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 14,
@@ -721,7 +735,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 15,
@@ -744,7 +759,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 16,
@@ -767,7 +783,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 17,
@@ -790,7 +807,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 18,
@@ -813,7 +831,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 19,
@@ -836,7 +855,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 20,
@@ -859,9 +879,11 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       }
     ],
+    "rotations": null,
     "notes": []
   },
   {
@@ -910,6 +932,7 @@
       "organic_matter_pct": 3.0,
       "depth_to_restrictive_layer_cm": 150.0
     },
+    "farm_hazards": null,
     "novel_climate": true,
     "analogs": [
       {
@@ -1051,7 +1074,8 @@
               27.67
             ]
           }
-        }
+        },
+        "hazards": null
       },
       {
         "rank": 2,
@@ -1192,7 +1216,8 @@
               26.03
             ]
           }
-        }
+        },
+        "hazards": null
       },
       {
         "rank": 3,
@@ -1333,7 +1358,8 @@
               27.6
             ]
           }
-        }
+        },
+        "hazards": null
       },
       {
         "rank": 4,
@@ -1356,7 +1382,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 5,
@@ -1379,7 +1406,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 6,
@@ -1402,7 +1430,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 7,
@@ -1425,7 +1454,8 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       },
       {
         "rank": 8,
@@ -1448,9 +1478,11 @@
         },
         "crops": null,
         "soil": null,
-        "climograph": null
+        "climograph": null,
+        "hazards": null
       }
     ],
+    "rotations": null,
     "notes": []
   }
 ]
