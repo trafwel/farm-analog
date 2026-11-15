@@ -5,7 +5,9 @@ field in ``config.TEST_FIELDS`` live, for every scenario, and saves each ``Analo
 ``data/samples/live_<field>_<scenario>.json`` (committed). In offline mode, a drawn field near
 a test field gets that saved result, with a note saying so.
 ``python -m farm_analog.saved --traits-only`` adds M19's rotation traits to the saved files
-without Earth Engine.
+without Earth Engine. ``--summaries`` writes Bill's summary of each saved result to
+``data/samples/summaries/`` for the online demo (Gemini if GEMINI_API_KEY is set, else the
+template).
 
 Data flow:
 Inputs:  live mode: pipeline.analyze on each test field (Earth Engine via M1-M4, M7);
@@ -125,10 +127,59 @@ def add_traits_to_saved(folder: Path = SAVED_DIR) -> list[Path]:
     return written
 
 
+SUMMARY_DIR = SAVED_DIR / "summaries"
+
+
+def summary_path(name: str, scenario: str, folder: Path = SUMMARY_DIR) -> Path:
+    return folder / f"live_{name}_{scenario}.json"
+
+
+def write_summaries(llm, folder: Path = SAVED_DIR, out: Path | None = None) -> list[dict]:
+    """Bill's summary of each saved result, for the online demo (M18), which has no server.
+
+    ``llm`` is Gemini (needs GEMINI_API_KEY) or None for the template. Each summary goes
+    through the same number check as POST /bill/summary and falls back to the template.
+    Writes ``summaries/live_<field>_<scenario>.json`` (text, source, notices, model, date);
+    the fallback reason is returned for the person running it, not saved.
+    """
+    from farm_analog.assistant.summarizer import summarize
+
+    out = out or folder / "summaries"
+    out.mkdir(parents=True, exist_ok=True)
+    report = []
+    for name in config.TEST_FIELDS:
+        for scenario in SCENARIOS:
+            path = path_for(name, scenario, folder)
+            if not path.exists():
+                continue
+            summary = summarize(AnalogResult.model_validate_json(path.read_text()), llm)
+            saved = {"text": summary.text, "source": summary.source, "notices": summary.notices,
+                     "model": config.GEMINI_MODEL if summary.source == "gemini" else None,
+                     "generated": date.today().isoformat()}
+            summary_path(name, scenario, out).write_text(json.dumps(saved, indent=2,
+                                                                    ensure_ascii=False) + "\n")
+            report.append({"file": f"{name}_{scenario}", "source": summary.source,
+                           "error": summary.error})
+    return report
+
+
 if __name__ == "__main__":
     import sys
 
-    if "--traits-only" in sys.argv:
+    if "--summaries" in sys.argv:
+        from dotenv import load_dotenv
+
+        from farm_analog.assistant.llm import GeminiLLM, LLMError
+
+        load_dotenv()
+        try:
+            llm = GeminiLLM()
+        except LLMError:
+            llm = None
+            print("No GEMINI_API_KEY: writing template summaries.")
+        for row in write_summaries(llm):
+            print(row["file"], row["source"], row["error"] or "")
+    elif "--traits-only" in sys.argv:
         for p in add_traits_to_saved():
             print("traits added:", p.name)
     else:

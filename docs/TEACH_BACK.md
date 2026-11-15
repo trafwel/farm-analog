@@ -281,3 +281,16 @@ _Built in the same away batch. M8 was skipped for now (no UI changes)._
    - Answer:
 2. Why is there no "extra income" priority, and what would it take to add one honestly?
    - Answer:
+
+## M18 — Plain-language summaries in the online demo
+
+**Key concepts**
+- **Code computes, the model narrates:** every number Bill may use is computed and rounded in code first; Gemini only words it.
+- **The number check is necessary but not enough:** it proves each number exists in the input, not that it's attached to the right place or that "strong" is right. A person still reads saved text.
+- **Written ahead of time:** the online demo has no server and no key, so summaries are generated once and labeled with model and date.
+
+**Questions**
+1. A summary says "the match has 23 hot days and the field has 31". Every number is in the input. Would the check catch it? What would?
+   - Answer:
+2. Why do the saved summaries have to be regenerated after M17's rerun, and what goes wrong if nobody does?
+   - Answer:

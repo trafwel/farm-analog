@@ -1,0 +1,7 @@
+{
+  "text": "Looking at the results for the 2050s under middle-of-the-road emissions, the best match for the farm's future climate is Walla Walla County, Washington, which has a strong match quality with 8 out of 8 climate models agreeing. A lower sigma score means the place's climate today is closer to the farm's future climate, with strong being below 1, good 1 to 2, weak 2 to 4, and none 4 or more. \n\nOut of the matching areas checked, 2 use the field's current rotation of a flexible mix of pulses, spring wheat, and winter wheat. The rotations used at the matching places include winter wheat to fallow, a flexible mix of fallow, pulses, and winter wheat, and a flexible mix of fallow, spring wheat, and winter wheat. \n\nComparing hazards with the best match in Walla Walla County, the field has 27 days above 32 degrees Celsius per year compared to 37 at the match today, 172 frost-free days compared to 211, and driest-month soil water in September of 18.1 percent compared to 17.8 percent. \n\nOverall, temperatures are projected to increase across all seasons by the 2050s, accompanied by varying changes in precipitation. \n\nCandidates are based on 3351 farmland cells at approximately 4 kilometers using the Cropland Data Layer.",
+  "source": "gemini",
+  "notices": [],
+  "model": "gemini-3.5-flash-lite",
+  "generated": "2026-11-15"
+}

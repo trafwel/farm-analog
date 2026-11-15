@@ -4,7 +4,6 @@ Every unresolved item from a milestone review. See rule 3 in [HOW_WE_BUILD.md](H
 
 ## Fix now
 
-- **[M9] Live Gemini call not run.** No `GEMINI_API_KEY` in `.env`. As soon as a key exists, call `POST /bill/summary` on `fake-colfax` and `POST /bill/parse` once each, to confirm the model id `gemini-3.5-flash-lite` and thinking level `MINIMAL` are accepted. Until then, a rejected setting would silently send every summary to the template.
 
 ## Waits for a milestone
 
@@ -29,7 +28,6 @@ Every unresolved item from a milestone review. See rule 3 in [HOW_WE_BUILD.md](H
 - **[M13] IMERG days are UTC days,** so a storm can be split across two days; extreme-rain counts may be slightly low.
 - **[M13] Bare months use a fixed NDVI threshold (0.25)** on a 200 m circle that includes field edges; in wheat–fallow areas half the years are fallow, pulling medians down.
 
-- **[M9 → M8 / UI] The frontend doesn't call Bill yet** (team instruction: leave the UI as it is for now). When it does, render `text` and `notices` as plain text, never as HTML (no `dangerouslySetInnerHTML`), and show the notices prominently.
 - **[M9 → M8 / UI] Bill's models are deliberately not in the contract.** `ParseResult` and `BillSummary` live in `assistant/` and appear only in the API's OpenAPI schema, so `contract/*.schema.json` and the frontend's generated types are unchanged (a test checks this). When the UI uses Bill, add them to `contract.MODELS` and regenerate the types in the same change.
 - **[M10 → live run] Sigma vs. the plain baseline.** Offline (one model, 20 km grid) the two rankings almost agree (Spearman 0.997; 17 of the top 20 the same). Re-measure on the live 8-model, 4 km run before claiming sigma adds something.
 
@@ -54,6 +52,9 @@ Every unresolved item from a milestone review. See rule 3 in [HOW_WE_BUILD.md](H
 - **[M2 → team member with Earth Engine] The model download is untested live,** like M1's PRISM download (no credentials here). Run `farm_future_for_field` on the 5 test fields and check that all 8 models in `config.CLIMATE_MODELS` exist in `NASA/GDDP-CMIP6` with an `ssp245` run; any that don't are reported in `failed_models` instead of stopping the run.
 - **[M2 → M8] The contract carries only the ensemble median future** (`AnalogResult.farm_future`). The low-high range across models (`FarmFuture.low` / `.high`) should reach the frontend for the climograph's uncertainty band; add it to the contract in M8.
 - **[M0 rebase → M7] No tests for the SMAP, ECOSTRESS and climate importers.** Their `validate_request` functions and the CSV/JSON writers can be tested with recorded responses; add tests when M7 wires them into the contract.
+
+- **[M18] Saved summaries go stale.** `data/samples/summaries/` describes the saved results as of 2026-11-15. After any rerun (M17 ECOSTRESS, M21 soil) run `python -m farm_analog.saved --summaries` and read all 10 again before committing.
+- **[M18] The number check doesn't check pairings or wording.** It confirms every number appears in the input, not that it's attached to the right thing, and not quality words. All 10 saved summaries were checked by hand against the input (pairs, shares, model counts, "good" vs. "strong"); one loose phrase remains (Lind SSP5-8.5 says the "projections" are based on the farmland cells, where the candidates are).
 
 ## Team decision
 
@@ -84,6 +85,9 @@ Every unresolved item from a milestone review. See rule 3 in [HOW_WE_BUILD.md](H
 - **[M0] 3-D GeoJSON positions are rejected.** Leaflet drawing produces 2-D positions only; supporting altitude adds complexity for no benefit.
 
 ## Resolved
+
+- **[M18]** [M9] Live Gemini check: `gemini-3.5-flash-lite` with thinking level `MINIMAL` is accepted (the `bill-retry` check, and 10 summaries written on 2026-11-15). Temporary 500/503/504 errors are now retried twice.
+- **[M18]** [M9 → UI] The frontend shows Bill's summary as plain text: from `POST /bill/summary` with a server, and from saved summaries in the online demo.
 
 - **[M9]** [M1 → M9] Bill reads the 8-value fingerprint (`tmean_*`, `ppt_*`): each quarter's average temperature and precipitation, today, future and change.
 - **[M9]** [M9 → M5] Bill is reachable from the API: `POST /bill/parse` and `POST /bill/summary`. Gemini is set up once at startup (template only without a key), and summaries are cached by result hash.

@@ -1,0 +1,7 @@
+{
+  "text": "The best match for the farm's future climate in the 2050s under middle-of-the-road emissions is Gilliam County, Oregon, which has a strong match quality with 8 out of 8 climate models in agreement. Sigma measures how different a place's climate today is from the farm's future climate, in units of the farm's normal year-to-year swings, where lower means closer. \n\nFor rotations, 0 matching areas out of 5 checked use the field's current rotation of a flexible mix of fallow, spring wheat, and winter wheat. The rotations used at the matching places are winter wheat to fallow, which is used in 5 analog areas, and continuous winter wheat, which is used in 0 analog areas.\n\nLooking at hazards compared to the best match, Gilliam County, Oregon has 32 days above 32 degrees Celsius per year, exactly matching the field's 32 days today. The frost-free season is 192 days at the match compared to 164 days for the field today. Soil water in the driest month of September is 19.2 percent at the match compared to 17.8 percent for the field today.\n\nAcross the year, temperatures are expected to rise across all seasons while precipitation changes vary between wetter and drier conditions depending on the time of year. \n\nThese findings are based on candidates from 3351 farmland cells of about 4 kilometers using the Cropland Data Layer.",
+  "source": "gemini",
+  "notices": [],
+  "model": "gemini-3.5-flash-lite",
+  "generated": "2026-11-15"
+}

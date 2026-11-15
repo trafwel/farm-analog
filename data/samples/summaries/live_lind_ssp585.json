@@ -1,0 +1,7 @@
+{
+  "text": "Looking ahead to the 2050s under high emissions, the closest climate match for your field is found in Gilliam County, Oregon. Five out of eight climate models agree on this good match. Sigma measures how different a place's climate today is from your farm's future climate, with lower numbers meaning a closer match. \n\nZero matching areas currently use your field's current rotation, which consists of a flexible mix of fallow, spring wheat, and winter wheat. The matching places instead use rotations of winter wheat leading to fallow, and continuous winter wheat. \n\nComparing your field to the best match in Gilliam County, your field has 32 days above 32 degrees Celsius per year, which is the same as the match today. Your field experiences 164 frost-free days compared to 192 days at the match. For soil water in the driest month of September, your field has 17.8 percent compared to 19.2 percent at the match. \n\nUnder this high emissions scenario, temperatures will rise across the year, with varying changes in precipitation from month to month. These projections are based on 3351 farmland cells.",
+  "source": "gemini",
+  "notices": [],
+  "model": "gemini-3.5-flash-lite",
+  "generated": "2026-11-15"
+}

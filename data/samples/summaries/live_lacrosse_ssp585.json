@@ -1,0 +1,7 @@
+{
+  "text": "For the 2050s under high emissions, the best match for the field is Garfield County, WA, with a good match quality, and 5 climate models agree out of 8. Lower sigma means the place's climate today is closer to the farm's future climate. \n\nLooking at crop rotations, 4 matching areas use the field's current rotation. The rotations used at the matching places are winter wheat to spring wheat to fallow, flexible mix of fallow, winter wheat, and winter wheat to winter wheat to fallow. \n\nFor hazards compared to the best match in Garfield County, WA, the field today has 37 days above 32 degrees Celsius per year compared to 42 for the match. The frost-free season is 165 days for the field today and 197 days for the match. For the driest-month soil water in September, the field today is 16.9 percent while the match today is 21.3 percent. \n\nThe future climate brings warmer temperatures and changing precipitation across the quarters of the year. \n\nThese results come with candidates based on 3351 farmland cells.",
+  "source": "gemini",
+  "notices": [],
+  "model": "gemini-3.5-flash-lite",
+  "generated": "2026-11-15"
+}
