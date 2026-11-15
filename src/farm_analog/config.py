@@ -21,6 +21,21 @@ FUTURE_YEARS: Final = (2041, 2060)
 
 DEFAULT_SCENARIO: Final = "ssp245"
 
+# NEX-GDDP-CMIP6 models used for the future climate (M2). Chosen to span the range of
+# projected warming: warmer-running (ACCESS-CM2, CanESM5, UKESM1-0-LL), middle (EC-Earth3,
+# MRI-ESM2-0) and cooler-running (GFDL-ESM4, MIROC6, MPI-ESM1-2-HR). Each model's change is
+# applied separately; M4 counts how many models agree on an analog.
+CLIMATE_MODELS: Final = (
+    "ACCESS-CM2",
+    "CanESM5",
+    "EC-Earth3",
+    "GFDL-ESM4",
+    "MIROC6",
+    "MPI-ESM1-2-HR",
+    "MRI-ESM2-0",
+    "UKESM1-0-LL",
+)
+
 # PRISM monthly grids in Earth Engine (~4 km). AN81 = the long-running monthly series.
 PRISM_COLLECTION: Final = "OREGONSTATE/PRISM/ANm"
 PRISM_DATASET_TYPE: Final = "AN81"
