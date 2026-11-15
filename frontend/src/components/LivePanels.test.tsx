@@ -36,7 +36,6 @@ describe('M8 panels on a live result', () => {
     expect(names()[1]).toContain('Winter wheat → Spring wheat → Pulses');
     expect(section).toHaveTextContent('nitrogen-fixing crop in 1 of 3 years');
     expect(within(section).getAllByText('Best fit for your choices')).toHaveLength(2);
-    expect(section).toHaveTextContent('Income, markets and equipment aren’t measured here');
   });
 
   it('compares the best match by default, then the selected place', () => {

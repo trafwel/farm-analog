@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { RotationStrategy } from '../types/contract';
-import { bestFit, NOT_SCORED, PRIORITIES, type PriorityId, priorityFit, sortByPriorities } from '../lib/priorities';
+import { bestFit, PRIORITIES, type PriorityId, priorityFit, sortByPriorities } from '../lib/priorities';
 
 export const ROTATION_INTRO =
   'Crop rotations seen on farmland whose climate today matches your field’s 2050s climate, next to the rotation your field grows now. They show what already works in that climate; they are not recommendations.';
@@ -41,7 +41,6 @@ function PriorityPicker({ chosen, onChange }: { chosen: PriorityId[]; onChange: 
           <input type="checkbox" checked={chosen.includes(p.id)} onChange={() => toggle(p.id)} /> {p.label}
         </label>
       ))}
-      <p className="muted small">{NOT_SCORED}</p>
     </fieldset>
   );
 }

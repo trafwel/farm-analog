@@ -58,8 +58,6 @@ export const PRIORITIES: Priority[] = [
   },
 ];
 
-export const NOT_SCORED =
-  'Income, markets and equipment aren’t measured here, so they can’t be scored. Weigh them yourself.';
 
 export interface PriorityFit {
   score: number;
