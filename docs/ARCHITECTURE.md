@@ -24,7 +24,7 @@ flowchart TD
     MATCH["match.py: per-model sigma, median, agreement,<br/>baseline, AnalogResult + offline Palouse demo<br/><b>built [M4]</b>"]
     SAVED["saved.py: 5 test fields run live, saved for offline demos<br/><b>built [M11]</b>"]
     ROT["rotations.py: CDL crop sequences 2016–2023 → rotation strategies<br/>(current first; why / evidence / benefits / risks / gaps)<br/><b>built [M12]</b> · trait shares per rotation <b>built [M19]</b>"]
-    HAZ["hazards.py: heat, frost (PRISM daily), extreme rain (GPM IMERG),<br/>soil moisture (SMAP), bare months (Landsat NDVI)<br/><b>built [M13]</b>"]
+    HAZ["hazards.py: heat, frost (PRISM daily), extreme rain (GPM IMERG),<br/>soil moisture (SMAP), bare months (Landsat NDVI)<br/><b>built [M13]</b> · afternoon ground temperature (ECOSTRESS, Earth Engine) <b>built [M17]</b>"]
     PROOF["proof.py: self-check, sigma vs. baseline,<br/>crop backtest (live) + day-length check<br/><b>built [M10]</b>"]
     EVID["evidence.py: crops (CDL), soil (OpenLandMap), climograph,<br/>county names for the top 3 (live mode)<br/><b>built [M7]</b>"]
 
@@ -70,7 +70,7 @@ flowchart TD
     SEARCH --> PREVIEW
     SMAP --> PREVIEW
     SMAP -. hazards / field view .-> EVID
-    ECO -. hazards / field view .-> EVID
+    ECO -. same product, now read in Earth Engine by hazards.py [M17] .-> HAZ
     CONTRACT -. defines shape .-> API
     CONTRACT -. types .-> UI
     FIX -. fake data until M5 .-> UI
@@ -89,6 +89,8 @@ flowchart TD
 Dotted arrows are build-time relationships (shared types and fake data), not runtime data flow.
 
 ## Changelog
+
+- 2026-11-15 (M17): `hazards.py` adds NASA ECOSTRESS afternoon ground temperature over cropland within 1 km (clear summer afternoons 2018–2025; June and July–August apart); contract `Hazards` gains three fields; the hazard table, glossary and Bill show it. The 10 saved results were rerun live (also bringing in county names for ranks 4–20) and their summaries regenerated.
 
 - 2026-11-15 (M18): Bill's summary input gains rotations and the best match's hazards; `saved.py --summaries` writes Gemini summaries of the saved results to `data/samples/summaries/`, which the online demo shows. Gemini temporary errors are retried.
 

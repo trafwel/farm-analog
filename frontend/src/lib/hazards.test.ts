@@ -56,6 +56,18 @@ describe('soil water (SMAP)', () => {
   });
 });
 
+describe('ground temperature (ECOSTRESS)', () => {
+  it('shows June and July–August with the change from the values shown', () => {
+    const rows = hazardRows(
+      { surface_temp_june_c: 37.0, surface_temp_julaug_c: 40.3, surface_passes: 88, missing_sources: [] },
+      { surface_temp_june_c: 37.6, surface_temp_julaug_c: 44.2, surface_passes: 87, missing_sources: [] },
+    );
+    const byId = Object.fromEntries(rows.map((r) => [r.id, r]));
+    expect(byId['surface-june']).toMatchObject({ farm: '37.0 °C', place: '37.6 °C', change: '+0.6 °C' });
+    expect(byId['surface-julaug']).toMatchObject({ farm: '40.3 °C', place: '44.2 °C', change: '+3.9 °C' });
+  });
+});
+
 describe('chart gridlines', () => {
   it('cover the whole data range', async () => {
     const { niceTicks } = await import('../components/ClimateChart');

@@ -219,3 +219,26 @@ def test_add_hazards_raises_when_nothing_came_back(monkeypatch):
         str(k): hazards.HazardProfile(missing=["prism: down"]) for k, _, _ in points})
     with pytest.raises(RuntimeError):
         hazards.add_hazards(result, field)
+
+
+def test_surface_temperature_splits_june_from_july_august_and_drops_repeat_passes():
+    """M17: overlapping ECOSTRESS tiles repeat a pass; June and Jul-Aug are kept apart."""
+    t = pd.to_datetime(["2020-06-05 20:00", "2020-06-05 20:00", "2021-06-20 21:00",
+                        "2020-07-10 19:00", "2022-08-02 22:00", "2023-08-20 20:00"])
+    s = pd.Series([36.0, 99.0, 38.0, 41.0, 44.0, 47.0], index=t)
+    out = hazards.surface_temperature(s)
+    assert out == {"surface_temp_june_c": 37.0, "surface_temp_julaug_c": 44.0, "surface_passes": 5}
+    only_june = hazards.surface_temperature(s.iloc[:3])
+    assert only_june["surface_temp_julaug_c"] is None and only_june["surface_passes"] == 2
+    assert hazards.surface_temperature(pd.Series(dtype=float))["surface_passes"] == 0
+
+
+def test_surface_temperature_reaches_the_contract_and_compare():
+    farm = hazards.HazardProfile(surface_temp_june_c=37.0, surface_temp_julaug_c=40.1,
+                                 surface_passes=88)
+    place = hazards.HazardProfile(surface_temp_june_c=36.9, surface_temp_julaug_c=43.7,
+                                  surface_passes=87)
+    c = hazards.compare(farm, place)
+    assert c["surface_temp_julaug_c"] == {"farm": 40.1, "analog": 43.7, "change": 3.6}
+    assert hazards.to_contract(place).surface_passes == 87
+    assert "ecostress_surface_temp" in hazards.SOURCES

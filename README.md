@@ -13,7 +13,7 @@ NASA Space Apps Challenge 2026 · *Field Shift: Adapting Farms with NASA Data* �
 3. **Your field around 2050:** each of 8 NASA NEX-GDDP-CMIP6 climate models' change (2041–2060 vs. 1995–2014) is added to your field's real climate. Both SSP2-4.5 (moderate) and SSP5-8.5 (high emissions) are available.
 4. **Matching places:** 3,351 farmland cells (~4.6 km, USDA Cropland Data Layer) across the inland Northwest are scored with sigma dissimilarity (Mahony et al., 2017) under every model. Below 1 is a strong match; 4 or more means no real match (a "novel climate").
 5. **Rotation options:** what the matching places actually grew from 2016 to 2023, read pixel by pixel from the Cropland Data Layer. Your field's current rotation comes first, with at least three options in all, each with why, evidence, benefits, risks and gaps.
-6. **Hazard outlook:** hot days and frost dates (PRISM daily), heavy-rain days (NASA GPM IMERG), soil moisture (NASA SMAP) and bare-field months (Landsat NDVI). Each compares your field today with the matching place today.
+6. **Hazard outlook:** hot days and frost dates (PRISM daily), heavy-rain days (NASA GPM IMERG), soil moisture (NASA SMAP), afternoon ground temperature at 70 m (NASA ECOSTRESS) and bare-field months (Landsat NDVI). Each compares your field today with the matching place today.
 7. **Plain words:** a template summary (or Gemini, when a key is set; every number is checked), a glossary, and a reminder to check with your county extension agent.
 
 The tool supports a farmer's decision; it doesn't make it.
