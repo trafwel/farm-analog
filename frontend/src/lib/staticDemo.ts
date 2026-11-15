@@ -107,14 +107,11 @@ export function analyzeStatic(body: AnalogRequest): AnalogResultView {
       OUTSIDE_MESSAGE,
       [
         `Draw your field within ${SAVED_RESULT_RADIUS_KM} km of one of them (brown areas on the map), or choose one of the example field buttons.`,
-        'The full app analyzes any US field live with Google Earth Engine; see the README to run it.',
       ],
       400,
     );
   }
-  const note =
-    `Saved live result for the ${nearest.f.label} test field (${nearest.km.toFixed(1)} km from your field’s ` +
-    `center), computed with Earth Engine on ${COMPUTED_ON}. Your own field’s climate may differ slightly.`;
+  const note = `These results use the nearby example field at ${nearest.f.label}. Your field’s climate may differ slightly.`;
   return {
     ...saved,
     field_id: `static-${nearest.f.id}`,

@@ -70,10 +70,9 @@ describe('M8 panels on a live result', () => {
       />,
     );
     expect(screen.getByText('<b>not bold</b> Summary.')).toBeInTheDocument();
-    expect(screen.getByText(/fixed template/)).toBeInTheDocument();
   });
 
-  it('labels a saved Gemini summary with its model and date', () => {
+  it('shows a saved summary without model or generation metadata', () => {
     render(
       <ResultsPanel
         result={cook}
@@ -82,7 +81,8 @@ describe('M8 panels on a live result', () => {
         billSummary={{ text: 'Saved.', source: 'gemini', notices: [], model: 'gemini-x', generated: '2026-11-15' }}
       />,
     );
-    expect(screen.getByText(/Written ahead of time by Bill \(Gemini, gemini-x\) for this test field on 2026-11-15/)).toBeInTheDocument();
+    expect(screen.getByText('Saved.')).toBeInTheDocument();
+    expect(screen.queryByText(/gemini-x|2026-11-15/)).not.toBeInTheDocument();
     expect(screen.getByText(LOCAL_EXPERT)).toBeInTheDocument();
   });
 

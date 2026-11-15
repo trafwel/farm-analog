@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Scenario } from './types/contract';
 import type { AnalogResultView } from './types/extensions';
-import { API_BASE, ApiError, type BillSummary, checkHealth, fetchAnalogs, fetchBillSummary } from './lib/api';
+import { ApiError, type BillSummary, fetchAnalogs, fetchBillSummary } from './lib/api';
 import { DEMO_CASES, type DemoCaseId, getDemoResult } from './lib/fixtures';
 import { analyzeStatic, IS_STATIC, savedSummary, TEST_FIELDS, testFieldRing } from './lib/staticDemo';
 import { buildAnalogRequest, type LonLat, validatePolygon } from './lib/request';
@@ -10,15 +10,6 @@ import type { PriorityId } from './lib/priorities';
 import { MapView } from './components/MapView';
 import { ResultsPanel } from './components/ResultsPanel';
 
-type Health = 'checking' | 'online' | 'offline' | 'static';
-
-const HEALTH_TEXT: Record<Health, string> = {
-  checking: 'Checking the analysis server…',
-  online: 'Analysis server is online.',
-  offline: 'Analysis server is not reachable. You can still view demo data.',
-  static:
-    'Online demo: real Earth Engine results saved for 5 Palouse test fields. No server needed.',
-};
 
 const VALID_GOALS: PriorityId[] = ['water', 'erosion', 'organic', 'nitrogen', 'pests'];
 
@@ -60,7 +51,6 @@ export default function App() {
   const [demoCase, setDemoCase] = useState<DemoCaseId | null>(null);
   const [selectedRank, setSelectedRank] = useState<number | null>(null);
   const [resultCount, setResultCount] = useState(0);
-  const [health, setHealth] = useState<Health>(IS_STATIC ? 'static' : 'checking');
   const [billSummary, setBillSummary] = useState<BillSummary | null>(null);
   const [cancelDrawKey, setCancelDrawKey] = useState(0);
   const [mapFocusRequest, setMapFocusRequest] = useState(0);
@@ -99,15 +89,6 @@ export default function App() {
     const newUrl = newQuery ? `${window.location.pathname}?${newQuery}` : window.location.pathname;
     window.history.replaceState(null, '', newUrl);
   }, [field, scenario, chosenGoals]);
-
-  useEffect(() => {
-    if (IS_STATIC) return;
-    let live = true;
-    checkHealth().then((ok) => live && setHealth(ok ? 'online' : 'offline'));
-    return () => {
-      live = false;
-    };
-  }, []);
 
   const showResult = useCallback((r: AnalogResultView, demo: DemoCaseId | null) => {
     setResult(r);
@@ -334,11 +315,6 @@ export default function App() {
                 Set a field first.
               </p>
             )}
-            {!IS_STATIC && (
-              <p className={`small health health-${health}`} role="status">
-                {HEALTH_TEXT[health]}
-              </p>
-            )}
           </section>
 
           {error && (
@@ -354,7 +330,7 @@ export default function App() {
                 </ul>
               )}
               {!IS_STATIC && error.kind === 'network' && (
-                <p className="small">Is the backend running at {API_BASE}? You can look at demo data instead.</p>
+                <p className="small">Try again in a moment or explore an example below.</p>
               )}
               {!IS_STATIC && (
                 <button type="button" onClick={() => showDemo('fake-colfax')}>
