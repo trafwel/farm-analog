@@ -9,6 +9,14 @@ Needs a NASA Earthdata login in ~/.netrc (or %USERPROFILE%\\_netrc on Windows):
 
 Run from the repo root:
     PYTHONPATH=src python -m farm_analog.ecostress
+
+Data flow:
+Inputs:  NASA CMR search + LP DAAC downloads of ECOSTRESS L2T LSTE v002 tiles (needs a NASA
+         Earthdata login in ~/.netrc) for a date range and bounding box.
+Outputs: data/ecostress/palouse_ecostress_lst_<start>_<end>.csv (one row per tile overpass:
+         LST statistics) and a .json with metadata; raw GeoTIFFs cached in raw/.
+Used by: nothing in the pipeline yet; a committed sample lives in data/samples/ for later
+         heat-stress evidence (see docs/ARCHITECTURE.md).
 """
 
 import argparse
@@ -18,12 +26,12 @@ import time
 from datetime import UTC, date, datetime
 from pathlib import Path
 
+from farm_analog.config import PALOUSE_BOUNDS  # defined once, in config.py
+
 ECOSTRESS_SHORT_NAME = "ECO_L2T_LSTE"
 ECOSTRESS_VERSION = "002"
 ECOSTRESS_DOI = "10.5067/ECOSTRESS/ECO_L2T_LSTE.002"
 CMR_GRANULES = "https://cmr.earthdata.nasa.gov/search/granules.json"
-# Same approximate Washington Palouse demo extent as the SMAP importer.
-PALOUSE_BOUNDS = (-118.2, 46.5, -117.0, 47.2)
 FIELDS = [
     "timestamp_utc",
     "granule_id",

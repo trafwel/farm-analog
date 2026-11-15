@@ -1,4 +1,14 @@
-"""Reproducible first PNW analog search; regional prototype, not crop advice."""
+"""Reproducible first PNW analog search; regional prototype, not crop advice.
+
+Data flow:
+Inputs:  data/samples/palouse_prism_analog_inputs.json (cached PRISM years; rebuilt from
+         Earth Engine only if missing) and data/samples/palouse_climate_ACCESS-CM2_ssp245_
+         2050.csv (from climate.py).
+Outputs: palouse_analog_candidates.csv (every grid cell ranked by sigma) and
+         palouse_analog_summary.json, in ``output_dir`` (default: the data folder).
+Used by: app/app.py (the Streamlit preview reads both outputs); tests/test_search.py and
+         tests/test_match.py (regression: match.py must reproduce these rankings).
+"""
 
 import json
 import os
@@ -9,34 +19,48 @@ import numpy as np
 import pandas as pd
 
 from .analogs import sigma_dissimilarity
-from .data import PALOUSE_BOUNDS
+from .config import (
+    BASELINE_YEARS,
+    FUTURE_YEARS,
+    PALOUSE_BOUNDS,
+    PRISM_COLLECTION,
+    PRISM_DATASET_TYPE,
+)
+from .fingerprint import FEATURES, QUARTER_LABELS, QUARTERS
+from .future import apply_delta, quarterly_change
 
-PERIODS = {"Jan–Mar": (1, 3), "Apr–Jun": (4, 6), "Jul–Sep": (7, 9), "Oct–Dec": (10, 12)}
-FEATURES = [f"{kind}_{q}" for q in range(4) for kind in ["temperature", "precipitation"]]
+# Quarter label -> (first month, last month), from the shared fingerprint definition.
+PERIODS = {QUARTER_LABELS[code]: months for code, months in QUARTERS.items()}
 SEARCH_BOUNDS = [-121, 44, -116, 49]
 
 
-def run():
-    import ee
-    from dotenv import load_dotenv
-
-    load_dotenv()
-    ee.Initialize(project=os.environ["EE_PROJECT"])
-    ee.data.setDeadline(120000)
-    folder = Path("data/samples")
-    folder.mkdir(parents=True, exist_ok=True)
+def run(data_dir="data/samples", output_dir=None):
+    """Rank candidate locations. Reads cached inputs from ``data_dir`` when present (no Earth
+    Engine needed); writes rankings and a summary to ``output_dir`` (default: ``data_dir``)."""
+    folder = Path(data_dir)
+    out = Path(output_dir) if output_dir is not None else folder
+    out.mkdir(parents=True, exist_ok=True)
+    first_year, last_year = BASELINE_YEARS
+    n_years = last_year - first_year + 1
     cache = folder / "palouse_prism_analog_inputs.json"
     if cache.exists():
         payload = json.loads(cache.read_text())
     else:
+        import ee
+        from dotenv import load_dotenv
+
+        load_dotenv()
+        ee.Initialize(project=os.environ["EE_PROJECT"])
+        ee.data.setDeadline(120000)
+        folder.mkdir(parents=True, exist_ok=True)
         source = (
-            ee.ImageCollection("OREGONSTATE/PRISM/ANm")
-            .filter(ee.Filter.eq("dataset_type", "AN81"))
-            .filterDate("1995-01-01", "2015-01-01")
+            ee.ImageCollection(PRISM_COLLECTION)
+            .filter(ee.Filter.eq("dataset_type", PRISM_DATASET_TYPE))
+            .filterDate(f"{first_year}-01-01", f"{last_year + 1}-01-01")
         )
         count = source.size().getInfo()
-        if count != 240:
-            raise ValueError(f"Expected 240 PRISM months, found {count}")
+        if count != 12 * n_years:
+            raise ValueError(f"Expected {12 * n_years} PRISM months, found {count}")
         native = source.first().select("tmean").projection()
         region = ee.Geometry.Rectangle(list(PALOUSE_BOUNDS), geodesic=False)
 
@@ -53,7 +77,7 @@ def run():
             return ee.Image.cat(bands).setDefaultProjection(native)
 
         annual = []
-        for year in range(1995, 2015):
+        for year in range(first_year, last_year + 1):
             collection = source.filterDate(f"{year}-01-01", f"{year + 1}-01-01")
             values = (
                 fingerprint(collection, 1)
@@ -70,7 +94,7 @@ def run():
             print(f"PRISM target year {year} downloaded", flush=True)
         # Sparse search: nearest native PRISM cell at a regular 20-km grid of points.
         points = (
-            fingerprint(source, 20)
+            fingerprint(source, n_years)
             .sample(
                 region=ee.Geometry.Rectangle(SEARCH_BOUNDS, geodesic=False),
                 projection=native,
@@ -90,9 +114,9 @@ def run():
         payload = {
             "annual": annual,
             "candidates": candidates,
-            "collection": "OREGONSTATE/PRISM/ANm",
-            "dataset_type": "AN81",
-            "reference_years": [1995, 2014],
+            "collection": PRISM_COLLECTION,
+            "dataset_type": PRISM_DATASET_TYPE,
+            "reference_years": list(BASELINE_YEARS),
             "search_bounds": SEARCH_BOUNDS,
             "target_bounds": list(PALOUSE_BOUNDS),
             "downloaded_utc": datetime.now(UTC).isoformat(),
@@ -101,17 +125,8 @@ def run():
     annual = pd.DataFrame(payload["annual"])[FEATURES].to_numpy()
     candidates = pd.DataFrame(payload["candidates"])
     observed = annual.mean(axis=0)
-    target = observed.copy()
     model = pd.read_csv(folder / "palouse_climate_ACCESS-CM2_ssp245_2050.csv")
-    for q, (lo, hi) in enumerate(PERIODS.values()):
-        part = model[model.month.between(lo, hi)]
-        baseline = part[part.period == "baseline"]
-        future = part[part.period == "future"]
-        target[2 * q] += future.temperature_c.mean() - baseline.temperature_c.mean()
-        denominator = baseline.precipitation_mm.sum()
-        if denominator <= 0:
-            raise ValueError("Cannot apply rainfall ratio to a zero baseline.")
-        target[2 * q + 1] *= future.precipitation_mm.sum() / denominator
+    target = apply_delta(observed, quarterly_change(model, "ACCESS-CM2"))
     matrix = candidates[FEATURES].to_numpy()
     candidates["sigma"] = sigma_dissimilarity(target, annual, matrix)
     candidates["standardized_euclidean"] = np.linalg.norm(
@@ -119,15 +134,15 @@ def run():
     )
     candidates = candidates.sort_values("sigma").reset_index(drop=True)
     candidates.insert(0, "rank", np.arange(1, len(candidates) + 1))
-    candidates.to_csv(folder / "palouse_analog_candidates.csv", index=False)
+    candidates.to_csv(out / "palouse_analog_candidates.csv", index=False)
     summary = {
         "target_future": dict(zip(FEATURES, target, strict=False)),
         "target_observed": dict(zip(FEATURES, observed, strict=False)),
         "quarters": list(PERIODS),
         "model": "ACCESS-CM2",
         "scenario": "SSP2-4.5",
-        "future_years": [2041, 2060],
-        "reference_years": [1995, 2014],
+        "future_years": list(FUTURE_YEARS),
+        "reference_years": list(BASELINE_YEARS),
         "candidate_count": len(candidates),
         "search_bounds": SEARCH_BOUNDS,
         "method": (
@@ -151,7 +166,7 @@ def run():
         ],
         "created_utc": datetime.now(UTC).isoformat(),
     }
-    (folder / "palouse_analog_summary.json").write_text(json.dumps(summary, indent=2) + "\n")
+    (out / "palouse_analog_summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     print(
         candidates[["rank", "latitude", "longitude", "sigma"]].head().to_string(index=False),
         flush=True,

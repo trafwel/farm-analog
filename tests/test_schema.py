@@ -10,10 +10,19 @@ from farm_analog.schema import AnalogRequest, AnalogResult, PolygonGeometry, mat
 SQUARE = [[-117.2, 46.8], [-117.19, 46.8], [-117.19, 46.81], [-117.2, 46.81], [-117.2, 46.8]]
 
 
-@pytest.mark.parametrize(("sigma", "label"), [
-    (0.0, "strong"), (0.99, "strong"), (1.0, "good"), (1.99, "good"),
-    (2.0, "weak"), (3.99, "weak"), (4.0, "none"), (12.0, "none"),
-])
+@pytest.mark.parametrize(
+    ("sigma", "label"),
+    [
+        (0.0, "strong"),
+        (0.99, "strong"),
+        (1.0, "good"),
+        (1.99, "good"),
+        (2.0, "weak"),
+        (3.99, "weak"),
+        (4.0, "none"),
+        (12.0, "none"),
+    ],
+)
 def test_match_quality_thresholds(sigma, label):
     assert match_quality(sigma) == label
 
@@ -24,12 +33,15 @@ def test_valid_polygon_and_request_defaults():
     assert req.top_n == config.DEFAULT_TOP_N
 
 
-@pytest.mark.parametrize("ring", [
-    SQUARE[:-1],                                             # not closed
-    [[-117.2, 46.8], [-117.19, 46.8], [-117.2, 46.8]],       # too few positions
-    [[-200, 46.8], [-117.19, 46.8], [-117.19, 46.81], [-200, 46.8]],  # longitude out of range
-    [[math.nan, 46.8], [-117.19, 46.8], [-117.19, 46.81], [math.nan, 46.8]],  # not a number
-])
+@pytest.mark.parametrize(
+    "ring",
+    [
+        SQUARE[:-1],  # not closed
+        [[-117.2, 46.8], [-117.19, 46.8], [-117.2, 46.8]],  # too few positions
+        [[-200, 46.8], [-117.19, 46.8], [-117.19, 46.81], [-200, 46.8]],  # longitude out of range
+        [[math.nan, 46.8], [-117.19, 46.8], [-117.19, 46.81], [math.nan, 46.8]],  # not a number
+    ],
+)
 def test_bad_polygons_are_rejected(ring):
     with pytest.raises(ValidationError):
         PolygonGeometry(type="Polygon", coordinates=[ring])

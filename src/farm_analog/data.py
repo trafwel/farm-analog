@@ -2,6 +2,14 @@
 
 Run from the repo root:
     PYTHONPATH=src python -m farm_analog.data
+
+Data flow:
+Inputs:  SMAP L4 soil moisture (NASA/SMAP/SPL4SMGP/008) over a date range and bounding box
+         (default config.PALOUSE_BOUNDS), via Earth Engine.
+Outputs: data/smap/palouse_smap_<start>_<end>.csv (3-hourly regional means) and a .json
+         with metadata; a committed sample lives in data/samples/.
+Used by: app/app.py (the SMAP chart reads the sample). Planned: field conditions next to
+         the analogs (see docs/ARCHITECTURE.md).
 """
 
 import argparse
@@ -11,10 +19,10 @@ import os
 from datetime import UTC, date, datetime
 from pathlib import Path
 
+from farm_analog.config import PALOUSE_BOUNDS  # defined once, in config.py
+
 SMAP_COLLECTION = "NASA/SMAP/SPL4SMGP/008"
 SMAP_BANDS = ["sm_surface", "sm_rootzone"]
-# Approximate Washington Palouse demo extent, not an official regional boundary.
-PALOUSE_BOUNDS = (-118.2, 46.5, -117.0, 47.2)
 
 
 def validate_request(start, end, bounds):

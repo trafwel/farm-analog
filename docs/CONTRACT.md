@@ -22,14 +22,14 @@ Unknown fields are rejected, so typos fail loudly instead of being ignored.
 |---|---|
 | `source` | `"computed"` (real results) or `"fixture"` (fake demo data; the UI must say so) |
 | `field_id` | Which field this is |
-| `scenario`, `baseline_years`, `future_years` | The settings used, for example `"ssp245"`, `[1991, 2020]`, `[2041, 2070]` |
+| `scenario`, `baseline_years`, `future_years` | The settings used, for example `"ssp245"`, `[1995, 2014]`, `[2041, 2060]` (IPCC AR6 periods) |
 | `models` | Names of the climate models used |
-| `farm_today`, `farm_future` | The farm's 12-number climate fingerprint now and in the future |
+| `farm_today`, `farm_future` | The farm's 8-number climate fingerprint now and in the future |
 | `farm_soil` | The farm's soil summary (optional) |
 | `novel_climate` | `true` when even the best analog has sigma of 4 or more: no real match exists today |
 | `analogs` | List of matches, best first |
 
-**The fingerprint** (`SeasonalFingerprint`) is 12 numbers: average daily high (`tmax_`) and low (`tmin_`) temperature and total precipitation (`ppt_`) for each season: `djf` (Dec–Feb), `mam` (Mar–May), `jja` (Jun–Aug), `son` (Sep–Nov).
+**The fingerprint** (`SeasonalFingerprint`) is 8 numbers: average temperature (`tmean_`, °C) and total precipitation (`ppt_`, mm) for each calendar quarter: `jfm` (Jan–Mar), `amj` (Apr–Jun), `jas` (Jul–Sep), `ond` (Oct–Dec). The definition lives in [`src/farm_analog/fingerprint.py`](../src/farm_analog/fingerprint.py) and is shared by the farm, the candidates and the future climate. (Changed in M1 from 12 seasonal highs, lows and rain, to match the team's working search.)
 
 ### Each analog
 
@@ -43,7 +43,7 @@ Unknown fields are rejected, so typos fail loudly instead of being ignored.
 | `fingerprint` | The analog's climate today, to compare with `farm_future` |
 | `crops` | Share of cropland in each crop (optional until M7) |
 | `soil` | Soil summary (optional until M7) |
-| `climograph` | Monthly values for the comparison chart: farm today, farm future, analog today (optional until M7) |
+| `climograph` | Monthly mean temperature (`tmean`) and precipitation (`ppt`) for the comparison chart: farm today, farm future, analog today (optional until M7) |
 
 **Map colors (M6):** shade analogs by `match_quality`, darkest blue for `strong` to lightest for `weak`; draw the farm polygon in green.
 
