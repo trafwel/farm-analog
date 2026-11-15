@@ -89,13 +89,9 @@ def fetch_prism_monthly(
     field's center instead. Returns (records, support), where support says which was used.
     Needs ``EE_PROJECT`` in ``.env`` and ``earthengine authenticate``.
     """
-    import os
+    from farm_analog.earthengine import field_geometry, initialize, reduce_field
 
-    import ee
-    from dotenv import load_dotenv
-
-    load_dotenv()
-    ee.Initialize(project=os.environ["EE_PROJECT"])
+    ee = initialize()
     first, last = years
     source = (
         ee.ImageCollection(config.PRISM_COLLECTION)
@@ -108,17 +104,11 @@ def fetch_prism_monthly(
     if count != expected:
         raise ValueError(f"expected {expected} PRISM months for {first}-{last}, found {count}")
     native = source.first().select("tmean").projection()
-    area = ee.Geometry.Polygon(field.coordinates, proj="EPSG:4326", geodesic=False)
-    center = area.centroid(maxError=1)
+    area = field_geometry(ee, field)
 
     def summarize(item):
         image = ee.Image(item)
-        kwargs = {"crs": native, "scale": native.nominalScale(), "maxPixels": 1_000_000}
-        mean = image.reduceRegion(ee.Reducer.mean(), area, **kwargs)
-        cell = image.reduceRegion(ee.Reducer.first(), center, **kwargs)
-        inside = ee.Number(ee.Algorithms.IsEqual(mean.get("tmean"), None)).Not()
-        values = ee.Dictionary(ee.Algorithms.If(inside, mean, cell))
-        support = ee.Algorithms.If(inside, "field_mean", "centroid_cell")
+        values, support = reduce_field(ee, image, area, native, "tmean")
         return ee.Feature(None, values).set(
             {"date": image.date().format("YYYY-MM"), "support": support}
         )
