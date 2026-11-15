@@ -3,8 +3,8 @@ import type { Scenario } from './types/contract';
 import type { AnalogResultView } from './types/extensions';
 import { API_BASE, ApiError, type BillSummary, checkHealth, fetchAnalogs, fetchBillSummary } from './lib/api';
 import { DEMO_CASES, type DemoCaseId, getDemoResult } from './lib/fixtures';
-import { buildAnalogRequest, EXAMPLE_FIELD, type LonLat } from './lib/request';
 import { analyzeStatic, IS_STATIC, savedSummary, TEST_FIELDS, testFieldRing } from './lib/staticDemo';
+import { buildAnalogRequest, EXAMPLE_FIELD, type LonLat, validatePolygon } from './lib/request';
 import { DEFAULT_SCENARIO, SCENARIO_LABELS, SCENARIOS } from './lib/scenario';
 import { MapView } from './components/MapView';
 import { ResultsPanel } from './components/ResultsPanel';
@@ -92,6 +92,15 @@ export default function App() {
   }, []);
 
   const onFieldDrawn = useCallback((ring: LonLat[]) => {
+    const validationError = validatePolygon(ring);
+    if (validationError) {
+      setError(new ApiError('validation', validationError));
+      setField(null);
+      setResult(null);
+      setSelectedRank(null);
+      setBillSummary(null);
+      return;
+    }
     setField(ring);
     setError(null);
     // Results belong to the previous field; don't leave them looking current.
@@ -170,11 +179,12 @@ export default function App() {
             resultKey={resultKey}
             selectedRank={selectedRank}
             onSelect={setSelectedRank}
+            cancelSignal={field ? field.map((p) => p.join(',')).join(';') : `none-${loading}-${demoCase}`}
           />
           <p className="muted small">
             Use the tools at the top left of the map to draw your field:
             <br />
-            • <strong>Rectangle:</strong> click once for the first corner, move mouse, then click again (click-click, not click-and-drag).
+            • <strong>Rectangle:</strong> click and drag to draw a box (or click opposite corners).
             <br />
             • <strong>Polygon:</strong> click each corner, then click the starting corner again (or double-click) to close.
             <br />
