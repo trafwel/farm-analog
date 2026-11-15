@@ -119,3 +119,15 @@ def test_mode_is_live_only_with_earth_engine(monkeypatch):
     assert pipeline.mode() == "offline-demo"
     monkeypatch.setenv("EE_PROJECT", "some-project")
     assert pipeline.mode() == "live"
+
+
+def test_field_near_a_test_field_gets_its_saved_live_result(client):
+    # COLFAX is about 0.6 km from the Colfax test field, so offline mode serves the saved
+    # Earth Engine result (data/samples/live_colfax_*.json), for either scenario.
+    for scenario in ("ssp245", "ssp585"):
+        response = client.post("/analogs", json={"field": COLFAX, "scenario": scenario})
+        assert response.status_code == 200
+        result = AnalogResult.model_validate(response.json())
+        assert result.notes[0].startswith("Saved live result for the Colfax test field")
+        assert result.models and len(result.models) == 8
+        assert result.rotations and result.farm_hazards is not None

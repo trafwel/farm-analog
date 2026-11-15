@@ -52,6 +52,16 @@ export type TmeanAmj = number;
 export type TmeanJas = number;
 export type TmeanJfm = number;
 export type TmeanOnd = number;
+export type BareMonths = number[] | null;
+export type ExtremeRainDays = number | null;
+export type FirstFallFrostDoy = number | null;
+export type FrostFreeDays = number | null;
+export type HeatDays = number | null;
+export type LastSpringFrostDoy = number | null;
+export type Max1DayRainMm = number | null;
+export type MissingSources = string[];
+export type NdviMonthly = (number | null)[] | null;
+export type SoilMoistureMonthly = (number | null)[] | null;
 export type Lat = number;
 export type Lon = number;
 export type MatchQuality = "strong" | "good" | "weak" | "none";
@@ -83,6 +93,23 @@ export type FutureYears = [number, number];
 export type Models = [string, ...string[]];
 export type Notes = string[];
 export type NovelClimate = boolean;
+export type Rotations = RotationStrategy[] | null;
+export type AnalogShare = number;
+export type AnalogsChecked = number;
+export type AnalogsUsing = number;
+export type Benefits = string[];
+/**
+ * @minItems 1
+ */
+export type Crops1 = [string, ...string[]];
+export type Current = boolean;
+export type Evidence = string[];
+export type FieldShare = number | null;
+export type Flexible = boolean;
+export type Gaps = string[];
+export type Name = string;
+export type Risks = string[];
+export type Why = string;
 export type Source = "computed" | "fixture";
 
 /**
@@ -92,6 +119,7 @@ export interface AnalogResult {
   analogs: Analogs;
   baseline_years: BaselineYears;
   farm_future: SeasonalFingerprint;
+  farm_hazards?: Hazards | null;
   farm_soil?: SoilProfile | null;
   farm_today: SeasonalFingerprint;
   field_id: FieldId;
@@ -99,6 +127,7 @@ export interface AnalogResult {
   models: Models;
   notes?: Notes;
   novel_climate: NovelClimate;
+  rotations?: Rotations;
   scenario: Scenario;
   source: Source;
 }
@@ -109,6 +138,7 @@ export interface Analog {
   climograph?: Climograph | null;
   crops?: Crops;
   fingerprint: SeasonalFingerprint;
+  hazards?: Hazards | null;
   lat: Lat;
   lon: Lon;
   match_quality: MatchQuality;
@@ -156,6 +186,23 @@ export interface SeasonalFingerprint {
   tmean_ond: TmeanOnd;
 }
 /**
+ * Hazard history and field conditions at one place (M13), from PRISM daily (heat, frost;
+ * 1995-2014), NASA GPM IMERG (extreme rain; 2014-2023), NASA SMAP L4 (root-zone soil
+ * moisture; 2016-2023) and Landsat 8/9 (NDVI; 2019-2023). Any value may be missing.
+ */
+export interface Hazards {
+  bare_months?: BareMonths;
+  extreme_rain_days?: ExtremeRainDays;
+  first_fall_frost_doy?: FirstFallFrostDoy;
+  frost_free_days?: FrostFreeDays;
+  heat_days?: HeatDays;
+  last_spring_frost_doy?: LastSpringFrostDoy;
+  max_1day_rain_mm?: Max1DayRainMm;
+  missing_sources?: MissingSources;
+  ndvi_monthly?: NdviMonthly;
+  soil_moisture_monthly?: SoilMoistureMonthly;
+}
+/**
  * Soil summary; any value can be missing where the soil survey has no data.
  */
 export interface SoilProfile {
@@ -164,4 +211,24 @@ export interface SoilProfile {
   depth_to_restrictive_layer_cm?: DepthToRestrictiveLayerCm;
   organic_matter_pct?: OrganicMatterPct;
   sand_pct?: SandPct;
+}
+/**
+ * One crop-rotation option (M12): the field's current rotation or one that farmers in the
+ * analog areas use. Every text field is written by code from observed data and a fixed
+ * crop-traits table, never by an LLM.
+ */
+export interface RotationStrategy {
+  analog_share: AnalogShare;
+  analogs_checked: AnalogsChecked;
+  analogs_using: AnalogsUsing;
+  benefits: Benefits;
+  crops: Crops1;
+  current?: Current;
+  evidence: Evidence;
+  field_share?: FieldShare;
+  flexible?: Flexible;
+  gaps: Gaps;
+  name: Name;
+  risks: Risks;
+  why: Why;
 }

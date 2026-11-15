@@ -144,16 +144,22 @@ def _analyze_live(request: AnalogRequest) -> AnalogResult:
             f"skipped: {', '.join(sorted(future.failed_models))}."
         )
     result = to_result(table, today, future, field_id(request.field), request.top_n, notes)
-    try:
-        from farm_analog.evidence import add_evidence
+    # Optional extras: each one that fails adds a note, and the match itself is never lost.
+    from farm_analog.evidence import add_evidence
+    from farm_analog.hazards import add_hazards
+    from farm_analog.rotations import add_rotations
 
-        return add_evidence(result, today.monthly, future, list(future.changes))
-    except Exception as exc:  # evidence is helpful but optional; never lose the match itself
-        return result.model_copy(
-            update={
-                "notes": [
-                    *result.notes,
-                    f"Crop, soil and climate details unavailable ({type(exc).__name__}).",
-                ]
-            }
-        )
+    extras = [
+        ("Crop, soil and climate details",
+         lambda r: add_evidence(r, today.monthly, future, list(future.changes))),
+        ("Rotation strategies", lambda r: add_rotations(r, request.field)),
+        ("Hazard history", lambda r: add_hazards(r, request.field)),
+    ]
+    for label, step in extras:
+        try:
+            result = step(result)
+        except Exception as exc:
+            result = result.model_copy(update={
+                "notes": [*result.notes, f"{label} unavailable ({type(exc).__name__})."]
+            })
+    return result
