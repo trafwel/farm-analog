@@ -55,6 +55,16 @@ describe('request body builder', () => {
     expect(() => buildAnalogRequest(open.slice(0, 2), 'ssp245')).toThrow();
   });
 
+  it('rejects a self-intersecting bowtie polygon', () => {
+    const bowtie: LonLat[] = [
+      [-117.4, 46.8],
+      [-117.3, 46.9],
+      [-117.3, 46.8],
+      [-117.4, 46.9],
+    ];
+    expect(() => buildAnalogRequest(bowtie, 'ssp245')).toThrow(/self-intersecting/i);
+  });
+
   it('example field is near Colfax, WA', () => {
     const lons = EXAMPLE_FIELD.map((p) => p[0]);
     const lats = EXAMPLE_FIELD.map((p) => p[1]);

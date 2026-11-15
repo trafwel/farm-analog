@@ -18,12 +18,30 @@ export const FIELD_COLOR = FIELD_COLOR_SWATCH;
 const FIELD_STYLE: L.PathOptions = { color: FIELD_COLOR, fillColor: FIELD_COLOR, fillOpacity: 0.3, weight: 3 };
 
 /** Adds Geoman's polygon-drawing control. Every new drawing replaces the field. */
-function DrawControl({ onDraw }: { onDraw: (ring: LonLat[]) => void }) {
+function DrawControl({ onDraw, cancelSignal }: { onDraw: (ring: LonLat[]) => void; cancelSignal?: unknown }) {
   const map = useMap();
   const onDrawRef = useRef(onDraw);
   useEffect(() => {
     onDrawRef.current = onDraw;
   }, [onDraw]);
+
+  // Cancel drawing when external actions happen (e.g. clear field, pick test field, search)
+  useEffect(() => {
+    map.pm.disableDraw();
+  }, [map, cancelSignal]);
+
+  // Escape key cancels drawing mode
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        map.pm.disableDraw();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [map]);
 
   useEffect(() => {
     map.pm.setGlobalOptions({
@@ -48,21 +66,106 @@ function DrawControl({ onDraw }: { onDraw: (ring: LonLat[]) => void }) {
       rotateMode: false,
       oneBlock: true,
     });
+
     const handleCreate = (e: { layer: L.Layer }) => {
+      map.pm.disableDraw();
       const layer = e.layer;
       if (layer instanceof L.Polygon) {
         const rings = layer.getLatLngs() as LatLngLike[][];
         const outer = rings[0];
         const ring = outer ? latLngsToLonLat(outer) : [];
-        // Ignore zero-area shapes (e.g. a rectangle made by a single click).
         if (distinctPointCount(ring) >= 3) onDrawRef.current(ring);
       }
       // The field is rendered from React state, so drop Geoman's own copy.
       map.removeLayer(layer);
     };
+
     map.on('pm:create', handleCreate);
+
+    // Support drag-to-draw for Rectangle mode without panning the map
+    let startLatLng: L.LatLng | null = null;
+    let previewRect: L.Rectangle | null = null;
+    let isDrawingRectangle = false;
+
+    const onDrawStart = (e: { shape: string }) => {
+      isDrawingRectangle = e.shape === 'Rectangle';
+    };
+
+    const onDrawEnd = () => {
+      isDrawingRectangle = false;
+      if (previewRect) {
+        map.removeLayer(previewRect);
+        previewRect = null;
+      }
+      startLatLng = null;
+      map.dragging.enable();
+    };
+
+    const onMouseDown = (e: L.LeafletMouseEvent) => {
+      if (!isDrawingRectangle) return;
+      startLatLng = e.latlng;
+      map.dragging.disable();
+    };
+
+    const onMouseMove = (e: L.LeafletMouseEvent) => {
+      if (!isDrawingRectangle || !startLatLng) return;
+      const bounds = L.latLngBounds(startLatLng, e.latlng);
+      if (!previewRect) {
+        previewRect = L.rectangle(bounds, FIELD_STYLE).addTo(map);
+      } else {
+        previewRect.setBounds(bounds);
+      }
+    };
+
+    const onMouseUp = (e: L.LeafletMouseEvent) => {
+      if (!isDrawingRectangle || !startLatLng) return;
+      const endLatLng = e.latlng;
+      const bounds = L.latLngBounds(startLatLng, endLatLng);
+      map.dragging.enable();
+
+      const p1 = map.latLngToLayerPoint(startLatLng);
+      const p2 = map.latLngToLayerPoint(endLatLng);
+      const pixelDist = p1.distanceTo(p2);
+
+      if (pixelDist > 15) {
+        const sw = bounds.getSouthWest();
+        const ne = bounds.getNorthEast();
+        const nw = bounds.getNorthWest();
+        const se = bounds.getSouthEast();
+        const ring: LonLat[] = [
+          [sw.lng, sw.lat],
+          [se.lng, se.lat],
+          [ne.lng, ne.lat],
+          [nw.lng, nw.lat],
+        ];
+        onDrawRef.current(ring);
+        map.pm.disableDraw();
+      }
+
+      if (previewRect) {
+        map.removeLayer(previewRect);
+        previewRect = null;
+      }
+      startLatLng = null;
+    };
+
+    map.on('pm:drawstart', onDrawStart);
+    map.on('pm:drawend', onDrawEnd);
+    map.on('mousedown', onMouseDown);
+    map.on('mousemove', onMouseMove);
+    map.on('mouseup', onMouseUp);
+
     return () => {
       map.off('pm:create', handleCreate);
+      map.off('pm:drawstart', onDrawStart);
+      map.off('pm:drawend', onDrawEnd);
+      map.off('mousedown', onMouseDown);
+      map.off('mousemove', onMouseMove);
+      map.off('mouseup', onMouseUp);
+      map.dragging.enable();
+      if (previewRect) {
+        map.removeLayer(previewRect);
+      }
       map.pm.removeControls();
     };
   }, [map]);
@@ -101,20 +204,33 @@ export interface MapViewProps {
   onSelect: (rank: number) => void;
   /** Static demo: the test fields that have saved results, outlined so people can find them. */
   testFields?: TestField[];
+  cancelSignal?: unknown;
 }
 
-export function MapView({ field, onFieldDrawn, analogs, resultKey, selectedRank, onSelect, testFields = [] }: MapViewProps) {
+export function MapView({ field, onFieldDrawn, analogs, resultKey, selectedRank, onSelect, testFields = [], cancelSignal }: MapViewProps) {
   const selected = analogs.find((a) => a.rank === selectedRank);
   // Draw the best matches on top.
   const ordered = [...analogs].sort((a, b) => b.rank - a.rank);
   return (
     <div className="map-wrap">
-      <MapContainer center={PALOUSE_CENTER} zoom={PALOUSE_ZOOM} className="map" aria-label="Map of your field and its climate analogs">
+      <MapContainer
+        center={PALOUSE_CENTER}
+        zoom={PALOUSE_ZOOM}
+        minZoom={6}
+        maxBounds={[
+          [38.0, -127.0],
+          [54.0, -110.0],
+        ]}
+        maxBoundsViscosity={0.75}
+        className="map"
+        aria-label="Map of your field and its climate analogs"
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          noWrap={true}
         />
-        <DrawControl onDraw={onFieldDrawn} />
+        <DrawControl onDraw={onFieldDrawn} cancelSignal={cancelSignal} />
         {testFields.map((t) => (
           <Rectangle
             key={t.id}
