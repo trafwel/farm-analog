@@ -44,11 +44,18 @@ PRISM_DATASET_TYPE: Final = "AN81"
 # Not an official regional boundary.
 PALOUSE_BOUNDS: Final = (-118.2, 46.5, -117.0, 47.2)
 
-# Western US search area as (west, south, east, north) in degrees.
-SEARCH_BBOX: Final = (-125.0, 31.0, -100.0, 49.0)
+# Candidate search area (M3) as (west, south, east, north) in degrees: the inland Pacific
+# Northwest, matching the team's search.py. Default chosen while the team was away; confirm.
+# The whole western US (-125, 31, -100, 49) would need an Earth Engine export to Drive.
+SEARCH_BBOX: Final = (-121.0, 44.0, -116.0, 49.0)
 
 # Grid spacing for sampling candidate locations, in meters (PRISM monthly is ~4 km).
 GRID_SCALE_M: Final = 4000
+
+# Farmland filter for candidates (M3): share of each ~4 km cell that the Cropland Data Layer
+# marks "cultivated", averaged over these years. Cells below the threshold are dropped.
+CDL_YEARS: Final = (2019, 2023)
+MIN_CULTIVATED_FRACTION: Final = 0.3
 
 # Sigma dissimilarity thresholds (Mahony et al., 2017).
 STRONG_SIGMA: Final = 1.0  # like a typical year at the farm
