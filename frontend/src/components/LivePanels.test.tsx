@@ -18,7 +18,7 @@ describe('M8 panels on a live result', () => {
     const section = screen.getByRole('region', { name: /Rotation options/ });
     const items = within(section).getAllByRole('listitem').filter((li) => li.classList.contains('rotation'));
     expect(items.length).toBeGreaterThanOrEqual(3);
-    expect(items[0]).toHaveTextContent('Your field now');
+    expect(items[0]).toHaveTextContent('Current Field');
     expect(items[0]).toHaveTextContent(cook.rotations![0]!.name);
     expect(section).toHaveTextContent('Check with your county extension agent');
   });

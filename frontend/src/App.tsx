@@ -4,7 +4,7 @@ import type { AnalogResultView } from './types/extensions';
 import { API_BASE, ApiError, type BillSummary, checkHealth, fetchAnalogs, fetchBillSummary } from './lib/api';
 import { DEMO_CASES, type DemoCaseId, getDemoResult } from './lib/fixtures';
 import { analyzeStatic, IS_STATIC, savedSummary, TEST_FIELDS, testFieldRing } from './lib/staticDemo';
-import { buildAnalogRequest, EXAMPLE_FIELD, type LonLat, validatePolygon } from './lib/request';
+import { buildAnalogRequest, type LonLat, validatePolygon } from './lib/request';
 import { DEFAULT_SCENARIO, SCENARIO_LABELS, SCENARIOS } from './lib/scenario';
 import type { PriorityId } from './lib/priorities';
 import { MapView } from './components/MapView';
@@ -63,6 +63,7 @@ export default function App() {
   const [health, setHealth] = useState<Health>(IS_STATIC ? 'static' : 'checking');
   const [billSummary, setBillSummary] = useState<BillSummary | null>(null);
   const [cancelDrawKey, setCancelDrawKey] = useState(0);
+  const [mapFocusRequest, setMapFocusRequest] = useState(0);
   const [panelFull, setPanelFull] = useState(false);
 
   // Esc leaves full screen.
@@ -134,11 +135,6 @@ export default function App() {
     setBillSummary(null);
   }, []);
 
-  const useExampleField = () => {
-    setCancelDrawKey((k) => k + 1);
-    onFieldDrawn(EXAMPLE_FIELD);
-  };
-
   const findAnalogs = async (f: LonLat[] | null = field, s: Scenario = scenario) => {
     if (!f) return;
     setCancelDrawKey((k) => k + 1);
@@ -201,18 +197,20 @@ export default function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>Farm Analog</h1>
+        <h1>Farm Forward</h1>
         <p>
-          Draw your field to find places in the Pacific Northwest whose climate <em>today</em> is like your field's
+          Draw your field to find places in the Pacific Northwest whose climate today is like your field's
           climate around 2050.
         </p>
       </header>
 
       <main className={`layout${panelFull ? ' panel-full' : ''}`}>
-        <div className="map-column" hidden={panelFull}>
+        <div id="field-map" className="map-column" hidden={panelFull}>
           <MapView
             hidden={panelFull}
+            focusRequest={mapFocusRequest}
             testFields={IS_STATIC ? TEST_FIELDS : []}
+            showDemoCoverage={IS_STATIC}
             field={field}
             onFieldDrawn={onFieldDrawn}
             analogs={result?.analogs ?? []}
@@ -221,65 +219,64 @@ export default function App() {
             onSelect={setSelectedRank}
             cancelSignal={cancelDrawKey}
           />
-          <p className="muted small">
+          <details className="map-help">
+            <summary>How to draw a field</summary>
+            <p className="muted small">
             Use the tools at the top left of the map to draw your field:
             <br />
             • <strong>Rectangle:</strong> click and drag to draw a box (or click opposite corners).
+            <br />
+            • <strong>Circle:</strong> click the center, move outward, then click again to set the edge.
             <br />
             • <strong>Polygon:</strong> click each corner, then click the starting corner again (or double-click) to close.
             <br />
             {IS_STATIC && (
               <>
-                • <strong>Demo range:</strong> must be within 8 km of one of the 5 test fields (green boxes on the map).
+                • <strong>Demo range:</strong> Your field’s center must be inside one of the shaded areas, within 8 km of an example field.
                 <br />
               </>
             )}
-            Drawing again replaces the field. No mouse? Use “Use example field”.
-          </p>
+            Drawing again replaces the field.
+            </p>
+          </details>
         </div>
 
         <aside className="panel" id="side-panel">
-          <div className="panel-toolbar">
-            <button
-              type="button"
-              className="panel-full-toggle"
-              aria-pressed={panelFull}
-              aria-controls="side-panel"
-              onClick={() => setPanelFull((v) => !v)}
-              title={panelFull ? 'Show the map again (Esc)' : 'Hide the map and use the whole page for this panel'}
-            >
-              <span aria-hidden="true">{panelFull ? '⤡' : '⤢'}</span> {panelFull ? 'Exit full screen' : 'Full screen'}
-            </button>
+          <div className="panel-toolbar field-heading">
+            <h2 id="controls-heading">Your field</h2>
+            <div className="field-heading-actions">
+              <span className="small muted" aria-live="polite">
+                {field ? 'Field selected' : 'No field selected'}
+              </span>
+              <button
+                type="button"
+                className="panel-full-toggle"
+                aria-pressed={panelFull}
+                aria-controls="side-panel"
+                onClick={() => setPanelFull((v) => !v)}
+                title={panelFull ? 'Show the map again (Esc)' : 'Hide the map and use the whole page for this panel'}
+              >
+                <span aria-hidden="true">{panelFull ? '⤡' : '⤢'}</span> {panelFull ? 'Exit full screen' : 'Full screen'}
+              </button>
+            </div>
           </div>
           <section className="controls" aria-labelledby="controls-heading">
-            <h2 id="controls-heading">Your field</h2>
-            <p className="small" aria-live="polite">
-              {field ? `Field set (${field.length} corners).` : 'No field yet: draw one on the map or use the example.'}
-            </p>
+            <p className="example-field">Example Fields</p>
             <div className="button-row">
-              <button type="button" onClick={useExampleField}>
-                Use example field
-              </button>
-              {IS_STATIC && (
-                <select
-                  aria-label="Try a test field"
-                  value=""
-                  onChange={(e) => {
-                    const f = TEST_FIELDS.find((t) => t.id === e.target.value);
-                    if (f) {
+              <div className="example-buttons">
+                {TEST_FIELDS.map((preset) => (
+                  <button
+                    key={preset.id}
+                    type="button"
+                    onClick={() => {
                       setCancelDrawKey((k) => k + 1);
-                      onFieldDrawn(testFieldRing(f));
-                    }
-                  }}
-                >
-                  <option value="">Try a test field…</option>
-                  {TEST_FIELDS.map((f) => (
-                    <option key={f.id} value={f.id}>
-                      {f.label}
-                    </option>
-                  ))}
-                </select>
-              )}
+                      onFieldDrawn(testFieldRing(preset));
+                    }}
+                  >
+                    {preset.label}
+                  </button>
+                ))}
+              </div>
               <button
                 type="button"
                 onClick={() => {
@@ -296,14 +293,23 @@ export default function App() {
               </button>
             </div>
 
-            <label htmlFor="scenario">Emissions scenario</label>
-            <select id="scenario" value={scenario} onChange={(e) => handleScenarioChange(e.target.value as Scenario)}>
-              {SCENARIOS.map((s) => (
-                <option key={s} value={s}>
-                  {SCENARIO_LABELS[s]}
-                </option>
-              ))}
-            </select>
+            <div role="group" aria-labelledby="scenario-heading">
+              <p id="scenario-heading" className="example-field">Emissions scenario</p>
+              <div className="example-buttons scenario-buttons">
+                {SCENARIOS.map((option) => (
+                  <button
+                    key={option}
+                    type="button"
+                    aria-pressed={scenario === option}
+                    onClick={() => {
+                      if (scenario !== option) handleScenarioChange(option);
+                    }}
+                  >
+                    {SCENARIO_LABELS[option]}
+                  </button>
+                ))}
+              </div>
+            </div>
 
             <button
               type="button"
@@ -319,9 +325,11 @@ export default function App() {
                 Set a field first.
               </p>
             )}
-            <p className={`small health health-${health}`} role="status">
-              {HEALTH_TEXT[health]}
-            </p>
+            {!IS_STATIC && (
+              <p className={`small health health-${health}`} role="status">
+                {HEALTH_TEXT[health]}
+              </p>
+            )}
           </section>
 
           {error && (
@@ -378,6 +386,11 @@ export default function App() {
             <ResultsPanel
               result={result}
               selectedRank={selectedRank}
+              onShowOnMap={(rank) => {
+                setSelectedRank(rank);
+                setPanelFull(false);
+                setMapFocusRequest((request) => request + 1);
+              }}
               onSelect={setSelectedRank}
               billSummary={billSummary}
               chosenGoals={chosenGoals}

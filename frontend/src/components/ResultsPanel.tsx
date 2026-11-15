@@ -18,6 +18,7 @@ export const DEMO_BANNER = 'Demo data — not a real analysis';
 export interface ResultsPanelProps {
   result: AnalogResultView;
   selectedRank: number | null;
+  onShowOnMap?: (rank: number) => void;
   onSelect: (rank: number) => void;
   /** Bill's plain-language summary, when the server provided one. */
   billSummary?: BillSummary | null;
@@ -25,7 +26,7 @@ export interface ResultsPanelProps {
   onGoalsChange?: (g: PriorityId[]) => void;
 }
 
-export function ResultsPanel({ result, selectedRank, onSelect, billSummary, chosenGoals, onGoalsChange }: ResultsPanelProps) {
+export function ResultsPanel({ result, selectedRank, onSelect, onShowOnMap, billSummary, chosenGoals, onGoalsChange }: ResultsPanelProps) {
   const [placesOpen, setPlacesOpen] = useState(true);
   const headline = getHeadline(result);
   const analogs = [...result.analogs].sort((a, b) => a.rank - b.rank);
@@ -64,7 +65,7 @@ export function ResultsPanel({ result, selectedRank, onSelect, billSummary, chos
       )}
 
       {compared && (
-        <PlaceComparison analog={compared} farmSoil={result.farm_soil} farmHazards={result.farm_hazards} />
+        <PlaceComparison onShowOnMap={onShowOnMap} analog={compared} farmSoil={result.farm_soil} farmHazards={result.farm_hazards} />
       )}
 
       <section className="card analog-list-card" aria-labelledby="analog-list-heading">

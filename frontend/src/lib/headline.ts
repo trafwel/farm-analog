@@ -1,6 +1,6 @@
 import type { Analog } from '../types/contract';
 import type { AnalogResultView } from '../types/extensions';
-import { MATCH_QUALITY_STYLES, matchScore } from './matchQuality';
+import { matchScore } from './matchQuality';
 
 export const NOVEL_CLIMATE_WARNING =
   "No place today has a close match to this field's future climate. Treat these suggestions with extra caution.";
@@ -18,14 +18,17 @@ export function agreementText(a: Pick<Analog, 'models_agree' | 'models_total'>):
   return `${a.models_agree} of ${a.models_total} climate models agree`;
 }
 
+const MATCH_RATINGS: Record<Analog['match_quality'], string> = {
+  strong: 'Strong!', good: 'Good!', weak: 'Weak match', none: 'No close match',
+};
+
 export function getHeadline(result: AnalogResultView): Headline {
   if (result.novel_climate) return { kind: 'novel', text: NOVEL_CLIMATE_WARNING };
   const best = bestAnalog(result);
   if (!best) return { kind: 'empty', text: 'No matching places were found for this field.' };
-  const quality = MATCH_QUALITY_STYLES[best.match_quality].label.toLowerCase();
   return {
     kind: 'best',
     best,
-    text: `Best match: rank ${best.rank}, ${quality} (score ${matchScore(best.sigma)} out of 100).`,
+    text: `Best match ${matchScore(best.sigma)} out of 100 (${MATCH_RATINGS[best.match_quality]})`,
   };
 }

@@ -13,7 +13,7 @@ describe('bundled fixture and headline logic', () => {
   it('normal case gives a best-match headline', () => {
     const h = getHeadline(getDemoResult('fake-colfax'));
     expect(h.kind).toBe('best');
-    expect(h.text).toBe('Best match: rank 1, strong match (score 92 out of 100).');
+    expect(h.text).toBe('Best match 92 out of 100 (Strong!)');
   });
 
   it('novel-climate case gives the warning instead', () => {

@@ -1,7 +1,7 @@
 import type { MatchQuality } from '../types/contract';
 
 export interface MatchQualityStyle {
-  /** Marker fill colour (colorblind-friendly sequential blues; gray for no match). */
+  /** Marker fill colour (colorblind-friendly orange to green scale; gray for no match). */
   color: string;
   /** Short label, e.g. "Strong match". */
   label: string;
@@ -10,9 +10,9 @@ export interface MatchQualityStyle {
 }
 
 export const MATCH_QUALITY_STYLES: Record<MatchQuality, MatchQualityStyle> = {
-  strong: { color: '#08306b', label: 'Strong match', description: 'score 85–100' },
-  good: { color: '#2171b5', label: 'Good match', description: 'score 70–84' },
-  weak: { color: '#6baed6', label: 'Weak match', description: 'score 50–69' },
+  strong: { color: '#17ab4b', label: 'Strong match', description: 'score 85–100' },
+  good: { color: '#8fd317', label: 'Good match', description: 'score 70–84' },
+  weak: { color: '#f5a52c', label: 'Weak match', description: 'score 50–69' },
   none: { color: '#969696', label: 'No real match', description: 'score below 50' },
 };
 

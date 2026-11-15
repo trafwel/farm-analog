@@ -80,49 +80,78 @@ def crop_group(code: int | None) -> str | None:
 # left for soil cover, relative water use, and short notes. Sources: WSU Extension dryland
 # cropping-systems publications and USDA-NRCS conservation crop rotation guidance (general
 # statements only; local conditions vary).
-TRAITS = {
-    "Winter wheat": {"n_fixing": False, "residue": "high", "water": "medium",
-                     "benefit": "Main cash crop of the region; heavy residue protects the soil",
-                     "risk": "Yield depends on spring rain and suffers from heat during grain "
-                             "fill in early summer"},
-    "Spring wheat": {"n_fixing": False, "residue": "medium", "water": "medium",
-                     "benefit": "Spring planting breaks winter-annual weed cycles",
-                     "risk": "Shorter season; more exposed to early-summer heat and drought"},
-    "Barley": {"n_fixing": False, "residue": "medium", "water": "medium",
-               "benefit": "Shorter season than wheat; feed or malt market",
-               "risk": "Shares several diseases with wheat"},
-    "Other small grains": {"n_fixing": False, "residue": "medium", "water": "medium",
-                           "benefit": "Adds a different cereal to the rotation",
-                           "risk": "Smaller, less certain markets"},
-    "Pulses": {"n_fixing": True, "residue": "low", "water": "low",
-               "benefit": "Fixes nitrogen for the next wheat crop and breaks cereal disease "
-                          "and weed cycles",
-               "risk": "Low residue leaves soil more exposed to erosion"},
-    "Canola": {"n_fixing": False, "residue": "medium", "water": "medium",
-               "benefit": "Broadleaf break crop; deep taproot",
-               "risk": "Stand establishment is difficult in dry falls; needs a crusher or "
-                       "buyer nearby"},
-    "Fallow": {"n_fixing": False, "residue": "low", "water": "none",
-               "benefit": "Stores soil water for the next crop in the driest areas",
-               "risk": "No crop that year, and bare or thin cover raises wind and water "
-                       "erosion risk"},
-    "Hay and forage": {"n_fixing": True, "residue": "high", "water": "high",
-                       "benefit": "Year-round cover builds organic matter and cuts erosion; "
-                                  "forage income",
-                       "risk": "Uses more water than grain crops; needs a livestock market"},
-    "Corn": {"n_fixing": False, "residue": "high", "water": "high",
-             "benefit": "High residue",
-             "risk": "Usually needs irrigation in this region"},
-    "Potatoes and beets": {"n_fixing": False, "residue": "low", "water": "high",
-                           "benefit": "High-value crops",
-                           "risk": "Need irrigation; low residue leaves soil exposed"},
-    "Double crop": {"n_fixing": False, "residue": "medium", "water": "high",
-                    "benefit": "Two harvests in one year",
-                    "risk": "Rarely possible without irrigation in dryland areas"},
-    "Other crops": {"n_fixing": False, "residue": "medium", "water": "medium",
-                    "benefit": "Diversifies the rotation",
-                    "risk": "Markets and practices not assessed here"},
-}
+TRAITS = {'Winter wheat': {'n_fixing': False,
+                  'residue': 'high',
+                  'water': 'medium',
+                  'benefit': "It's one of the main cash crops in the region, and the residue it "
+                             'leaves behind can protect the soil',
+                  'risk': 'It depends on spring rain, and early summer heat can reduce yields as '
+                          'the grain develops'},
+ 'Spring wheat': {'n_fixing': False,
+                  'residue': 'medium',
+                  'water': 'medium',
+                  'benefit': 'Planting in spring can help break the cycle of weeds that sprout in '
+                             'fall',
+                  'risk': 'It has a shorter growing season and is more exposed to early summer '
+                          'heat and drought'},
+ 'Barley': {'n_fixing': False,
+            'residue': 'medium',
+            'water': 'medium',
+            'benefit': 'It has a shorter growing season than wheat and can be sold for feed or '
+                       'malt',
+            'risk': 'It shares several diseases with wheat'},
+ 'Other small grains': {'n_fixing': False,
+                        'residue': 'medium',
+                        'water': 'medium',
+                        'benefit': 'They add a different cereal to the rotation',
+                        'risk': 'Markets for these grains can be smaller and less reliable'},
+ 'Pulses': {'n_fixing': True,
+            'residue': 'low',
+            'water': 'low',
+            'benefit': 'They fix nitrogen for the next wheat crop and can help break cereal '
+                       'disease and weed cycles',
+            'risk': 'They leave little residue, which can expose the soil to erosion'},
+ 'Canola': {'n_fixing': False,
+            'residue': 'medium',
+            'water': 'medium',
+            'benefit': 'Its deep root grows into the soil, and rotating it with grains can help '
+                       'break disease cycles',
+            'risk': 'It can be hard to establish in a dry fall, and you need a nearby processor or '
+                    'buyer'},
+ 'Fallow': {'n_fixing': False,
+            'residue': 'low',
+            'water': 'none',
+            'benefit': 'Leaving the field unplanted gives the soil a chance to store water for the '
+                       'next crop',
+            'risk': "There's no crop to sell that year, and thin ground cover can leave soil "
+                    'vulnerable to erosion'},
+ 'Hay and forage': {'n_fixing': True,
+                    'residue': 'high',
+                    'water': 'high',
+                    'benefit': 'Keeping the soil covered can build organic matter and reduce '
+                               'erosion, and forage can bring in income',
+                    'risk': 'These crops use more water than grains and need a livestock market'},
+ 'Corn': {'n_fixing': False,
+          'residue': 'high',
+          'water': 'high',
+          'benefit': 'It leaves plenty of crop residue behind',
+          'risk': 'It usually needs irrigation in this region'},
+ 'Potatoes and beets': {'n_fixing': False,
+                        'residue': 'low',
+                        'water': 'high',
+                        'benefit': 'These crops can sell for a high price',
+                        'risk': 'They need irrigation and leave little residue to protect the '
+                                'soil'},
+ 'Double crop': {'n_fixing': False,
+                 'residue': 'medium',
+                 'water': 'high',
+                 'benefit': 'Growing two crops can give you two harvests in a year',
+                 'risk': "It's rarely possible without irrigation in dryland areas"},
+ 'Other crops': {'n_fixing': False,
+                 'residue': 'medium',
+                 'water': 'medium',
+                 'benefit': 'They add variety to the rotation',
+                 'risk': "We haven't checked the markets or growing practices for these crops"}}
 
 # Crops that break cereal disease and weed cycles (M19). Cereals, fallow and the catch-all
 # groups don't count.
@@ -230,8 +259,8 @@ def _traits_text(rotation: Rotation):
     benefits, risks = [], []
     for crop in dict.fromkeys(rotation.crops):  # unique, in order
         t = TRAITS[crop]
-        benefits.append(f"{crop}: {t['benefit']}.")
-        risks.append(f"{crop}: {t['risk']}.")
+        benefits.append(f"{crop} - {t['benefit']}.")
+        risks.append(f"{crop} - {t['risk']}.")
     groups = set(rotation.crops)
     if any(TRAITS[c]["n_fixing"] for c in groups):
         benefits.append("Includes a nitrogen-fixing crop, which can cut fertilizer needs.")
@@ -286,8 +315,11 @@ def strategies(
             why = (f"Used on {round(100 * share)}% of sampled cropland across the top "
                    f"{checked} analog areas, whose climate today matches your field's 2050s "
                    "climate.")
-        evidence = [f"USDA Cropland Data Layer, {span}: {round(100 * share)}% of analog-area "
-                    f"cropland; used in {len(using)} of {checked} analog areas."]
+        evidence = [
+            f"From {span}, the USDA Cropland Data Layer shows this rotation on "
+            f"{round(100 * share)}% of the sampled cropland across the matched areas. "
+            f"It appeared in {len(using)} of the {checked} areas we checked."
+        ]
         if using:
             agree = [models_agree[r] for r in using if r in models_agree]
             if agree:

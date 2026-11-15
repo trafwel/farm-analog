@@ -1100,17 +1100,17 @@
       "analogs_checked": 5,
       "why": "Your field's current rotation: 92% of its sampled cropland followed it in 2016–2023.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016–2023: 0% of analog-area cropland; used in 0 of 5 analog areas."
+        "From 2016–2023, the USDA Cropland Data Layer shows this rotation on 0% of the sampled cropland across the matched areas. It appeared in 0 of the 5 areas we checked."
       ],
       "benefits": [
-        "Fallow: Stores soil water for the next crop in the driest areas.",
-        "Spring wheat: Spring planting breaks winter-annual weed cycles.",
-        "Winter wheat: Main cash crop of the region; heavy residue protects the soil."
+        "Fallow - Leaving the field unplanted gives the soil a chance to store water for the next crop.",
+        "Spring wheat - Planting in spring can help break the cycle of weeds that sprout in fall.",
+        "Winter wheat - It's one of the main cash crops in the region, and the residue it leaves behind can protect the soil."
       ],
       "risks": [
-        "Fallow: No crop that year, and bare or thin cover raises wind and water erosion risk.",
-        "Spring wheat: Shorter season; more exposed to early-summer heat and drought.",
-        "Winter wheat: Yield depends on spring rain and suffers from heat during grain fill in early summer."
+        "Fallow - There's no crop to sell that year, and thin ground cover can leave soil vulnerable to erosion.",
+        "Spring wheat - It has a shorter growing season and is more exposed to early summer heat and drought.",
+        "Winter wheat - It depends on spring rain, and early summer heat can reduce yields as the grain develops."
       ],
       "gaps": [
         "None of the top analog areas use this rotation on 10% or more of their cropland, so the evidence that it suits your 2050s climate is thin.",
@@ -1143,16 +1143,16 @@
       "analogs_checked": 5,
       "why": "Used on 95% of sampled cropland across the top 5 analog areas, whose climate today matches your field's 2050s climate.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016–2023: 95% of analog-area cropland; used in 5 of 5 analog areas.",
+        "From 2016–2023, the USDA Cropland Data Layer shows this rotation on 95% of the sampled cropland across the matched areas. It appeared in 5 of the 5 areas we checked.",
         "Those analog areas match your 2050s climate in up to 5 of 8 climate models."
       ],
       "benefits": [
-        "Winter wheat: Main cash crop of the region; heavy residue protects the soil.",
-        "Fallow: Stores soil water for the next crop in the driest areas."
+        "Winter wheat - It's one of the main cash crops in the region, and the residue it leaves behind can protect the soil.",
+        "Fallow - Leaving the field unplanted gives the soil a chance to store water for the next crop."
       ],
       "risks": [
-        "Winter wheat: Yield depends on spring rain and suffers from heat during grain fill in early summer.",
-        "Fallow: No crop that year, and bare or thin cover raises wind and water erosion risk."
+        "Winter wheat - It depends on spring rain, and early summer heat can reduce yields as the grain develops.",
+        "Fallow - There's no crop to sell that year, and thin ground cover can leave soil vulnerable to erosion."
       ],
       "gaps": [
         "Pest and disease pressure, yields and prices are not measured here.",
@@ -1183,14 +1183,14 @@
       "analogs_checked": 5,
       "why": "Used on 1% of sampled cropland across the top 5 analog areas, whose climate today matches your field's 2050s climate.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016–2023: 1% of analog-area cropland; used in 0 of 5 analog areas."
+        "From 2016–2023, the USDA Cropland Data Layer shows this rotation on 1% of the sampled cropland across the matched areas. It appeared in 0 of the 5 areas we checked."
       ],
       "benefits": [
-        "Winter wheat: Main cash crop of the region; heavy residue protects the soil.",
+        "Winter wheat - It's one of the main cash crops in the region, and the residue it leaves behind can protect the soil.",
         "Every year leaves crop residue, which protects the soil."
       ],
       "risks": [
-        "Winter wheat: Yield depends on spring rain and suffers from heat during grain fill in early summer.",
+        "Winter wheat - It depends on spring rain, and early summer heat can reduce yields as the grain develops.",
         "A single crop every year gives pests, diseases and grassy weeds no break."
       ],
       "gaps": [

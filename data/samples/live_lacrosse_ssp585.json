@@ -1082,16 +1082,16 @@
       "analogs_checked": 5,
       "why": "Your field's current rotation: 98% of its sampled cropland followed it in 2016–2023.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016–2023: 51% of analog-area cropland; used in 4 of 5 analog areas.",
+        "From 2016–2023, the USDA Cropland Data Layer shows this rotation on 51% of the sampled cropland across the matched areas. It appeared in 4 of the 5 areas we checked.",
         "Those analog areas match your 2050s climate in up to 5 of 8 climate models."
       ],
       "benefits": [
-        "Winter wheat: Main cash crop of the region; heavy residue protects the soil.",
-        "Fallow: Stores soil water for the next crop in the driest areas."
+        "Winter wheat - It's one of the main cash crops in the region, and the residue it leaves behind can protect the soil.",
+        "Fallow - Leaving the field unplanted gives the soil a chance to store water for the next crop."
       ],
       "risks": [
-        "Winter wheat: Yield depends on spring rain and suffers from heat during grain fill in early summer.",
-        "Fallow: No crop that year, and bare or thin cover raises wind and water erosion risk."
+        "Winter wheat - It depends on spring rain, and early summer heat can reduce yields as the grain develops.",
+        "Fallow - There's no crop to sell that year, and thin ground cover can leave soil vulnerable to erosion."
       ],
       "gaps": [
         "Pest and disease pressure, yields and prices are not measured here.",
@@ -1124,18 +1124,18 @@
       "analogs_checked": 5,
       "why": "Used on 16% of sampled cropland across the top 5 analog areas, whose climate today matches your field's 2050s climate.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016–2023: 16% of analog-area cropland; used in 2 of 5 analog areas.",
+        "From 2016–2023, the USDA Cropland Data Layer shows this rotation on 16% of the sampled cropland across the matched areas. It appeared in 2 of the 5 areas we checked.",
         "Those analog areas match your 2050s climate in up to 5 of 8 climate models."
       ],
       "benefits": [
-        "Winter wheat: Main cash crop of the region; heavy residue protects the soil.",
-        "Spring wheat: Spring planting breaks winter-annual weed cycles.",
-        "Fallow: Stores soil water for the next crop in the driest areas."
+        "Winter wheat - It's one of the main cash crops in the region, and the residue it leaves behind can protect the soil.",
+        "Spring wheat - Planting in spring can help break the cycle of weeds that sprout in fall.",
+        "Fallow - Leaving the field unplanted gives the soil a chance to store water for the next crop."
       ],
       "risks": [
-        "Winter wheat: Yield depends on spring rain and suffers from heat during grain fill in early summer.",
-        "Spring wheat: Shorter season; more exposed to early-summer heat and drought.",
-        "Fallow: No crop that year, and bare or thin cover raises wind and water erosion risk."
+        "Winter wheat - It depends on spring rain, and early summer heat can reduce yields as the grain develops.",
+        "Spring wheat - It has a shorter growing season and is more exposed to early summer heat and drought.",
+        "Fallow - There's no crop to sell that year, and thin ground cover can leave soil vulnerable to erosion."
       ],
       "gaps": [
         "Pest and disease pressure, yields and prices are not measured here.",
@@ -1167,16 +1167,16 @@
       "analogs_checked": 5,
       "why": "Used on 8% of sampled cropland across the top 5 analog areas, whose climate today matches your field's 2050s climate.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016–2023: 8% of analog-area cropland; used in 2 of 5 analog areas.",
+        "From 2016–2023, the USDA Cropland Data Layer shows this rotation on 8% of the sampled cropland across the matched areas. It appeared in 2 of the 5 areas we checked.",
         "Those analog areas match your 2050s climate in up to 5 of 8 climate models."
       ],
       "benefits": [
-        "Fallow: Stores soil water for the next crop in the driest areas.",
-        "Winter wheat: Main cash crop of the region; heavy residue protects the soil."
+        "Fallow - Leaving the field unplanted gives the soil a chance to store water for the next crop.",
+        "Winter wheat - It's one of the main cash crops in the region, and the residue it leaves behind can protect the soil."
       ],
       "risks": [
-        "Fallow: No crop that year, and bare or thin cover raises wind and water erosion risk.",
-        "Winter wheat: Yield depends on spring rain and suffers from heat during grain fill in early summer."
+        "Fallow - There's no crop to sell that year, and thin ground cover can leave soil vulnerable to erosion.",
+        "Winter wheat - It depends on spring rain, and early summer heat can reduce yields as the grain develops."
       ],
       "gaps": [
         "Pest and disease pressure, yields and prices are not measured here.",
@@ -1209,16 +1209,16 @@
       "analogs_checked": 5,
       "why": "Used on 3% of sampled cropland across the top 5 analog areas, whose climate today matches your field's 2050s climate.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016–2023: 3% of analog-area cropland; used in 1 of 5 analog areas.",
+        "From 2016–2023, the USDA Cropland Data Layer shows this rotation on 3% of the sampled cropland across the matched areas. It appeared in 1 of the 5 areas we checked.",
         "Those analog areas match your 2050s climate in up to 5 of 8 climate models."
       ],
       "benefits": [
-        "Winter wheat: Main cash crop of the region; heavy residue protects the soil.",
-        "Fallow: Stores soil water for the next crop in the driest areas."
+        "Winter wheat - It's one of the main cash crops in the region, and the residue it leaves behind can protect the soil.",
+        "Fallow - Leaving the field unplanted gives the soil a chance to store water for the next crop."
       ],
       "risks": [
-        "Winter wheat: Yield depends on spring rain and suffers from heat during grain fill in early summer.",
-        "Fallow: No crop that year, and bare or thin cover raises wind and water erosion risk."
+        "Winter wheat - It depends on spring rain, and early summer heat can reduce yields as the grain develops.",
+        "Fallow - There's no crop to sell that year, and thin ground cover can leave soil vulnerable to erosion."
       ],
       "gaps": [
         "Pest and disease pressure, yields and prices are not measured here.",

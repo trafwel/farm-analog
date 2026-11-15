@@ -8,7 +8,7 @@ describe('ResultsPanel', () => {
     const onSelect = vi.fn();
     render(<ResultsPanel result={getDemoResult('fake-colfax')} selectedRank={null} onSelect={onSelect} />);
     expect(screen.getByText(DEMO_BANNER)).toBeInTheDocument();
-    expect(screen.getByText(/^Best match: rank 1, strong match/)).toBeInTheDocument();
+    expect(screen.getByText(/^Best match 92 out of 100/)).toBeInTheDocument();
     expect(screen.queryByText(NOVEL_CLIMATE_WARNING)).not.toBeInTheDocument();
     const list = screen.getByRole('list', { name: /Matching places/ });
     expect(within(list).getAllByRole('button')).toHaveLength(20);
