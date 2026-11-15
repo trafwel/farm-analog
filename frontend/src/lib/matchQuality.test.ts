@@ -27,9 +27,9 @@ describe('match score', () => {
 
 describe('match quality mapping', () => {
   it.each([
-    ['strong', '#08306b', 'Strong match'],
-    ['good', '#2171b5', 'Good match'],
-    ['weak', '#6baed6', 'Weak match'],
+    ['strong', '#17ab4b', 'Strong match'],
+    ['good', '#8fd317', 'Good match'],
+    ['weak', '#f5a52c', 'Weak match'],
     ['none', '#969696', 'No real match'],
   ] as const)('%s -> %s, %s', (q, color, label) => {
     expect(matchQualityStyle(q).color).toBe(color);
