@@ -3,6 +3,7 @@ import { MATCH_QUALITY_STYLES } from '../lib/matchQuality';
 import { agreementText, getHeadline } from '../lib/headline';
 import { SCENARIO_LABELS } from '../lib/scenario';
 import type { BillSummary } from '../lib/api';
+import type { PriorityId } from '../lib/priorities';
 import { BillSummaryCard } from './BillSummaryCard';
 import { FingerprintTable } from './FingerprintTable';
 import { Glossary } from './Glossary';
@@ -19,9 +20,11 @@ export interface ResultsPanelProps {
   onSelect: (rank: number) => void;
   /** Bill's plain-language summary, when the server provided one. */
   billSummary?: BillSummary | null;
+  chosenGoals?: PriorityId[];
+  onGoalsChange?: (g: PriorityId[]) => void;
 }
 
-export function ResultsPanel({ result, selectedRank, onSelect, billSummary }: ResultsPanelProps) {
+export function ResultsPanel({ result, selectedRank, onSelect, billSummary, chosenGoals, onGoalsChange }: ResultsPanelProps) {
   const headline = getHeadline(result);
   const analogs = [...result.analogs].sort((a, b) => a.rank - b.rank);
   const notes = result.notes?.filter((n) => n.trim() !== '') ?? [];
@@ -69,7 +72,9 @@ export function ResultsPanel({ result, selectedRank, onSelect, billSummary }: Re
         </div>
       )}
 
-      {result.rotations && result.rotations.length > 0 && <RotationCards rotations={result.rotations} />}
+      {result.rotations && result.rotations.length > 0 && (
+        <RotationCards rotations={result.rotations} chosen={chosenGoals} onChosenChange={onGoalsChange} />
+      )}
 
       {compared && (
         <PlaceComparison analog={compared} farmSoil={result.farm_soil} farmHazards={result.farm_hazards} />

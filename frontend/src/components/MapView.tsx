@@ -25,16 +25,52 @@ function DrawControl({ onDraw, cancelSignal }: { onDraw: (ring: LonLat[]) => voi
     onDrawRef.current = onDraw;
   }, [onDraw]);
 
-  // Cancel drawing when external actions happen (e.g. clear field, pick test field, search)
+  // Cancel drawing and clean up temporary markers when external actions happen (e.g. clear field, pick test field, search)
   useEffect(() => {
-    map.pm.disableDraw();
+    try {
+      map.pm.disableDraw();
+      const pmDraw = (map.pm as unknown as { Draw?: { Polygon?: { _cleanUpMarkers?: () => void; _layer?: L.Layer | null }; Rectangle?: { _layer?: L.Layer | null } } })?.Draw;
+      if (pmDraw?.Polygon) {
+        if (typeof pmDraw.Polygon._cleanUpMarkers === 'function') {
+          pmDraw.Polygon._cleanUpMarkers();
+        }
+        if (pmDraw.Polygon._layer) {
+          map.removeLayer(pmDraw.Polygon._layer);
+          pmDraw.Polygon._layer = null;
+        }
+      }
+      if (pmDraw?.Rectangle?._layer) {
+        map.removeLayer(pmDraw.Rectangle._layer);
+        pmDraw.Rectangle._layer = null;
+      }
+    } catch {
+      // ignore
+    }
   }, [map, cancelSignal]);
 
-  // Escape key cancels drawing mode
+  // Escape key cancels drawing mode and cleans up markers
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        map.pm.disableDraw();
+        try {
+          map.pm.disableDraw();
+          const pmDraw = (map.pm as unknown as { Draw?: { Polygon?: { _cleanUpMarkers?: () => void; _layer?: L.Layer | null }; Rectangle?: { _layer?: L.Layer | null } } })?.Draw;
+          if (pmDraw?.Polygon) {
+            if (typeof pmDraw.Polygon._cleanUpMarkers === 'function') {
+              pmDraw.Polygon._cleanUpMarkers();
+            }
+            if (pmDraw.Polygon._layer) {
+              map.removeLayer(pmDraw.Polygon._layer);
+              pmDraw.Polygon._layer = null;
+            }
+          }
+          if (pmDraw?.Rectangle?._layer) {
+            map.removeLayer(pmDraw.Rectangle._layer);
+            pmDraw.Rectangle._layer = null;
+          }
+        } catch {
+          // ignore
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -49,6 +85,9 @@ function DrawControl({ onDraw, cancelSignal }: { onDraw: (ring: LonLat[]) => voi
       templineStyle: { color: FIELD_COLOR },
       hintlineStyle: { color: FIELD_COLOR, dashArray: '5,5' },
       continueDrawing: false,
+      snappable: true,
+      snapDistance: 25,
+      finishOn: 'dblclick',
     });
     map.pm.addControls({
       position: 'topleft',
@@ -172,11 +211,11 @@ function DrawControl({ onDraw, cancelSignal }: { onDraw: (ring: LonLat[]) => voi
   return null;
 }
 
-/** Pan to the selected analog. */
+/** Pan to the selected analog quickly. */
 function FlyToSelected({ analog }: { analog: Analog | undefined }) {
   const map = useMap();
   useEffect(() => {
-    if (analog) map.flyTo([analog.lat, analog.lon], Math.max(map.getZoom(), 9), { duration: 0.6 });
+    if (analog) map.flyTo([analog.lat, analog.lon], Math.max(map.getZoom(), 9), { duration: 0.2 });
   }, [map, analog]);
   return null;
 }
@@ -207,6 +246,52 @@ export interface MapViewProps {
   cancelSignal?: unknown;
 }
 
+const TEST_FIELD_NAMES: Record<string, string> = {
+  cook: 'Cook Farm',
+  colfax: 'Colfax',
+  lacrosse: 'LaCrosse',
+  lind: 'Lind',
+  dayton: 'Dayton',
+};
+
+function TestFieldMarkers({ testFields }: { testFields: TestField[] }) {
+  const map = useMap();
+  const [zoom, setZoom] = useState(map.getZoom());
+  useEffect(() => {
+    const onZoom = () => setZoom(map.getZoom());
+    map.on('zoomend', onZoom);
+    return () => {
+      map.off('zoomend', onZoom);
+    };
+  }, [map]);
+
+  // At minimum zoom (6-7), permanent labels pile on top of each other.
+  // Below zoom 8, show on hover instead of permanent.
+  const isPermanent = zoom >= 8;
+
+  return (
+    <>
+      {testFields.map((t) => {
+        const name = TEST_FIELD_NAMES[t.id] ?? t.label.split(' (')[0].split(',')[0];
+        return (
+          <Rectangle
+            key={t.id}
+            bounds={[
+              [t.lat - 0.02, t.lon - 0.027],
+              [t.lat + 0.02, t.lon + 0.027],
+            ]}
+            pathOptions={{ color: FIELD_COLOR, weight: 3, fillColor: FIELD_COLOR, fillOpacity: 0.25, pmIgnore: true } as L.PathOptions}
+          >
+            <Tooltip permanent={isPermanent} direction="top" offset={[0, -6]}>
+              {name}
+            </Tooltip>
+          </Rectangle>
+        );
+      })}
+    </>
+  );
+}
+
 export function MapView({ field, onFieldDrawn, analogs, resultKey, selectedRank, onSelect, testFields = [], cancelSignal }: MapViewProps) {
   const selected = analogs.find((a) => a.rank === selectedRank);
   // Draw the best matches on top.
@@ -231,20 +316,7 @@ export function MapView({ field, onFieldDrawn, analogs, resultKey, selectedRank,
           noWrap={true}
         />
         <DrawControl onDraw={onFieldDrawn} cancelSignal={cancelSignal} />
-        {testFields.map((t) => (
-          <Rectangle
-            key={t.id}
-            bounds={[
-              [t.lat - 0.02, t.lon - 0.027],
-              [t.lat + 0.02, t.lon + 0.027],
-            ]}
-            pathOptions={{ color: FIELD_COLOR, weight: 3, fillColor: FIELD_COLOR, fillOpacity: 0.25, pmIgnore: true } as L.PathOptions}
-          >
-            <Tooltip permanent direction="top" offset={[0, -6]}>
-              {t.label.split(' (')[0]}
-            </Tooltip>
-          </Rectangle>
-        ))}
+        <TestFieldMarkers testFields={testFields} />
         {field && (
           <Polygon
             positions={field.map(([lon, lat]) => [lat, lon] as [number, number])}

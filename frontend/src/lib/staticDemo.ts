@@ -9,7 +9,7 @@
 import type { AnalogRequest, AnalogResult } from '../types/contract';
 import type { AnalogResultView } from '../types/extensions';
 import { ApiError, type BillSummary } from './api';
-import type { LonLat } from './request';
+import { type LonLat, MAX_FIELD_AREA_KM2, polygonAreaKm2 } from './request';
 
 export const IS_STATIC = import.meta.env.VITE_STATIC === '1';
 export const SAVED_RESULT_RADIUS_KM = 8;
@@ -87,6 +87,15 @@ export const OUTSIDE_MESSAGE = 'This online demo has saved results for 5 Palouse
 /** The static stand-in for POST /analogs. */
 export function analyzeStatic(body: AnalogRequest): AnalogResultView {
   const ring = body.field.coordinates[0] as LonLat[];
+  const area = polygonAreaKm2(ring);
+  if (area > MAX_FIELD_AREA_KM2) {
+    throw new ApiError(
+      'http',
+      `Field area (${area.toFixed(1)} km²) exceeds the maximum limit of ${MAX_FIELD_AREA_KM2} km² (~12,000 acres).`,
+      ['Please draw a single field rather than an entire county or region.'],
+      400,
+    );
+  }
   const c = fieldCenter(ring);
   const nearest = TEST_FIELDS.map((f) => ({ f, km: distanceKm(c.lat, c.lon, f.lat, f.lon) })).sort(
     (a, b) => a.km - b.km,

@@ -35,7 +35,7 @@ export const PRIORITIES: Priority[] = [
     label: 'Cut erosion',
     score: (t) => 1 - t.low_cover,
     reason: (t, f) =>
-      t.low_cover === 0 ? 'crop residue covers the soil every year' : `little residue in ${count(t.low_cover, t, f)}`,
+      t.low_cover === 0 ? 'crop residue covers the soil every year' : `good residue cover in ${count(1 - t.low_cover, t, f)}`,
   },
   {
     id: 'organic',

@@ -91,18 +91,23 @@ button.link { border: none; padding: 0; background: none; color: #0b4392; text-d
   display: flex;
   justify-content: space-between;
   align-items: center;
-  cursor: pointer;
-  user-select: none;
-}
-.legend-title { margin: 0; font-weight: 700; font-size: 0.78rem; }
-.legend-toggle {
+  width: 100%;
   background: none;
   border: none;
-  padding: 0 0.2rem;
+  padding: 0;
+  cursor: pointer;
+  user-select: none;
+  font: inherit;
+  color: inherit;
+}
+.legend-header:hover {
+  background: none;
+}
+.legend-title { margin: 0; font-weight: 700; font-size: 0.78rem; text-align: left; }
+.legend-toggle-icon {
   font-size: 0.85rem;
   font-weight: bold;
   color: var(--muted);
-  cursor: pointer;
 }
 .legend ul { list-style: none; margin: 0.25rem 0 0; padding: 0; }
 .legend li { margin: 0.1rem 0; display: flex; align-items: center; }

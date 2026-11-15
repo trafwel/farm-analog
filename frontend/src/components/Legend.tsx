@@ -6,23 +6,19 @@ export function Legend({ className = '' }: { className?: string }) {
   const [open, setOpen] = useState(true);
   return (
     <div className={`legend ${className}`} aria-label="Map legend">
-      <div className="legend-header" onClick={() => setOpen((o) => !o)} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setOpen((o) => !o)}>
+      <button
+        type="button"
+        className="legend-header"
+        aria-expanded={open}
+        aria-controls="legend-list"
+        aria-label={open ? 'Match quality legend, click to collapse' : 'Match quality legend, click to expand'}
+        onClick={() => setOpen((o) => !o)}
+      >
         <span className="legend-title">Match quality</span>
-        <button
-          type="button"
-          className="legend-toggle"
-          aria-label={open ? 'Collapse legend' : 'Expand legend'}
-          aria-expanded={open}
-          onClick={(e) => {
-            e.stopPropagation();
-            setOpen((o) => !o);
-          }}
-        >
-          {open ? '−' : '+'}
-        </button>
-      </div>
+        <span className="legend-toggle-icon" aria-hidden="true">{open ? '−' : '+'}</span>
+      </button>
       {open && (
-        <ul>
+        <ul id="legend-list">
           {MATCH_QUALITY_ORDER.map((q) => {
             const s = MATCH_QUALITY_STYLES[q];
             return (

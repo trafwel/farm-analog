@@ -41,8 +41,18 @@ function PriorityPicker({ chosen, onChange }: { chosen: PriorityId[]; onChange: 
   );
 }
 
-export function RotationCards({ rotations }: { rotations: RotationStrategy[] }) {
-  const [chosen, setChosen] = useState<PriorityId[]>([]);
+export function RotationCards({
+  rotations,
+  chosen: externalChosen,
+  onChosenChange,
+}: {
+  rotations: RotationStrategy[];
+  chosen?: PriorityId[];
+  onChosenChange?: (c: PriorityId[]) => void;
+}) {
+  const [internalChosen, setInternalChosen] = useState<PriorityId[]>([]);
+  const chosen = externalChosen !== undefined ? externalChosen : internalChosen;
+  const setChosen = onChosenChange ?? setInternalChosen;
   const hasTraits = rotations.some((r) => r.traits);
   const shown = sortByPriorities(rotations, chosen);
   const best = bestFit(rotations, chosen);

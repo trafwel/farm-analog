@@ -65,6 +65,17 @@ describe('request body builder', () => {
     expect(() => buildAnalogRequest(bowtie, 'ssp245')).toThrow(/self-intersecting/i);
   });
 
+  it('rejects a field that exceeds the maximum size limit', () => {
+    // A huge box (1 deg x 1 deg ~ 8,500 km²)
+    const huge: LonLat[] = [
+      [-118.0, 46.0],
+      [-117.0, 46.0],
+      [-117.0, 47.0],
+      [-118.0, 47.0],
+    ];
+    expect(() => buildAnalogRequest(huge, 'ssp245')).toThrow(/too large/i);
+  });
+
   it('example field is near Colfax, WA', () => {
     const lons = EXAMPLE_FIELD.map((p) => p[0]);
     const lats = EXAMPLE_FIELD.map((p) => p[1]);

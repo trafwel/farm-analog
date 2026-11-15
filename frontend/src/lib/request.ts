@@ -75,6 +75,9 @@ export function polygonAreaKm2(ring: LonLat[]): number {
   return degArea * 111 * 77;
 }
 
+/** Maximum field size in km² (50 km² ~ 12,355 acres, matching backend config). */
+export const MAX_FIELD_AREA_KM2 = 50.0;
+
 export function validatePolygon(ring: LonLat[]): string | null {
   if (distinctPointCount(ring) < 3) {
     return 'A field needs at least 3 distinct corners.';
@@ -82,8 +85,12 @@ export function validatePolygon(ring: LonLat[]): string | null {
   if (isSelfIntersecting(ring)) {
     return 'Self-intersecting polygon (bowtie) is not a valid field. Please draw a simple shape.';
   }
-  if (polygonAreaKm2(ring) < 0.0005) {
+  const area = polygonAreaKm2(ring);
+  if (area < 0.0005) {
     return 'Field area is too small. Please draw a larger field.';
+  }
+  if (area > MAX_FIELD_AREA_KM2) {
+    return `Field area (${area.toFixed(1)} km²) exceeds the maximum limit of ${MAX_FIELD_AREA_KM2} km² (~12,000 acres). Please draw a single field.`;
   }
   return null;
 }

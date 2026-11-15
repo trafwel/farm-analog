@@ -29,6 +29,18 @@ describe('hazard helpers', () => {
     expect(byId.rain).toBeUndefined();
     expect(hazardRows(null, null)).toEqual([]);
   });
+
+  it('ensures frost-free days change equals spring shift plus fall shift', () => {
+    // e.g. Colfax: spring 18 days earlier, fall 17 days later -> ffd change must be +35 days
+    const rows = hazardRows(
+      { frost_free_days: 147.2, last_spring_frost_doy: 126.0, first_fall_frost_doy: 279.0 },
+      { frost_free_days: 183.0, last_spring_frost_doy: 108.0, first_fall_frost_doy: 296.0 },
+    );
+    const byId = Object.fromEntries(rows.map((r) => [r.id, r]));
+    expect(byId.spring.change).toBe('18 days earlier');
+    expect(byId.fall.change).toBe('17 days later');
+    expect(byId.ffd.change).toBe('+35 days');
+  });
 });
 
 describe('soil water (SMAP)', () => {

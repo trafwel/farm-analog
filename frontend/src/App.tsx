@@ -6,6 +6,7 @@ import { DEMO_CASES, type DemoCaseId, getDemoResult } from './lib/fixtures';
 import { analyzeStatic, IS_STATIC, savedSummary, TEST_FIELDS, testFieldRing } from './lib/staticDemo';
 import { buildAnalogRequest, EXAMPLE_FIELD, type LonLat, validatePolygon } from './lib/request';
 import { DEFAULT_SCENARIO, SCENARIO_LABELS, SCENARIOS } from './lib/scenario';
+import type { PriorityId } from './lib/priorities';
 import { MapView } from './components/MapView';
 import { ResultsPanel } from './components/ResultsPanel';
 
@@ -19,11 +20,17 @@ const HEALTH_TEXT: Record<Health, string> = {
     'Online demo: real Earth Engine results saved for 5 Palouse test fields. No server needed.',
 };
 
-function parseInitialState(): { field: LonLat[] | null; scenario: Scenario } {
+const VALID_GOALS: PriorityId[] = ['water', 'erosion', 'organic', 'nitrogen', 'pests'];
+
+function parseInitialState(): { field: LonLat[] | null; scenario: Scenario; goals: PriorityId[] } {
   try {
     const params = new URLSearchParams(window.location.search);
     const scen = params.get('scenario');
     const scenario: Scenario = scen === 'ssp585' ? 'ssp585' : DEFAULT_SCENARIO;
+    const goalsParam = params.get('goals');
+    const goals: PriorityId[] = goalsParam
+      ? (goalsParam.split(',').filter((g) => VALID_GOALS.includes(g as PriorityId)) as PriorityId[])
+      : [];
     const fieldParam = params.get('field');
     if (fieldParam) {
       const coords = fieldParam.split(';').map((pt) => {
@@ -33,12 +40,12 @@ function parseInitialState(): { field: LonLat[] | null; scenario: Scenario } {
         return [lon, lat] as LonLat;
       });
       if (coords.length >= 3 && coords.every(([lon, lat]) => Number.isFinite(lon) && Number.isFinite(lat))) {
-        return { field: coords, scenario };
+        return { field: coords, scenario, goals };
       }
     }
-    return { field: null, scenario };
+    return { field: null, scenario, goals };
   } catch {
-    return { field: null, scenario: DEFAULT_SCENARIO };
+    return { field: null, scenario: DEFAULT_SCENARIO, goals: [] };
   }
 }
 
@@ -46,6 +53,7 @@ export default function App() {
   const [initial] = useState(parseInitialState);
   const [field, setField] = useState<LonLat[] | null>(initial.field);
   const [scenario, setScenario] = useState<Scenario>(initial.scenario);
+  const [chosenGoals, setChosenGoals] = useState<PriorityId[]>(initial.goals);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ApiError | null>(null);
   const [result, setResult] = useState<AnalogResultView | null>(null);
@@ -54,9 +62,10 @@ export default function App() {
   const [resultCount, setResultCount] = useState(0);
   const [health, setHealth] = useState<Health>(IS_STATIC ? 'static' : 'checking');
   const [billSummary, setBillSummary] = useState<BillSummary | null>(null);
+  const [cancelDrawKey, setCancelDrawKey] = useState(0);
   const abortRef = useRef<AbortController | null>(null);
 
-  // Sync field and scenario to URL query params so they survive reload and are shareable
+  // Sync field, scenario, and rotation goals to URL query params so they survive reload and are shareable
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (field && field.length > 0) {
@@ -69,10 +78,22 @@ export default function App() {
     } else {
       params.delete('scenario');
     }
+    if (chosenGoals.length > 0) {
+      params.set('goals', chosenGoals.join(','));
+    } else {
+      params.delete('goals');
+    }
     const newQuery = params.toString();
     const newUrl = newQuery ? `${window.location.pathname}?${newQuery}` : window.location.pathname;
     window.history.replaceState(null, '', newUrl);
-  }, [field, scenario]);
+  }, [field, scenario, chosenGoals]);
+
+  // Bring back results on reload if a field is present in the URL
+  useEffect(() => {
+    if (initial.field) {
+      findAnalogs(initial.field, initial.scenario);
+    }
+  }, []);
 
   useEffect(() => {
     if (IS_STATIC) return;
@@ -109,10 +130,14 @@ export default function App() {
     setBillSummary(null);
   }, []);
 
-  const useExampleField = () => onFieldDrawn(EXAMPLE_FIELD);
+  const useExampleField = () => {
+    setCancelDrawKey((k) => k + 1);
+    onFieldDrawn(EXAMPLE_FIELD);
+  };
 
   const findAnalogs = async (f: LonLat[] | null = field, s: Scenario = scenario) => {
     if (!f) return;
+    setCancelDrawKey((k) => k + 1);
     abortRef.current?.abort();
     const ctrl = new AbortController();
     abortRef.current = ctrl;
@@ -145,6 +170,7 @@ export default function App() {
   };
 
   const handleScenarioChange = (newScenario: Scenario) => {
+    setCancelDrawKey((k) => k + 1);
     setScenario(newScenario);
     // If a result is currently showing, re-run with the new scenario automatically
     if (result && field) {
@@ -179,7 +205,7 @@ export default function App() {
             resultKey={resultKey}
             selectedRank={selectedRank}
             onSelect={setSelectedRank}
-            cancelSignal={field ? field.map((p) => p.join(',')).join(';') : `none-${loading}-${demoCase}`}
+            cancelSignal={cancelDrawKey}
           />
           <p className="muted small">
             Use the tools at the top left of the map to draw your field:
@@ -214,7 +240,10 @@ export default function App() {
                   value=""
                   onChange={(e) => {
                     const f = TEST_FIELDS.find((t) => t.id === e.target.value);
-                    if (f) onFieldDrawn(testFieldRing(f));
+                    if (f) {
+                      setCancelDrawKey((k) => k + 1);
+                      onFieldDrawn(testFieldRing(f));
+                    }
                   }}
                 >
                   <option value="">Try a test field…</option>
@@ -225,7 +254,18 @@ export default function App() {
                   ))}
                 </select>
               )}
-              <button type="button" onClick={() => { setField(null); setResult(null); setSelectedRank(null); setBillSummary(null); setError(null); }} disabled={!field}>
+              <button
+                type="button"
+                onClick={() => {
+                  setCancelDrawKey((k) => k + 1);
+                  setField(null);
+                  setResult(null);
+                  setSelectedRank(null);
+                  setBillSummary(null);
+                  setError(null);
+                }}
+                disabled={!field}
+              >
                 Clear field
               </button>
             </div>
@@ -314,6 +354,8 @@ export default function App() {
               selectedRank={selectedRank}
               onSelect={setSelectedRank}
               billSummary={billSummary}
+              chosenGoals={chosenGoals}
+              onGoalsChange={setChosenGoals}
             />
           )}
         </aside>

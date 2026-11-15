@@ -32,7 +32,7 @@ describe('farmer priorities', () => {
       { label: 'Cut erosion', text: 'crop residue covers the soil every year' },
       { label: 'Add nitrogen', text: 'nitrogen-fixing crop in 1 of 3 years' },
     ]);
-    expect(priorityFit(fallow, ['erosion'])!.reasons[0]!.text).toBe('little residue in 1 of 2 years');
+    expect(priorityFit(fallow, ['erosion'])!.reasons[0]!.text).toBe('good residue cover in 1 of 2 years');
   });
 
   it('says "main crops" for a flexible mix', () => {
