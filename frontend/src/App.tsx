@@ -4,16 +4,19 @@ import type { AnalogResultView } from './types/extensions';
 import { API_BASE, ApiError, type BillSummary, checkHealth, fetchAnalogs, fetchBillSummary } from './lib/api';
 import { DEMO_CASES, type DemoCaseId, getDemoResult } from './lib/fixtures';
 import { buildAnalogRequest, EXAMPLE_FIELD, type LonLat } from './lib/request';
+import { analyzeStatic, IS_STATIC, TEST_FIELDS, testFieldRing } from './lib/staticDemo';
 import { DEFAULT_SCENARIO, SCENARIO_LABELS, SCENARIOS } from './lib/scenario';
 import { MapView } from './components/MapView';
 import { ResultsPanel } from './components/ResultsPanel';
 
-type Health = 'checking' | 'online' | 'offline';
+type Health = 'checking' | 'online' | 'offline' | 'static';
 
 const HEALTH_TEXT: Record<Health, string> = {
   checking: 'Checking the analysis server…',
   online: 'Analysis server is online.',
   offline: 'Analysis server is not reachable. You can still view demo data.',
+  static:
+    'Online demo: real Earth Engine results saved for 5 Palouse test fields. No server needed.',
 };
 
 export default function App() {
@@ -25,11 +28,12 @@ export default function App() {
   const [demoCase, setDemoCase] = useState<DemoCaseId | null>(null);
   const [selectedRank, setSelectedRank] = useState<number | null>(null);
   const [resultCount, setResultCount] = useState(0);
-  const [health, setHealth] = useState<Health>('checking');
+  const [health, setHealth] = useState<Health>(IS_STATIC ? 'static' : 'checking');
   const [billSummary, setBillSummary] = useState<BillSummary | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
+    if (IS_STATIC) return;
     let live = true;
     checkHealth().then((ok) => live && setHealth(ok ? 'online' : 'offline'));
     return () => {
@@ -69,6 +73,10 @@ export default function App() {
     setSelectedRank(null);
     try {
       const body = buildAnalogRequest(field, scenario);
+      if (IS_STATIC) {
+        showResult(analyzeStatic(body), null);
+        return;
+      }
       const r = await fetchAnalogs(body, { signal: ctrl.signal });
       showResult(r, null);
       // Bill's summary is optional and arrives after the result; a newer search cancels it.
@@ -103,6 +111,7 @@ export default function App() {
       <main className="layout">
         <div className="map-column">
           <MapView
+            testFields={IS_STATIC ? TEST_FIELDS : []}
             field={field}
             onFieldDrawn={onFieldDrawn}
             analogs={result?.analogs ?? []}
@@ -126,6 +135,23 @@ export default function App() {
               <button type="button" onClick={useExampleField}>
                 Use example field
               </button>
+              {IS_STATIC && (
+                <select
+                  aria-label="Try a test field"
+                  value=""
+                  onChange={(e) => {
+                    const f = TEST_FIELDS.find((t) => t.id === e.target.value);
+                    if (f) onFieldDrawn(testFieldRing(f));
+                  }}
+                >
+                  <option value="">Try a test field…</option>
+                  {TEST_FIELDS.map((f) => (
+                    <option key={f.id} value={f.id}>
+                      {f.label}
+                    </option>
+                  ))}
+                </select>
+              )}
               <button type="button" onClick={() => setField(null)} disabled={!field}>
                 Clear field
               </button>
@@ -171,16 +197,18 @@ export default function App() {
                   ))}
                 </ul>
               )}
-              {error.kind === 'network' && (
+              {!IS_STATIC && error.kind === 'network' && (
                 <p className="small">Is the backend running at {API_BASE}? You can look at demo data instead.</p>
               )}
-              <button type="button" onClick={() => showDemo('fake-colfax')}>
-                Show demo data
-              </button>
+              {!IS_STATIC && (
+                <button type="button" onClick={() => showDemo('fake-colfax')}>
+                  Show demo data
+                </button>
+              )}
             </div>
           )}
 
-          {!error && !result && (
+          {!IS_STATIC && !error && !result && (
             <p className="small">
               No server handy?{' '}
               <button type="button" className="link" onClick={() => showDemo('fake-colfax')}>
