@@ -28,8 +28,8 @@ Every number comes from data, and a plain-language summary and glossary make it 
 
 ## Link to final project
 
-- Code: https://github.com/trafwel/farm-analog (PRs #2–#13 build it milestone by milestone)
-- Live demo: [link, if deployed]
+- Code: https://github.com/trafwel/farm-analog (PRs #2–#15 build it milestone by milestone)
+- Live demo (no install): https://trafwel.github.io/farm-analog/ shows the saved Earth Engine results for the 5 Palouse test fields; other fields need the app running with Earth Engine
 
 ## Link to project demo
 
@@ -56,7 +56,7 @@ Every number comes from data, and a plain-language summary and glossary make it 
 - We also ran a crop backtest. Places whose 2008–2012 climate matched a cell's 2019–2023 climate grew similar crops only slightly more often than random farmland did (0.529 vs. 0.517 similarity). The cell's own past did much better (0.818). We report this openly: over an 11-year gap, climate alone says little about crop mix in a wheat-dominated region. That's why the tool shows rotations as evidence to discuss, not as predictions.
 
 **Built for farmers.**
-- Plain-language summary of every result, from a fixed template or Gemini; every number Gemini writes is checked against the result.
+- Plain-language summary of each result when the app runs with its server, from a fixed template or Gemini; every number Gemini writes is checked against the result. The online demo doesn't show it yet.
 - Glossary of the terms used.
 - Every chart has a table version for screen readers.
 - °C and °F, mm and inches side by side.
@@ -67,12 +67,12 @@ Every number comes from data, and a plain-language summary and glossary make it 
 - Python 3.11: pandas, NumPy, SciPy, scikit-learn, Pydantic, FastAPI, Google Earth Engine API.
 - TypeScript and React 18 with Leaflet and Geoman.
 - Gemini, via google-genai, for the optional plain-language layer.
-- GitHub Actions for CI: 186 backend tests and 39 frontend tests.
+- GitHub Actions for CI: 186 backend tests and 42 frontend tests.
 
 ## Use of Super Intelligence (SI)
 
 - **Software development:** we used Anthropic's Claude (Claude Code) as a coding assistant to write most of the code, tests and documentation. It worked one milestone at a time under written team rules (docs/HOW_WE_BUILD.md). The rules required a self-review per milestone (docs/REVIEWS.md), a list of open issues, teach-back questions the team answers before moving on (docs/TEACH_BACK.md), and CI on every pull request. Team members chose the region, the method, the data and the scope, and reviewed the results.
-- **In the app:** "Bill" can use Google Gemini to restate a computed result in plain language and to read a farmer's description of their farm. Gemini never chooses crops or makes up numbers: every number in its text is checked against the result, and a fixed template is used whenever the check fails or no key is set. The demo uses the template.
+- **In the app:** "Bill" can use Google Gemini to restate a computed result in plain language and to read a farmer's description of their farm. Gemini never chooses crops or makes up numbers: every number in its text is checked against the result, and a fixed template is used whenever the check fails or no key is set. The online demo doesn't show Bill yet; the app with its server shows the template unless a Gemini key is set.
 - The analysis itself (matching, rotations, hazards) is deterministic code, not SI.
 
 ## NASA data

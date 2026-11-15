@@ -26,7 +26,12 @@ function DrawControl({ onDraw }: { onDraw: (ring: LonLat[]) => void }) {
   }, [onDraw]);
 
   useEffect(() => {
-    map.pm.setGlobalOptions({ pathOptions: FIELD_STYLE, templineStyle: { color: FIELD_COLOR }, hintlineStyle: { color: FIELD_COLOR, dashArray: '5,5' } });
+    map.pm.setGlobalOptions({
+      pathOptions: FIELD_STYLE,
+      templineStyle: { color: FIELD_COLOR },
+      hintlineStyle: { color: FIELD_COLOR, dashArray: '5,5' },
+      continueDrawing: false,
+    });
     map.pm.addControls({
       position: 'topleft',
       drawPolygon: true,
@@ -41,6 +46,7 @@ function DrawControl({ onDraw }: { onDraw: (ring: LonLat[]) => void }) {
       cutPolygon: false,
       removalMode: false,
       rotateMode: false,
+      oneBlock: true,
     });
     const handleCreate = (e: { layer: L.Layer }) => {
       const layer = e.layer;

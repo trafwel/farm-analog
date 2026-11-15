@@ -85,23 +85,24 @@ export function hazardRows(farm: Hazards | null | undefined, place: Hazards | nu
   };
   const days = (v: number) => `${Math.round(v)} days`;
   add('heat', 'Hot days above 32 °C (90 °F) per year', f.heat_days, p.heat_days, days,
-    (a, b) => signed(b - a, ' days'));
+    (a, b) => signed(Math.round(b) - Math.round(a), ' days'));
   add('ffd', 'Frost-free season', f.frost_free_days, p.frost_free_days, days,
-    (a, b) => signed(b - a, ' days'));
+    (a, b) => signed(Math.round(b) - Math.round(a), ' days'));
   add('spring', 'Last spring frost (average)', f.last_spring_frost_doy, p.last_spring_frost_doy, doyToDate,
-    (a, b) => (Math.round(b - a) === 0 ? 'same' : `${Math.abs(Math.round(b - a))} days ${b < a ? 'earlier' : 'later'}`));
+    (a, b) => { const d = Math.round(b) - Math.round(a); return d === 0 ? 'same' : `${Math.abs(d)} days ${d < 0 ? 'earlier' : 'later'}`; });
   add('fall', 'First fall frost (average)', f.first_fall_frost_doy, p.first_fall_frost_doy, doyToDate,
-    (a, b) => (Math.round(b - a) === 0 ? 'same' : `${Math.abs(Math.round(b - a))} days ${b < a ? 'earlier' : 'later'}`));
+    (a, b) => { const d = Math.round(b) - Math.round(a); return d === 0 ? 'same' : `${Math.abs(d)} days ${d < 0 ? 'earlier' : 'later'}`; });
   add('rain', 'Days with 25 mm (1 in) of rain or more, per year', f.extreme_rain_days, p.extreme_rain_days,
     (v) => v.toFixed(1), (a, b) => `${b - a > 0 ? '+' : ''}${(b - a).toFixed(1)}`);
   add('wettest', 'Wettest day of the year (average)', f.max_1day_rain_mm, p.max_1day_rain_mm,
-    (v) => `${Math.round(v)} mm`, (a, b) => signed(b - a, ' mm'));
+    (v) => `${Math.round(v)} mm`, (a, b) => signed(Math.round(b) - Math.round(a), ' mm'));
   const fd = driestMonth(f.soil_moisture_monthly);
   const pd = driestMonth(p.soil_moisture_monthly);
   if (fd || pd) {
     const fmt = (d: { month: number; value: number } | null) =>
       d ? `${soilWaterPct(d.value)} (${MONTHS[d.month - 1]})` : '—';
-    const diff = fd && pd ? Math.round((pd.value - fd.value) * 1000) / 10 : null;
+    const shown = (v: number) => Math.round(v * 1000) / 10; // percent, one decimal, as displayed
+    const diff = fd && pd ? Math.round((shown(pd.value) - shown(fd.value)) * 10) / 10 : null;
     rows.push({
       id: 'soil',
       label: 'Soil water in the driest month (top 1 m, % by volume)',
