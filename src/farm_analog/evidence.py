@@ -9,6 +9,19 @@ used only to fetch raw numbers:
 - soil: OpenLandMap topsoil clay, sand and organic carbon (250 m) at the point;
 - climograph: monthly PRISM normals at the analog, next to the farm today and in 2050;
 - place: the county (US Census TIGER) the analog falls in.
+
+Data flow:
+Inputs:  an ``AnalogResult`` from match.to_result; the farm's monthly table
+         (FarmToday.monthly) and per-model changes (FarmFuture.changes); from Earth Engine,
+         for the top 3 analog points: CDL crop pixel counts (2019-2023, 2 km radius),
+         OpenLandMap topsoil clay/sand/organic carbon, monthly PRISM normals, and TIGER
+         county names.
+Outputs: a copy of the AnalogResult whose top analogs carry ``place_name``, ``crops``
+         (list of CropShare), ``soil`` (SoilProfile) and ``climograph`` (farm today, farm
+         future and analog today, 12 months each).
+Used by: pipeline._analyze_live (``add_evidence``, wrapped so a failure only adds a note);
+         the frontend reads the new fields (shown in M8); assistant/summarizer.py reads
+         place names and crops.
 """
 
 from dataclasses import dataclass

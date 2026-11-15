@@ -10,6 +10,13 @@ invalid gives an empty profile plus an error message instead of a crash.
 
 Why structured output instead of "please reply in JSON": the schema constrains the model's
 decoding, so replies are almost always well formed; the Pydantic check covers the rest.
+
+Data flow:
+Inputs:  the farmer's free text (POST /bill/parse in api.py) and an LLM.
+Outputs: ``ParseResult``: ``profile`` (FarmProfile: crops, acres, irrigated, worries,
+         priorities, unparsed_notes), ``ok`` and ``error``. Never raises.
+Used by: api.bill_parse. The profile isn't used by the analysis yet; it's for the
+         frontend (not wired in, since the UI is unchanged this round).
 """
 
 import json

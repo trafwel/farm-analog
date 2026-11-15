@@ -8,6 +8,16 @@ Two modes:
 - **offline demo** (no Earth Engine): the Palouse result computed from the team's committed
   data. It only answers for fields inside the Palouse demo area and only for SSP2-4.5, and
   says so in the result's notes; anything else is refused rather than faked.
+
+Data flow:
+Inputs:  an ``AnalogRequest`` (field polygon, scenario, top_n) from api.py; the environment
+         variables EE_PROJECT and FARM_ANALOG_OFFLINE (choose the mode).
+Outputs: an ``AnalogResult`` (with ``notes`` explaining every caveat), or
+         ``FieldNotSupported`` with a reason the farmer can act on (api.py turns it into an
+         HTTP 400). ``field_id`` gives a coordinate-free hash for caching.
+Calls:   live: farm_today -> future -> candidates (+ near_latitude) -> match -> evidence;
+         offline: match.palouse_demo.
+Used by: api.py (POST /analogs), proof.main (``mode``), tests/test_pipeline_live.py.
 """
 
 import hashlib

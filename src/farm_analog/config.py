@@ -2,6 +2,16 @@
 
 Change a default here, not inside individual modules, so the analog pipeline, the API and
 the docs always agree on periods, thresholds and limits.
+
+Data flow:
+Inputs:  none (constants only; nothing is read from disk or the environment here).
+Outputs: periods (BASELINE_YEARS, FUTURE_YEARS), CLIMATE_MODELS, PRISM asset names,
+         PALOUSE_BOUNDS, the search area and grid (SEARCH_BBOX, GRID_SCALE_M), the farmland
+         and day-length filters, sigma thresholds, API limits, backtest settings, and
+         Bill's settings.
+Used by: nearly every module: schema.py (thresholds), fingerprint/farm_today/future
+         (periods), candidates.py, match.py, pipeline.py, evidence.py, proof.py, the team's
+         importers (data.py, ecostress.py, climate.py, search.py) and assistant/*.
 """
 
 from typing import Final

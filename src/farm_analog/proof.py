@@ -16,6 +16,16 @@ Three checks, from cheapest to most convincing:
 
 Checks 1 and 2 run offline on the team's data (``python -m farm_analog.proof``). The
 backtest needs Earth Engine; its arithmetic is plain functions tested offline.
+
+Data flow:
+Inputs:  offline: the team's committed data via match.palouse_demo and
+         candidates.load_candidates; live (EE_PROJECT set): the candidate cache
+         (data/candidates/candidates.parquet) plus Earth Engine PRISM and CDL for
+         config.BACKTEST_THEN_YEARS and BACKTEST_NOW_YEARS.
+Outputs: dicts of numbers (self_check, rank_agreement), a ``BacktestResult``; ``main`` prints
+         them and writes data/proof/proof.json (ignored by git).
+Used by: ``python -m farm_analog.proof``; tests/test_proof.py; the numbers are quoted in
+         docs/REVIEWS.md (M10).
 """
 
 import json

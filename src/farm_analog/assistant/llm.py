@@ -8,6 +8,13 @@ with Google's ``google-genai`` SDK; tests pass a fake object with the same metho
 in the package imports the SDK, so swapping models or providers touches only this file.
 
 The API key is read on the server from ``GEMINI_API_KEY`` (``.env``) and never leaves it.
+
+Data flow:
+Inputs:  GEMINI_API_KEY from the environment; a system prompt, user prompt and optional JSON
+         schema from parser.py / summarizer.py.
+Outputs: the model's reply text, or LLMError (no key, the call failed, or an empty reply).
+Used by: parser.parse_farmer_text, summarizer.summarize, api.make_bill_llm (built once at
+         startup).
 """
 
 import os

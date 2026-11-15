@@ -9,6 +9,17 @@ Candidates are the same for every farm, so they're computed once (Earth Engine, 
 and cached as Parquet in ``data/candidates/`` (ignored by git). Until someone with Earth
 Engine access builds that cache, ``load_candidates`` falls back to the team's committed
 20 km search cache, which has the same fingerprint but no farmland filter.
+
+Data flow:
+Inputs:  Earth Engine (PRISM normals + Cropland Data Layer cultivated band) when building the
+         cache with ``python -m farm_analog.candidates``; otherwise
+         data/candidates/candidates.parquet if it exists, else the team's
+         data/samples/palouse_prism_analog_inputs.json (784-cell, 20 km grid).
+Outputs: a DataFrame with COLUMNS (cell_id, lon, lat, the 8 FEATURES,
+         cultivated_fraction) plus a one-line note saying which source was used;
+         data/candidates/candidates.parquet (+ metadata) when the cache is built.
+Used by: match.match (scores every row), pipeline._analyze_live (after near_latitude),
+         match.palouse_demo, proof.py (self-check pool and backtest cells).
 """
 
 import json

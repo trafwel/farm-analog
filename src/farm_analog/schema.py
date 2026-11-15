@@ -9,6 +9,16 @@ Every part of the app builds against these models:
 
 Units are fixed so nobody has to guess: temperatures in °C, precipitation in mm,
 coordinates as (longitude, latitude) in degrees, as GeoJSON requires.
+
+Data flow:
+Inputs:  JSON from the frontend (POST /analogs body -> ``AnalogRequest``); Python objects
+         from the pipeline (match.to_result, evidence.attach build ``AnalogResult``).
+Outputs: validated Pydantic models. ``AnalogResult`` is what api.py returns as JSON.
+Used by: api.py and pipeline.py (request/response), match.py and evidence.py (build
+         results), fingerprint.py (``SeasonalFingerprint``), fixtures.py (fake results),
+         contract.py (exports these models to contract/*.schema.json, which
+         frontend/scripts/gen-types.mjs turns into frontend/src/types/contract.ts), and
+         assistant/summarizer.py (reads ``AnalogResult``).
 """
 
 import math

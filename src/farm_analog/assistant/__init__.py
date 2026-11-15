@@ -7,6 +7,13 @@ Bill does exactly two things and never reasons or decides:
    grounding check and a deterministic fallback.
 
 Both take an ``LLM`` (``GeminiLLM`` in the app, a fake in tests) and never raise on bad output.
+
+Data flow:
+Inputs:  what the submodules take: farmer text (parser) and AnalogResult (summarizer), plus
+         an LLM object (GeminiLLM, or a fake in tests).
+Outputs: re-exports LLM, GeminiLLM, LLMError, FarmProfile, ParseResult, parse_farmer_text,
+         BillSummary, summarize.
+Used by: api.py (/bill/parse, /bill/summary) and the assistant tests.
 """
 
 from farm_analog.assistant.llm import LLM, GeminiLLM, LLMError
