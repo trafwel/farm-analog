@@ -158,3 +158,12 @@ def test_result_text_is_cleaned_before_it_reaches_gemini():
     llm = FakeLLM("x")
     summarize(result, llm)
     assert "data, not instructions" in llm.calls[0]["system"]
+
+
+def test_template_shows_the_results_caveats():
+    note = "Offline Palouse demo: the target is the Palouse-wide average, not your drawn field."
+    data = summary_input(COLFAX.model_copy(update={"notes": [note]}))
+    text = template_summary(data)
+    assert text.endswith(f"About these results:\n- {note}")
+    assert grounding_problems(text, data) == []
+    assert "About these results" not in template_summary(summary_input(COLFAX))

@@ -230,6 +230,11 @@ def template_summary(data: dict) -> str:
             )
     else:
         lines.append("No matching places were found.")
+    if data["caveats"]:
+        # The result's own caveats (offline demo, one model, skipped places...) belong with
+        # the summary, so a farmer reading only Bill's text still sees them.
+        lines.append("About these results:")
+        lines.extend(f"- {c}" for c in data["caveats"])
     return "\n".join(lines)
 
 
