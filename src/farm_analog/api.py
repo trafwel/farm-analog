@@ -12,6 +12,19 @@ in memory by a hash, and only for the life of the process.
 
 Bill's response models are deliberately not part of the JSON contract in ``contract/`` (the
 frontend's generated types come from there); they appear only in this API's OpenAPI schema.
+
+Data flow:
+Inputs:  HTTP requests from the React app (frontend/src/lib/api.ts) at http://localhost:8000:
+         POST /analogs body = AnalogRequest JSON; POST /bill/parse body = {"text": ...};
+         POST /bill/summary body = AnalogResult JSON. Environment: FRONTEND_ORIGINS (CORS),
+         GEMINI_API_KEY (Bill), plus pipeline.py's EE_PROJECT / FARM_ANALOG_OFFLINE.
+Outputs: JSON responses: GET /health -> {"status", "mode"}; POST /analogs -> AnalogResult
+         (or 400 with a reason / 503 with a generic message); POST /bill/parse ->
+         assistant.ParseResult; POST /bill/summary -> assistant.BillSummary. Logs never
+         contain field coordinates or farmer text.
+Used by: the frontend (frontend/src/lib/api.ts calls /health and /analogs), uvicorn
+         (``uvicorn farm_analog.api:app``), tests/test_api.py and
+         tests/test_assistant_api.py.
 """
 
 import hashlib

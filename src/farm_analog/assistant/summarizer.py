@@ -19,6 +19,13 @@ Approach, in four steps:
    use ``template_summary``, a deterministic summary built from the same input.
 4. The demo-data and no-match notices are added by code, so they can never be dropped or
    softened by the model.
+
+Data flow:
+Inputs:  an ``AnalogResult`` (POST /bill/summary in api.py, normally the JSON that
+         POST /analogs just returned) and an LLM (or None for template only).
+Outputs: ``BillSummary``: ``text`` (plain text, never HTML), ``source`` ("gemini" or
+         "template"), ``notices`` (code-written warnings) and ``error``. Never raises.
+Used by: api.bill_summary.
 """
 
 import json

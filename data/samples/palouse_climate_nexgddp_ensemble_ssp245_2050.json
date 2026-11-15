@@ -1,0 +1,44 @@
+{
+  "dataset": "NASA NEX-GDDP-CMIP6",
+  "doi": "10.7917/OFSG3345",
+  "source": "https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6",
+  "access": "https://ds.nccs.nasa.gov/thredds/ncss/grid/AMES/NEX/GDDP-CMIP6/ (NetCDF Subset Service, no login)",
+  "models": [
+    "ACCESS-CM2",
+    "CanESM5",
+    "EC-Earth3",
+    "GFDL-ESM4",
+    "MIROC6",
+    "MPI-ESM1-2-HR",
+    "MRI-ESM2-0",
+    "NorESM2-MM"
+  ],
+  "member": "r1i1p1f1",
+  "scenario": "SSP2-4.5",
+  "ensemble": "ensemble_mean rows are the unweighted mean of the listed models.",
+  "bounds_west_south_east_north": [
+    -118.2,
+    46.5,
+    -117.0,
+    47.2
+  ],
+  "region_note": "Mean of 0.25° grid cells whose centers fall in the box.",
+  "baseline": "1995–2014 historical model simulation; not observations",
+  "future": "2041–2060 (20-year climate centered around 2050)",
+  "temperature": "Monthly mean daily near-surface temperature in °C; tas minus 273.15",
+  "precipitation": "Mean monthly precipitation total in mm; sum(pr) × 86400 / 20 years",
+  "file_versions": "Newest available version per year (_v2.0 > _v1.1 > unversioned).",
+  "files_per_model": {
+    "ACCESS-CM2": 80,
+    "CanESM5": 80,
+    "EC-Earth3": 80,
+    "GFDL-ESM4": 80,
+    "MIROC6": 80,
+    "MPI-ESM1-2-HR": 80,
+    "MRI-ESM2-0": 80,
+    "NorESM2-MM": 80
+  },
+  "limitations": "Bias-corrected, statistically downscaled GCM output at 0.25°; one ensemble member per model; unweighted ensemble. Regional means, not field-level. Not a forecast of any specific year.",
+  "related": "climate.py builds the same table for ACCESS-CM2 through Earth Engine.",
+  "downloaded_utc": "2026-11-15T01:30:52.610564+00:00"
+}

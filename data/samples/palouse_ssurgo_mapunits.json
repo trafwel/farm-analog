@@ -1,0 +1,36 @@
+{
+  "dataset": "USDA NRCS Soil Survey Geographic Database (SSURGO)",
+  "source": "https://sdmdataaccess.sc.egov.usda.gov/Tabular/post.rest",
+  "documentation": "https://sdmdataaccess.nrcs.usda.gov/",
+  "survey_areas": [
+    "ID057",
+    "ID611",
+    "ID620",
+    "WA001",
+    "WA021",
+    "WA075",
+    "WA613",
+    "WA623"
+  ],
+  "bounds_west_south_east_north": [
+    -118.2,
+    46.5,
+    -117.0,
+    47.2
+  ],
+  "region_note": "Approximate demo extent; custom bounds may override it. Polygons are clipped to the lon/lat box.",
+  "rows": 422,
+  "mapped_acres": 1759883.5,
+  "aggregation": "One row per map unit: clipped polygon area (geodesic) and map-unit attributes. Dominant component is the highest comppct_r.",
+  "attribute_notes": {
+    "aws_0_100cm_cm": "Available water storage 0-100 cm, weighted average (muaggatt.aws0100wta).",
+    "drainage_class": "Dominant-condition drainage class (muaggatt.drclassdcd).",
+    "nonirrigated_capability_class": "Dominant-condition land capability class, non-irrigated (muaggatt.niccdcd).",
+    "hydrologic_group": "Dominant-condition hydrologic soil group (muaggatt.hydgrpdcd).",
+    "slope_pct": "Weighted-average slope gradient (muaggatt.slopegradwta).",
+    "water_table_min_cm": "Minimum annual depth to water table (muaggatt.wtdepannmin).",
+    "bedrock_min_cm": "Minimum depth to bedrock (muaggatt.brockdepmin)."
+  },
+  "limitations": "SSURGO map units are mixtures of soil components mapped at roughly 1:12,000-1:24,000; attributes are map-unit aggregates, not field or point measurements. Empty values mean SDA has no value.",
+  "downloaded_utc": "2026-11-15T01:00:06.016100+00:00"
+}

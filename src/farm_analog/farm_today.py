@@ -9,6 +9,16 @@ Two halves, kept apart on purpose:
 
 The yearly fingerprints are what sigma dissimilarity needs: they show how much each value,
 and each combination of values, normally swings at this farm.
+
+Data flow:
+Inputs:  the drawn field (schema.PolygonGeometry) from pipeline._analyze_live; PRISM monthly
+         grids from Earth Engine (config.PRISM_COLLECTION, BASELINE_YEARS 1995-2014).
+Outputs: ``FarmToday``: ``normal`` (schema.SeasonalFingerprint, the 20-year average),
+         ``yearly`` (20 x 8 DataFrame, the year-to-year swings that set the sigma scale),
+         ``years``, ``support`` ("field_mean" or "centroid_cell") and ``monthly`` (the raw
+         year x month table, for climographs).
+Used by: future.farm_future_for_field (takes ``normal``), match.match (``yearly``),
+         evidence.add_evidence (``monthly``), proof.self_check, pipeline.py (notes).
 """
 
 from dataclasses import dataclass

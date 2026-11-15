@@ -1,4 +1,12 @@
-"""Climate analog matching (sigma dissimilarity, Mahony et al. 2017)."""
+"""Climate analog matching (sigma dissimilarity, Mahony et al. 2017).
+
+Data flow:
+Inputs:  target_future (8 values: a farm's future fingerprint), target_icv (years x 8: the
+         farm's yearly fingerprints), candidates (cells x 8: places' fingerprints today).
+Outputs: one sigma per candidate (numpy array); lower = closer.
+Used by: match.match (once per climate model), proof.self_check and proof.pick_cells,
+         search.py (the team's regional prototype).
+"""
 
 import numpy as np
 from scipy.stats import chi2

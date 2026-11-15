@@ -14,6 +14,12 @@ Defenses, in layers (none is perfect alone):
 4. **Small blast radius.** The parser's reply must fit a strict schema and is validated with
    Pydantic, so the worst an injection can do is put wrong values in a few fields. Farmer text
    never reaches the summarizer at all.
+
+Data flow:
+Inputs:  untrusted text (farmer input, or place/crop names and notes from a result).
+Outputs: cleaned text (``clean_text``) and text wrapped in randomly tagged delimiters
+         (``wrap_untrusted``), plus the UNTRUSTED_TEXT_RULE prompt line.
+Used by: parser.py (farmer text) and summarizer.py (text fields from AnalogResult).
 """
 
 import re

@@ -1,0 +1,36 @@
+{
+  "collection": "GPM_3IMERGDF.07",
+  "product": "IMERG V07 Final Run, daily",
+  "doi": "10.5067/GPM/IMERGDF/DAY/07",
+  "source": "https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDF_07/summary",
+  "access": "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.07/ (OPeNDAP subset, Earthdata login)",
+  "bounds_west_south_east_north": [
+    -118.2,
+    46.5,
+    -117.0,
+    47.2
+  ],
+  "region_note": "Approximate demo extent; custom bounds may override it. Mean of 0.1\u00b0 cells whose centers fall in the box.",
+  "cell_index_ranges": {
+    "lon": [
+      618,
+      629
+    ],
+    "lat": [
+      1365,
+      1371
+    ]
+  },
+  "start_inclusive": "2024-10-01",
+  "end_exclusive": "2025-10-01",
+  "rows": 365,
+  "period_total_precipitation_mm": 458.4,
+  "units": {
+    "precipitation": "mm/day",
+    "random_error": "mm/day",
+    "liquid_probability": "percent"
+  },
+  "aggregation": "Daily regional mean and maximum across cells; random error and liquid-precipitation probability are cell means. Days are UTC.",
+  "limitations": "Satellite-gauge merged estimate at ~10 km; not station measurements. Final Run is gauge-adjusted monthly and lags ~3.5 months. Snowfall is included as liquid-equivalent but satellite snow retrievals are less reliable.",
+  "downloaded_utc": "2026-11-15T04:00:22.496685+00:00"
+}

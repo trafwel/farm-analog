@@ -8,8 +8,28 @@ Every unresolved item from a milestone review. See rule 3 in [HOW_WE_BUILD.md](H
 
 ## Waits for a milestone
 
+- **[M15 → team, before 11:59 p.m. tonight] Submit.**
+  1. Make the demo: up to 7 slides, or a video of 30 seconds at most.
+  2. Paste each section of `docs/SUBMISSION.md` into the project form, adding the demo link and a deployed link if there is one.
+  3. Check that every team member is registered for the same Local Event.
+  4. Tick both confirmation boxes.
+
+- **[M8] The farm's own soil isn't fetched.** `evidence.add_evidence` never passes `farm_soil`, so the comparison's soil table shows only the matching place. Add the field's center as one more point in `fetch_evidence`, then rerun `python -m farm_analog.saved`.
+- **[M8] The results panel is long on phones.** Rotation cards, comparison, list, summary, fingerprint and glossary stack in one column. Consider collapsing sections or using tabs.
+
+- **[M11] The backtest is weak, and that's the honest result.** Live, over 200 test cells: analog areas' 2008–2012 crop mix matched the test cell's 2019–2023 crop mix with similarity 0.529, random farmland cells 0.517, and the cell's own past 0.818; analogs beat random cells in 57% of cells. Over an 11-year gap, climate alone says little about crop mix in a wheat-dominated region. Present it as a limit, not a validation, and consider the alternative design under Team decision (M10).
+- **[M11 → live run] Sigma vs. the plain baseline, live.** Still only measured offline (Spearman 0.997). `proof.rank_agreement` on a live 8-model match table would settle it; the live tables aren't saved yet.
+- **[M11] Saved results go stale.** `data/samples/live_*.json` were computed on 2026-11-15. Rerun `python -m farm_analog.saved` after any change to the pipeline, the candidate cache, or the test-field points.
+- **[M12] Rotations come from 8 years of 30 m CDL labels.** CDL misclassifies some pixels (pulses vs. spring grains in particular), and 8 years show at most two cycles of a 4-year rotation. Many pixels have no clean cycle and are grouped as "flexible mixes". Treat shares as rough.
+- **[M12] Crop-traits text is general agronomy,** not local research. Have someone at WSU Extension (or a farmer on the team's contact list) read `rotations.TRAITS` before the demo.
+- **[M13] Hazard periods differ by source:** PRISM 1995–2014, IMERG 2014–2023, SMAP 2016–2023, Landsat 2019–2023. Coarse grids (PRISM ~4 km, IMERG ~10 km, SMAP ~9 km) are read at the point; only NDVI is field-scale.
+- **[M13] `OREGONSTATE/PRISM/AN81d` is deprecated** in Earth Engine (superseded by `OREGONSTATE/PRISM/ANd`). It still serves 1995–2014. Switch `hazards.PRISM_DAILY_COLLECTION` and check the band names before the asset goes away.
+- **[M13] IMERG days are UTC days,** so a storm can be split across two days; extreme-rain counts may be slightly low.
+- **[M13] Bare months use a fixed NDVI threshold (0.25)** on a 200 m circle that includes field edges; in wheat–fallow areas half the years are fallow, pulling medians down.
+
 - **[M9 → M8 / UI] The frontend doesn't call Bill yet** (team instruction: leave the UI as it is for now). When it does, render `text` and `notices` as plain text, never as HTML (no `dangerouslySetInnerHTML`), and show the notices prominently.
 - **[M9 → M8 / UI] Bill's models are deliberately not in the contract.** `ParseResult` and `BillSummary` live in `assistant/` and appear only in the API's OpenAPI schema, so `contract/*.schema.json` and the frontend's generated types are unchanged (a test checks this). When the UI uses Bill, add them to `contract.MODELS` and regenerate the types in the same change.
+- **[M10 → live run] Sigma vs. the plain baseline.** Offline (one model, 20 km grid) the two rankings almost agree (Spearman 0.997; 17 of the top 20 the same). Re-measure on the live 8-model, 4 km run before claiming sigma adds something.
 
 - **[M7 → team member with Earth Engine] Evidence untested live.** Crops (CDL), soil (OpenLandMap), monthly PRISM normals and county names are fetched for the top 3 analogs in live mode only. Run once on the test fields and check the numbers look sensible.
 - **[M7 → before demo] Check the OpenLandMap organic-carbon unit.** The code assumes the catalog's "x 5 g/kg" storage unit (`evidence.OLM_OC_UNIT_G_PER_KG`); confirm on the catalog page, or organic matter will be off by that factor.
@@ -20,8 +40,6 @@ Every unresolved item from a milestone review. See rule 3 in [HOW_WE_BUILD.md](H
 
 - **[M5 → deployment] No rate limiting.** Each live request runs about 10 Earth Engine jobs. M9 adds two more paid endpoints (`/bill/parse`; `/bill/summary` for uncached results). Before a public deployment, add a per-client limit so one user can't exhaust the team's Earth Engine quota.
 - **[M5 → team member with Earth Engine] Live mode untested end to end.** With `EE_PROJECT` set, `POST /analogs` runs M1 + M2 + M4 for real; run it once on the 5 test fields.
-
-- **[M4 → M10] The latitude (day-length) check isn't applied.** Within the inland Northwest every candidate is within 3° of the Palouse, so it has no effect yet; add it if the search area grows.
 
 - **[M3 → team member with Earth Engine] Build the candidate cache.** Run `python -m farm_analog.candidates` once to create `data/candidates/candidates.parquet` (~4 km farmland cells). Until then the app uses the team's 20 km grid, which isn't filtered to farmland, and says so in the result notes.
 - **[M3 → M7] No irrigation filter yet.** Irrigated farmland can look like a match on climate while its crops depend on irrigation. Add an irrigated-lands mask (for example LANID) to the candidate build.
@@ -37,8 +55,12 @@ Every unresolved item from a milestone review. See rule 3 in [HOW_WE_BUILD.md](H
 
 ## Team decision
 
+- **[M11] OpenLandMap organic carbon is stored in 5 g/kg steps,** so organic matter can only be about 1.7, 2.6, 3.4 or 4.3%. Coarse, not wrong; another reason to weigh SSURGO (Owen's new `ssurgo.py` on `main`) for soil.
+- **[M11] Owen's importers on `main` (SSURGO, an 8-model NEX-GDDP ensemble, GPM IMERG daily)** arrived after this stack branched. Merge `main` in before M8 and decide whether `hazards.py` should reuse `imerg.py` and whether soil should switch to `ssurgo.py`.
+
 - **[M9] Gemini free tier vs. paid.** On the free tier Google may use prompts to improve its products, and `/bill/parse` sends the farmer's own words. Recommendation: a paid key for any real farmer use.
 - **[M9] How strict should the grounding check be?** It checks numbers, not claims (a weak match called "strong" passes). Whole numbers within 0.5 of any input value pass, and spelled-out numbers and unlisted advice phrasings aren't caught. Options: per-field number matching, checking match-quality words against each place, or always showing the template and using Gemini only for a one-line intro.
+- **[M10] Backtest periods.** 2008–2012 vs. 2019–2023 (CDL starts in 2008 in the inland Northwest). The gap is short, so climate changed little. Alternatives: compare places farther apart in climate today instead of over time, or accept the short gap and report "nothing changed" alongside.
 
 - **[M7] Soil source.** Evidence uses OpenLandMap (global, 250 m, in Earth Engine) for clay, sand and organic matter, because SSURGO/gNATSGO isn't in the Earth Engine catalog. SSURGO is more detailed for US farms; switch if someone can provide it as an Earth Engine asset.
 

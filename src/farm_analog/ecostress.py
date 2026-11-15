@@ -9,6 +9,14 @@ Needs a NASA Earthdata login in ~/.netrc (or %USERPROFILE%\\_netrc on Windows):
 
 Run from the repo root:
     PYTHONPATH=src python -m farm_analog.ecostress
+
+Data flow:
+Inputs:  NASA CMR search + LP DAAC downloads of ECOSTRESS L2T LSTE v002 tiles (needs a NASA
+         Earthdata login in ~/.netrc) for a date range and bounding box.
+Outputs: data/ecostress/palouse_ecostress_lst_<start>_<end>.csv (one row per tile overpass:
+         LST statistics) and a .json with metadata; raw GeoTIFFs cached in raw/.
+Used by: nothing in the pipeline yet; a committed sample lives in data/samples/ for later
+         heat-stress evidence (see docs/ARCHITECTURE.md).
 """
 
 import argparse
