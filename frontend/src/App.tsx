@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Scenario } from './types/contract';
 import type { AnalogResultView } from './types/extensions';
-import { API_BASE, ApiError, checkHealth, fetchAnalogs } from './lib/api';
+import { API_BASE, ApiError, type BillSummary, checkHealth, fetchAnalogs, fetchBillSummary } from './lib/api';
 import { DEMO_CASES, type DemoCaseId, getDemoResult } from './lib/fixtures';
 import { buildAnalogRequest, EXAMPLE_FIELD, type LonLat } from './lib/request';
 import { DEFAULT_SCENARIO, SCENARIO_LABELS, SCENARIOS } from './lib/scenario';
@@ -26,6 +26,7 @@ export default function App() {
   const [selectedRank, setSelectedRank] = useState<number | null>(null);
   const [resultCount, setResultCount] = useState(0);
   const [health, setHealth] = useState<Health>('checking');
+  const [billSummary, setBillSummary] = useState<BillSummary | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
@@ -38,6 +39,7 @@ export default function App() {
 
   const showResult = useCallback((r: AnalogResultView, demo: DemoCaseId | null) => {
     setResult(r);
+    setBillSummary(null);
     setDemoCase(demo);
     setSelectedRank(null);
     setResultCount((n) => n + 1);
@@ -49,6 +51,7 @@ export default function App() {
     // Results belong to the previous field; don't leave them looking current.
     setResult(null);
     setSelectedRank(null);
+    setBillSummary(null);
   }, []);
 
   const useExampleField = () => onFieldDrawn(EXAMPLE_FIELD);
@@ -68,6 +71,10 @@ export default function App() {
       const body = buildAnalogRequest(field, scenario);
       const r = await fetchAnalogs(body, { signal: ctrl.signal });
       showResult(r, null);
+      // Bill's summary is optional and arrives after the result; a newer search cancels it.
+      fetchBillSummary(r, { signal: ctrl.signal }).then((b) => {
+        if (abortRef.current === ctrl) setBillSummary(b);
+      });
     } catch (err) {
       if (err instanceof DOMException && err.name === 'AbortError') return;
       setError(err instanceof ApiError ? err : new ApiError('bad_response', (err as Error).message));
@@ -200,7 +207,14 @@ export default function App() {
             </fieldset>
           )}
 
-          {result && <ResultsPanel result={result} selectedRank={selectedRank} onSelect={setSelectedRank} />}
+          {result && (
+            <ResultsPanel
+              result={result}
+              selectedRank={selectedRank}
+              onSelect={setSelectedRank}
+              billSummary={billSummary}
+            />
+          )}
         </aside>
       </main>
     </div>

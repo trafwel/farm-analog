@@ -2,7 +2,12 @@ import type { AnalogResultView } from '../types/extensions';
 import { MATCH_QUALITY_STYLES } from '../lib/matchQuality';
 import { agreementText, getHeadline } from '../lib/headline';
 import { SCENARIO_LABELS } from '../lib/scenario';
+import type { BillSummary } from '../lib/api';
+import { BillSummaryCard } from './BillSummaryCard';
 import { FingerprintTable } from './FingerprintTable';
+import { Glossary } from './Glossary';
+import { PlaceComparison } from './PlaceComparison';
+import { RotationCards } from './RotationCards';
 
 export const DEMO_BANNER = 'Demo data — not a real analysis';
 export const SIGMA_EXPLAINER =
@@ -12,12 +17,16 @@ export interface ResultsPanelProps {
   result: AnalogResultView;
   selectedRank: number | null;
   onSelect: (rank: number) => void;
+  /** Bill's plain-language summary, when the server provided one. */
+  billSummary?: BillSummary | null;
 }
 
-export function ResultsPanel({ result, selectedRank, onSelect }: ResultsPanelProps) {
+export function ResultsPanel({ result, selectedRank, onSelect, billSummary }: ResultsPanelProps) {
   const headline = getHeadline(result);
   const analogs = [...result.analogs].sort((a, b) => a.rank - b.rank);
   const notes = result.notes?.filter((n) => n.trim() !== '') ?? [];
+  // The comparison follows the selected place, or the best match when nothing is selected.
+  const compared = analogs.find((a) => a.rank === selectedRank) ?? analogs[0];
   return (
     <section className="results" aria-labelledby="results-heading">
       {result.source === 'fixture' && (
@@ -60,8 +69,14 @@ export function ResultsPanel({ result, selectedRank, onSelect }: ResultsPanelPro
         </div>
       )}
 
+      {result.rotations && result.rotations.length > 0 && <RotationCards rotations={result.rotations} />}
+
+      {compared && (
+        <PlaceComparison analog={compared} farmSoil={result.farm_soil} farmHazards={result.farm_hazards} />
+      )}
+
       <h3 id="analog-list-heading">Matching places ({analogs.length})</h3>
-      <p className="muted small">Select a place to show it on the map.</p>
+      <p className="muted small">Select a place to show it on the map and compare it above.</p>
       <ol className="analog-list" aria-labelledby="analog-list-heading">
         {analogs.map((a) => {
           const s = MATCH_QUALITY_STYLES[a.match_quality];
@@ -90,12 +105,16 @@ export function ResultsPanel({ result, selectedRank, onSelect }: ResultsPanelPro
         })}
       </ol>
 
+      {billSummary && <BillSummaryCard summary={billSummary} />}
+
       <FingerprintTable
         today={result.farm_today}
         future={result.farm_future}
         baselineYears={result.baseline_years}
         futureYears={result.future_years}
       />
+
+      <Glossary />
     </section>
   );
 }
