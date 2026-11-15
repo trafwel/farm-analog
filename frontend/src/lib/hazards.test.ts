@@ -37,9 +37,9 @@ describe('hazard helpers', () => {
       { frost_free_days: 183.0, last_spring_frost_doy: 108.0, first_fall_frost_doy: 296.0 },
     );
     const byId = Object.fromEntries(rows.map((r) => [r.id, r]));
-    expect(byId.spring.change).toBe('18 days earlier');
-    expect(byId.fall.change).toBe('17 days later');
-    expect(byId.ffd.change).toBe('+35 days');
+    expect(byId.spring!.change).toBe('18 days earlier');
+    expect(byId.fall!.change).toBe('17 days later');
+    expect(byId.ffd!.change).toBe('+35 days');
   });
 });
 
