@@ -652,7 +652,7 @@
       "rank": 4,
       "lon": -117.833333333276,
       "lat": 46.416666665697,
-      "place_name": null,
+      "place_name": "Columbia County, WA",
       "sigma": 0.379,
       "match_quality": "strong",
       "models_agree": 8,
@@ -676,7 +676,7 @@
       "rank": 5,
       "lon": -118.66666666661598,
       "lat": 45.9166666656923,
-      "place_name": null,
+      "place_name": "Umatilla County, OR",
       "sigma": 0.384,
       "match_quality": "strong",
       "models_agree": 8,
@@ -700,7 +700,7 @@
       "rank": 6,
       "lon": -118.12499999994499,
       "lat": 46.208333332361676,
-      "place_name": null,
+      "place_name": "Walla Walla County, WA",
       "sigma": 0.389,
       "match_quality": "strong",
       "models_agree": 8,
@@ -724,7 +724,7 @@
       "rank": 7,
       "lon": -118.166666666612,
       "lat": 46.208333332361676,
-      "place_name": null,
+      "place_name": "Walla Walla County, WA",
       "sigma": 0.408,
       "match_quality": "strong",
       "models_agree": 8,
@@ -748,7 +748,7 @@
       "rank": 8,
       "lon": -117.45833333327302,
       "lat": 46.624999999032376,
-      "place_name": null,
+      "place_name": "Garfield County, WA",
       "sigma": 0.411,
       "match_quality": "strong",
       "models_agree": 8,
@@ -772,7 +772,7 @@
       "rank": 9,
       "lon": -118.166666666612,
       "lat": 46.124999999027565,
-      "place_name": null,
+      "place_name": "Walla Walla County, WA",
       "sigma": 0.418,
       "match_quality": "strong",
       "models_agree": 8,
@@ -796,7 +796,7 @@
       "rank": 10,
       "lon": -118.499999999948,
       "lat": 45.874999999025256,
-      "place_name": null,
+      "place_name": "Umatilla County, OR",
       "sigma": 0.418,
       "match_quality": "strong",
       "models_agree": 8,
@@ -820,7 +820,7 @@
       "rank": 11,
       "lon": -117.874999999943,
       "lat": 46.416666665697,
-      "place_name": null,
+      "place_name": "Columbia County, WA",
       "sigma": 0.419,
       "match_quality": "strong",
       "models_agree": 8,
@@ -844,7 +844,7 @@
       "rank": 12,
       "lon": -118.041666666611,
       "lat": 46.374999999029924,
-      "place_name": null,
+      "place_name": "Columbia County, WA",
       "sigma": 0.422,
       "match_quality": "strong",
       "models_agree": 8,
@@ -868,7 +868,7 @@
       "rank": 13,
       "lon": -118.708333333283,
       "lat": 45.9166666656923,
-      "place_name": null,
+      "place_name": "Umatilla County, OR",
       "sigma": 0.433,
       "match_quality": "strong",
       "models_agree": 8,
@@ -892,7 +892,7 @@
       "rank": 14,
       "lon": -118.58333333328201,
       "lat": 45.9166666656923,
-      "place_name": null,
+      "place_name": "Umatilla County, OR",
       "sigma": 0.437,
       "match_quality": "strong",
       "models_agree": 8,
@@ -916,7 +916,7 @@
       "rank": 15,
       "lon": -117.49999999994,
       "lat": 46.624999999032376,
-      "place_name": null,
+      "place_name": "Garfield County, WA",
       "sigma": 0.438,
       "match_quality": "strong",
       "models_agree": 8,
@@ -940,7 +940,7 @@
       "rank": 16,
       "lon": -117.99999999994398,
       "lat": 46.374999999029924,
-      "place_name": null,
+      "place_name": "Columbia County, WA",
       "sigma": 0.439,
       "match_quality": "strong",
       "models_agree": 8,
@@ -964,7 +964,7 @@
       "rank": 17,
       "lon": -118.12499999994499,
       "lat": 46.374999999029924,
-      "place_name": null,
+      "place_name": "Columbia County, WA",
       "sigma": 0.448,
       "match_quality": "strong",
       "models_agree": 8,
@@ -988,7 +988,7 @@
       "rank": 18,
       "lon": -117.45833333327302,
       "lat": 46.5833333323653,
-      "place_name": null,
+      "place_name": "Garfield County, WA",
       "sigma": 0.454,
       "match_quality": "strong",
       "models_agree": 8,
@@ -1012,7 +1012,7 @@
       "rank": 19,
       "lon": -118.33333333327998,
       "lat": 45.874999999025256,
-      "place_name": null,
+      "place_name": "Umatilla County, OR",
       "sigma": 0.457,
       "match_quality": "strong",
       "models_agree": 8,
@@ -1036,7 +1036,7 @@
       "rank": 20,
       "lon": -117.79166666660899,
       "lat": 46.416666665697,
-      "place_name": null,
+      "place_name": "Columbia County, WA",
       "sigma": 0.457,
       "match_quality": "strong",
       "models_agree": 8,
@@ -1071,9 +1071,9 @@
       "analog_share": 0.095,
       "analogs_using": 1,
       "analogs_checked": 5,
-      "why": "Your field's current rotation: 40% of its sampled cropland followed it in 2016–2023.",
+      "why": "Your field's current rotation: 40% of its sampled cropland followed it in 2016\u20132023.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016–2023: 9% of analog-area cropland; used in 1 of 5 analog areas.",
+        "USDA Cropland Data Layer, 2016\u20132023: 9% of analog-area cropland; used in 1 of 5 analog areas.",
         "Those analog areas match your 2050s climate in up to 8 of 8 climate models."
       ],
       "benefits": [
@@ -1108,7 +1108,7 @@
       "analogs_checked": 5,
       "why": "Used on 22% of sampled cropland across the top 5 analog areas, whose climate today matches your field's 2050s climate.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016–2023: 22% of analog-area cropland; used in 3 of 5 analog areas.",
+        "USDA Cropland Data Layer, 2016\u20132023: 22% of analog-area cropland; used in 3 of 5 analog areas.",
         "Those analog areas match your 2050s climate in up to 8 of 8 climate models."
       ],
       "benefits": [
@@ -1128,7 +1128,7 @@
       ]
     },
     {
-      "name": "Winter wheat → Fallow",
+      "name": "Winter wheat \u2192 Fallow",
       "crops": [
         "Winter wheat",
         "Fallow"
@@ -1141,7 +1141,7 @@
       "analogs_checked": 5,
       "why": "Used on 18% of sampled cropland across the top 5 analog areas, whose climate today matches your field's 2050s climate.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016–2023: 18% of analog-area cropland; used in 2 of 5 analog areas.",
+        "USDA Cropland Data Layer, 2016\u20132023: 18% of analog-area cropland; used in 2 of 5 analog areas.",
         "Those analog areas match your 2050s climate in up to 8 of 8 climate models."
       ],
       "benefits": [
@@ -1159,7 +1159,7 @@
       ]
     },
     {
-      "name": "Winter wheat → Spring wheat → Fallow",
+      "name": "Winter wheat \u2192 Spring wheat \u2192 Fallow",
       "crops": [
         "Winter wheat",
         "Spring wheat",
@@ -1173,7 +1173,7 @@
       "analogs_checked": 5,
       "why": "Used on 15% of sampled cropland across the top 5 analog areas, whose climate today matches your field's 2050s climate.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016–2023: 15% of analog-area cropland; used in 2 of 5 analog areas.",
+        "USDA Cropland Data Layer, 2016\u20132023: 15% of analog-area cropland; used in 2 of 5 analog areas.",
         "Those analog areas match your 2050s climate in up to 8 of 8 climate models."
       ],
       "benefits": [

@@ -78,10 +78,38 @@ button.link { border: none; padding: 0; background: none; color: #0b4392; text-d
 .swatch { display: inline-block; width: 14px; height: 14px; flex: none; border: 1px solid #333; vertical-align: middle; margin-right: 0.35rem; }
 .swatch.dot { border-radius: 50%; }
 
-.legend { background: rgba(255, 255, 255, 0.95); border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem 0.7rem; font-size: 0.82rem; }
-.legend-title { margin: 0 0 0.25rem; font-weight: 700; }
-.legend ul { list-style: none; margin: 0; padding: 0; }
-.legend li { margin: 0.1rem 0; }
+.legend {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.75rem;
+  max-width: min(240px, 45vw);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+.legend-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+.legend-title { margin: 0; font-weight: 700; font-size: 0.78rem; }
+.legend-toggle {
+  background: none;
+  border: none;
+  padding: 0 0.2rem;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: var(--muted);
+  cursor: pointer;
+}
+.legend ul { list-style: none; margin: 0.25rem 0 0; padding: 0; }
+.legend li { margin: 0.1rem 0; display: flex; align-items: center; }
+
+@media (max-width: 600px), (max-height: 600px) {
+  .map-legend { bottom: 8px; right: 8px; font-size: 0.7rem; padding: 0.25rem 0.4rem; }
+}
 
 .demo-toggle legend { font-weight: 600; }
 .demo-toggle label { display: block; margin: 0.2rem 0; }

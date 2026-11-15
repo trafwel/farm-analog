@@ -26,6 +26,68 @@ export function closeRing(ring: LonLat[]): LonLat[] {
   return out;
 }
 
+function ccw(p1: LonLat, p2: LonLat, p3: LonLat): number {
+  return (p2[0] - p1[0]) * (p3[1] - p1[1]) - (p2[1] - p1[1]) * (p3[0] - p1[0]);
+}
+
+function segmentsIntersect(a: LonLat, b: LonLat, c: LonLat, d: LonLat): boolean {
+  const d1 = ccw(c, d, a);
+  const d2 = ccw(c, d, b);
+  const d3 = ccw(a, b, c);
+  const d4 = ccw(a, b, d);
+
+  if (((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) &&
+      ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0))) {
+    return true;
+  }
+  return false;
+}
+
+/** Check if polygon edges cross each other (e.g. figure-eight / bowtie shape). */
+export function isSelfIntersecting(ring: LonLat[]): boolean {
+  const closed = closeRing(ring);
+  const n = closed.length - 1;
+  if (n < 4) return false;
+  for (let i = 0; i < n; i++) {
+    const a = closed[i]!;
+    const b = closed[i + 1]!;
+    for (let j = i + 1; j < n; j++) {
+      if (Math.abs(i - j) <= 1 || (i === 0 && j === n - 1)) continue;
+      const c = closed[j]!;
+      const d = closed[j + 1]!;
+      if (segmentsIntersect(a, b, c, d)) return true;
+    }
+  }
+  return false;
+}
+
+/** Approximate polygon area in km² (Shoelace formula). */
+export function polygonAreaKm2(ring: LonLat[]): number {
+  const closed = closeRing(ring);
+  if (closed.length < 4) return 0;
+  let area = 0;
+  for (let i = 0; i < closed.length - 1; i++) {
+    const [x1, y1] = closed[i]!;
+    const [x2, y2] = closed[i + 1]!;
+    area += x1 * y2 - x2 * y1;
+  }
+  const degArea = Math.abs(area) / 2;
+  return degArea * 111 * 77;
+}
+
+export function validatePolygon(ring: LonLat[]): string | null {
+  if (distinctPointCount(ring) < 3) {
+    return 'A field needs at least 3 distinct corners.';
+  }
+  if (isSelfIntersecting(ring)) {
+    return 'Self-intersecting polygon (bowtie) is not a valid field. Please draw a simple shape.';
+  }
+  if (polygonAreaKm2(ring) < 0.0005) {
+    return 'Field area is too small. Please draw a larger field.';
+  }
+  return null;
+}
+
 /**
  * Build the POST /analogs body. `ring` is the field outline in [lon, lat] order,
  * open or closed; it is closed here. Needs at least 3 distinct vertices.
@@ -35,10 +97,11 @@ export function buildAnalogRequest(
   scenario: Scenario,
   topN: number = DEFAULT_TOP_N,
 ): AnalogRequest {
-  const closed = closeRing(ring);
-  if (closed.length < 4) {
-    throw new Error('A field needs at least 3 corners.');
+  const err = validatePolygon(ring);
+  if (err) {
+    throw new Error(err);
   }
+  const closed = closeRing(ring);
   return {
     field: { type: 'Polygon', coordinates: [closed] },
     scenario,

@@ -6,7 +6,7 @@ import { ClimateChart } from './ClimateChart';
 import { SoilMoistureChart } from './SoilMoistureChart';
 
 export const NEEDS_LIVE =
-  'Crops, soil, climate charts and hazards for this place appear when the analysis runs with Earth Engine, or near one of the 5 saved test fields.';
+  'Detailed crop rotations, soil surveys, climate charts, and hazard profiles are evaluated for the top 3 matches. Ranks 4–20 provide seasonal climate fingerprint matching.';
 
 function SoilTable({ farm, place }: { farm: SoilProfile | null | undefined; place: SoilProfile | null | undefined }) {
   const rows: { label: string; key: keyof SoilProfile }[] = [
@@ -83,6 +83,11 @@ export function HazardTable({ farm, place, placeLabel }: {
         around each point, except green cover, which is within 200 m.
         {missing.length > 0 && ` Not available: ${missing.join(', ')}.`}
       </p>
+      {!place && (
+        <p className="muted small" role="note">
+          <strong>Note:</strong> Detailed hazard histories are computed for the top 3 matches only. Ranks 4–20 show dashes because individual hazard monitoring was not computed for this location.
+        </p>
+      )}
     </>
   );
 }
