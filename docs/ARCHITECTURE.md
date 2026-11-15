@@ -19,16 +19,21 @@ flowchart TD
     FPRINT["Shared 8-value fingerprint: fingerprint.py<br/><b>built [M1]</b>"]
     F50["Farm 2050: future.py<br/>delta method per model + median/range<br/><b>built [M2]</b>"]
     EEH["earthengine.py: field averaging helper<br/><b>built [M2]</b>"]
-    CAND["Candidate points (cached Parquet)<br/><i>planned [M3]</i>"]
+    CAND["candidates.py: farmland cells, cached Parquet<br/>(falls back to team 20 km cache)<br/><b>built [M3]</b>"]
     SIGMA["sigma_dissimilarity()<br/><b>built</b>"]
-    MATCH["Match + novel-climate flag<br/><i>planned [M4]</i>"]
-    EVID["Evidence: crops, soil, climograph<br/><i>planned [M7]</i>"]
+    MATCH["match.py: per-model sigma, median, agreement,<br/>baseline, AnalogResult + offline Palouse demo<br/><b>built [M4]</b>"]
+    SAVED["saved.py: 5 test fields run live, saved for offline demos<br/><b>built [M11]</b>"]
+    ROT["rotations.py: CDL crop sequences 2016–2023 → rotation strategies<br/>(current first; why / evidence / benefits / risks / gaps)<br/><b>built [M12]</b>"]
+    HAZ["hazards.py: heat, frost (PRISM daily), extreme rain (GPM IMERG),<br/>soil moisture (SMAP), bare months (Landsat NDVI)<br/><b>built [M13]</b>"]
+    PROOF["proof.py: self-check, sigma vs. baseline,<br/>crop backtest (live) + day-length check<br/><b>built [M10]</b>"]
+    EVID["evidence.py: crops (CDL), soil (OpenLandMap), climograph,<br/>county names for the top 3 (live mode)<br/><b>built [M7]</b>"]
 
     CONTRACT["JSON contract: schema.py + contract/*.schema.json<br/><b>built [M0]</b>"]
     FIX["Fake results fixture<br/><b>built [M0]</b>"]
-    API["FastAPI POST /analogs<br/><i>planned [M5]</i>"]
-    UI["React + Leaflet map and panels<br/><i>planned [M6, M8]</i>"]
-    BILL["Bill (Gemini): parse + summarize<br/><i>planned [M9]</i>"]
+    API["api.py + pipeline.py: FastAPI GET /health, POST /analogs<br/>field checks, live or offline-demo mode<br/><b>built [M5]</b>"]
+    UI["frontend/: React + Leaflet map, list, fingerprint table<br/><b>built [M6]</b> · comparison, rotation cards, hazard outlook, glossary <b>built [M8]</b>"]
+    BILL["assistant/: Bill (Gemini) parse + summarize, grounding check, template fallback<br/>POST /bill/parse, /bill/summary<br/><b>built [M9]</b> · <i>UI not wired yet</i>"]
+    GEMINI[("Gemini API: gemini-3.5-flash-lite<br/>server-side key, optional")]
     FARMER(["Farmer"])
 
     PRISM --> FT
@@ -41,6 +46,15 @@ flowchart TD
     CAND --> MATCH
     SIGMA --> MATCH
     MATCH --> EVID
+    MATCH --> PROOF
+    MATCH --> ROT
+    CDL --> ROT
+    MATCH --> HAZ
+    ROT --> API
+    HAZ --> API
+    SAVED -. offline demo .-> API
+    CAND --> PROOF
+    CDL --> PROOF
     CDL --> EVID
     MATCH --> API
     EEH -. used by .-> FT
@@ -64,7 +78,9 @@ flowchart TD
     EVID --> API
     API --> UI
     API --> BILL
-    BILL --> UI
+    BILL -. planned: UI shows the summary .-> UI
+    BILL <--> GEMINI
+    CONTRACT -. AnalogResult in .-> BILL
     FARMER <--> UI
 ```
 
@@ -73,6 +89,24 @@ flowchart TD
 Dotted arrows are build-time relationships (shared types and fake data), not runtime data flow.
 
 ## Changelog
+
+- 2026-11-15 (M8): The frontend shows rotation cards, a comparison of the selected match (monthly climate chart, crops, soil, hazard outlook), Bill's plain-language summary and a glossary.
+
+- 2026-11-15 (M11–M13): Live run with Earth Engine (candidate cache: 3,351 farmland cells; 5 test fields moved onto cropland and saved for offline use in `saved.py`; live backtest). `rotations.py` (M12) adds rotation strategies and `hazards.py` (M13) adds heat, frost, extreme rain, soil moisture and bare months; both are optional steps in the live pipeline. Contract gains `rotations`, `farm_hazards` and `Analog.hazards`.
+
+- 2026-11-14 (M10): Added `proof.py` (self-check, sigma vs. standardized-distance agreement, model agreement, crop-mix backtest with Earth Engine) and the day-length check in the live pipeline (`candidates.near_latitude`). M8 skipped for now (no UI changes).
+
+- 2026-11-14 (M9): Added Bill (`assistant/`): a text → `FarmProfile` parser using Gemini structured output, and a summarizer that sends derived numbers only (no coordinates), checks every number in the reply against its input, and falls back to a template. Plus a prompt-injection guard, and `POST /bill/parse` and `POST /bill/summary` in `api.py` (Gemini set up once at startup, optional; summaries cached). Bill's models stay out of `contract/`. The frontend isn't changed.
+
+- 2026-11-14 (M7): Added `evidence.py` (crop shares from CDL, OpenLandMap soil, monthly climographs, county names) attached to the top 3 analogs in live mode; `FarmToday` keeps its monthly table and `FarmFuture` its per-model changes; the live pipeline returns the match even if evidence fails.
+
+- 2026-11-14 (M6): Added `frontend/` (Vite + React + TypeScript, react-leaflet + Geoman drawing, types generated from `contract/`, demo-data fallback, accessible results list) and a frontend CI job.
+
+- 2026-11-14 (M5): Added `pipeline.py` (field checks, live analysis with Earth Engine, offline Palouse demo otherwise) and `api.py` (FastAPI `GET /health`, `POST /analogs`, CORS, privacy-safe caching and errors). Environment gains fastapi, uvicorn, httpx, shapely, pyproj.
+
+- 2026-11-14 (M4): Added `match.py` (sigma per model, median, model agreement, standardized-distance baseline, `AnalogResult` output) and an offline Palouse demo from the team's data that reproduces the team's rankings. Contract gains optional `notes`.
+
+- 2026-11-14 (M3): Added `candidates.py`: farmland PRISM cells in the inland Northwest with the shared fingerprint and cultivated share, fetched in tiles from Earth Engine and cached as Parquet; offline fallback to the team's 20 km cache. Search area set in `config.SEARCH_BBOX`.
 
 - 2026-11-14 (M2): Added `future.py` (per-model delta method at the farm, ensemble median and range, Earth Engine fetch of model climatologies) and `earthengine.py` (shared field averaging). `config.CLIMATE_MODELS` lists 8 models. `search.py` uses the shared delta functions (rankings unchanged).
 

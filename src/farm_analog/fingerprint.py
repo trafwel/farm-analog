@@ -10,6 +10,16 @@ the candidate locations (``search``), the future climate (M2) and the JSON contr
 numbers rather than more keeps the year-to-year statistics stable: sigma dissimilarity
 estimates how the numbers vary together from only 20 reference years, and that estimate
 gets unreliable as the number of values approaches the number of years.
+
+Data flow:
+Inputs:  a monthly table (one row per year x month: ``year``, ``month``, ``tmean`` °C,
+         ``ppt`` mm) from farm_today.records_to_monthly, or contract fingerprints.
+Outputs: ``yearly_fingerprints`` -> DataFrame (index year, columns FEATURES, 8 values);
+         ``normal`` -> 8-value numpy vector; ``to_contract``/``from_contract`` convert between
+         that vector and schema.SeasonalFingerprint (tmean_jfm ... ppt_ond).
+Used by: farm_today.py (farm's yearly values), future.py (applies deltas to the vector),
+         candidates.py (column names), match.py and proof.py (matrices), search.py,
+         evidence.py (QUARTERS for monthly futures).
 """
 
 import numpy as np
