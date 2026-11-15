@@ -29,27 +29,17 @@ Every unresolved item from a milestone review. See rule 3 in [HOW_WE_BUILD.md](H
 - **[M13] Bare months use a fixed NDVI threshold (0.25)** on a 200 m circle that includes field edges; in wheat–fallow areas half the years are fallow, pulling medians down.
 
 - **[M9 → M8 / UI] Bill's models are deliberately not in the contract.** `ParseResult` and `BillSummary` live in `assistant/` and appear only in the API's OpenAPI schema, so `contract/*.schema.json` and the frontend's generated types are unchanged (a test checks this). When the UI uses Bill, add them to `contract.MODELS` and regenerate the types in the same change.
-- **[M10 → live run] Sigma vs. the plain baseline.** Offline (one model, 20 km grid) the two rankings almost agree (Spearman 0.997; 17 of the top 20 the same). Re-measure on the live 8-model, 4 km run before claiming sigma adds something.
 
-- **[M7 → team member with Earth Engine] Evidence untested live.** Crops (CDL), soil (OpenLandMap), monthly PRISM normals and county names are fetched for the top 3 analogs in live mode only. Run once on the test fields and check the numbers look sensible.
-- **[M7 → before demo] Check the OpenLandMap organic-carbon unit.** The code assumes the catalog's "x 5 g/kg" storage unit (`evidence.OLM_OC_UNIT_G_PER_KG`); confirm on the catalog page, or organic matter will be off by that factor.
-- **[M7 → M8] The map doesn't show the evidence yet.** Crops, soil and climographs are in the API response; M8's comparison panel displays them.
 
-- **[M6 → M8] Map polish:** the legend can cover markers in the bottom-right corner; drawing needs a mouse ("Use example field" is the keyboard route); the JavaScript bundle is ~600 kB (Leaflet + Geoman), so consider code-splitting the map.
-- **[M6 → M8] Comparison panel.** Clicking an analog highlights it but doesn't yet show its climograph, crops and soil side by side (M7 supplies the data; M8 shows it).
+- **[M6] JavaScript bundle size:** ~630 kB (Leaflet + Geoman); consider code-splitting the map. (The legend overlap was fixed on `main` with the compact legend.)
 
 - **[M5 → deployment] No rate limiting.** Each live request runs about 10 Earth Engine jobs. M9 adds two more paid endpoints (`/bill/parse`; `/bill/summary` for uncached results). Before a public deployment, add a per-client limit so one user can't exhaust the team's Earth Engine quota.
-- **[M5 → team member with Earth Engine] Live mode untested end to end.** With `EE_PROJECT` set, `POST /analogs` runs M1 + M2 + M4 for real; run it once on the 5 test fields.
 
-- **[M3 → team member with Earth Engine] Build the candidate cache.** Run `python -m farm_analog.candidates` once to create `data/candidates/candidates.parquet` (~4 km farmland cells). Until then the app uses the team's 20 km grid, which isn't filtered to farmland, and says so in the result notes.
 - **[M3 → M7] No irrigation filter yet.** Irrigated farmland can look like a match on climate while its crops depend on irrigation. Add an irrigated-lands mask (for example LANID) to the candidate build.
 
-- **[M0 → first PR] CI workflow never run.** It only runs on a pull request. Check it goes green when the M0 pull request is opened.
 - **[M0 → M9] The environment installs the Anthropic SDK, but the spec now uses Gemini.** Swap to the Gemini SDK when Bill is built. (M9: `google-genai` added; removing `anthropic` is tracked separately.)
 - **[M0 rebase → M1–M4] `search.py` is a working regional prototype of M1–M4, not the full milestones.** It matches the Palouse box's *regional mean* (not a farm), uses quarterly mean temperature (not highs and lows), one model (ACCESS-CM2, which runs warm: July +4.3°C), a sparse 20 km grid over `[-121, 44, -116, 49]`, and no cropland, irrigation or soil filter. Its best match is near Walla Walla (0.50σ), which is plausible. Still needed: farm-level target, `tasmax`/`tasmin`, a cropland mask, several models with an agreement count, output in the `AnalogResult` contract, and tests for `search.py`.
 - **[M0 rebase → M3] `search.py` writes its outputs into `data/samples/`, which is committed.** Rerunning it changes tracked files (new timestamps, possibly new rankings). Write to `data/` (ignored) and copy to `data/samples/` deliberately.
-- **[M1 → team member with Earth Engine] The live field download is untested.** `fetch_prism_monthly` / `farm_today_for_field` couldn't run here (no Earth Engine credentials on this machine). Run it once on the 5 test fields; check `support` (most fields will report `centroid_cell`, since a field is smaller than a ~4 km PRISM cell) and that the normal fingerprint is close to the regional values in `palouse_analog_summary.json`.
-- **[M2 → team member with Earth Engine] The model download is untested live,** like M1's PRISM download (no credentials here). Run `farm_future_for_field` on the 5 test fields and check that all 8 models in `config.CLIMATE_MODELS` exist in `NASA/GDDP-CMIP6` with an `ssp245` run; any that don't are reported in `failed_models` instead of stopping the run.
 - **[M2 → M8] The contract carries only the ensemble median future** (`AnalogResult.farm_future`). The low-high range across models (`FarmFuture.low` / `.high`) should reach the frontend for the climograph's uncertainty band; add it to the contract in M8.
 - **[M0 rebase → M7] No tests for the SMAP, ECOSTRESS and climate importers.** Their `validate_request` functions and the CSV/JSON writers can be tested with recorded responses; add tests when M7 wires them into the contract.
 
@@ -60,10 +50,13 @@ Every unresolved item from a milestone review. See rule 3 in [HOW_WE_BUILD.md](H
 
 ## Team decision
 
+- **[Fix pass] Pushes straight to `main`.** Two direct pushes (`0f8c081`/#19 merge, `978f9c8`) broke CI on `main` today; the second also stopped the online demo from deploying until fixed. Recommendation: protect `main` so changes go through a pull request with green CI.
+- **[Fix pass] The page address holds the field and the priorities, and reloading reruns the analysis.** Field corners are farm location data (HOW_WE_BUILD: don't store them longer than needed); in the URL they land in browser history and shared links. In live mode, every opened link also starts Earth Engine jobs, with no rate limit yet. Options: keep (shareable links), keep only in the online demo, or drop the field from the URL.
+
 - **[M16] Soil water is context, not part of the match.** In 8 of 10 saved results the best match's driest-month soil is wetter than or about the same as the field's, because SMAP is a ~9 km land-model product and soil water isn't in the climate fingerprint. Options: keep it as context (current), add a note when the match is wetter, or add a soil-water term to matching (changes every result and needs a rerun).
 
 - **[M11] OpenLandMap organic carbon is stored in 5 g/kg steps,** so organic matter can only be about 1.7, 2.6, 3.4 or 4.3%. Coarse, not wrong; another reason to weigh SSURGO (Owen's new `ssurgo.py` on `main`) for soil.
-- **[M11] Owen's importers on `main` (SSURGO, an 8-model NEX-GDDP ensemble, GPM IMERG daily)** arrived after this stack branched. Merge `main` in before M8 and decide whether `hazards.py` should reuse `imerg.py` and whether soil should switch to `ssurgo.py`.
+- **[M11] Owen's importers on `main` (SSURGO, an 8-model NEX-GDDP ensemble, GPM IMERG daily)** are merged but unused by the pipeline. Decide whether `hazards.py` should reuse `imerg.py` and whether soil should switch to `ssurgo.py`.
 
 - **[M9] Gemini free tier vs. paid.** On the free tier Google may use prompts to improve its products, and `/bill/parse` sends the farmer's own words. Recommendation: a paid key for any real farmer use.
 - **[M9] How strict should the grounding check be?** It checks numbers, not claims (a weak match called "strong" passes). Whole numbers within 0.5 of any input value pass, and spelled-out numbers and unlisted advice phrasings aren't caught. Options: per-field number matching, checking match-quality words against each place, or always showing the template and using Gemini only for a one-line intro.
@@ -88,6 +81,16 @@ Every unresolved item from a milestone review. See rule 3 in [HOW_WE_BUILD.md](H
 
 ## Resolved
 
+- **[Fix pass]** [M7 → team member with Earth Engine] Evidence ran live on the 5 test fields (M11): crops, soil, monthly normals and county names look sensible.
+- **[Fix pass]** [M7 → before demo] Checked on live values (M11): organic matter comes out 1.7–4.3%, plausible for Palouse topsoil, so the ×5 g/kg unit is right.
+- **[Fix pass]** [M7 → M8] M8 shows crops, soil and the climate chart in the comparison panel.
+- **[Fix pass]** [M6 → M8] M8 built it.
+- **[Fix pass]** [M5 → team member with Earth Engine] Run live on all 5 test fields (M11), and again for M17.
+- **[Fix pass]** [M3 → team member with Earth Engine] Built (M11): 3,351 farmland cells.
+- **[Fix pass]** [M0 → first PR] CI has run on every pull request since #2.
+- **[Fix pass]** [M1 → team member with Earth Engine] Ran live (M11). Earth Engine area-weights partial cells, so `support` reads "field_mean" even for small fields; the "centroid_cell" fallback only fires when a field returns nothing.
+- **[Fix pass]** [M2 → team member with Earth Engine] Ran live (M11): all 8 models have SSP2-4.5 and SSP5-8.5 runs.
+- **[Fix pass]** [M10 → live run] Merged into the M11 item of the same name (one open item, not two).
 - **[M18]** [M9] Live Gemini check: `gemini-3.5-flash-lite` with thinking level `MINIMAL` is accepted (the `bill-retry` check, and 10 summaries written on 2026-11-15). Temporary 500/503/504 errors are now retried twice.
 - **[M18]** [M9 → UI] The frontend shows Bill's summary as plain text: from `POST /bill/summary` with a server, and from saved summaries in the online demo.
 

@@ -76,6 +76,14 @@ describe('request body builder', () => {
     expect(() => buildAnalogRequest(huge, 'ssp245')).toThrow(/exceeds the maximum limit of 50 km²/);
   });
 
+  it('measures area with the field’s own latitude', async () => {
+    const { polygonAreaKm2 } = await import('./request');
+    const box = (lat: number): LonLat[] => [[-100, lat], [-99.9, lat], [-99.9, lat + 0.1], [-100, lat + 0.1]];
+    // 0.1° x 0.1°: ~85 km² at 46.5°N, ~107 km² at 30.5°N (east-west degrees are wider there).
+    expect(polygonAreaKm2(box(46.45))).toBeCloseTo(85.3, 0);
+    expect(polygonAreaKm2(box(30.45))).toBeCloseTo(106.8, 0);
+  });
+
   it('example field is near Colfax, WA', () => {
     const lons = EXAMPLE_FIELD.map((p) => p[0]);
     const lats = EXAMPLE_FIELD.map((p) => p[1]);

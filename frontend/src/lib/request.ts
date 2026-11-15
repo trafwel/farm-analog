@@ -72,7 +72,9 @@ export function polygonAreaKm2(ring: LonLat[]): number {
     area += x1 * y2 - x2 * y1;
   }
   const degArea = Math.abs(area) / 2;
-  return degArea * 111 * 77;
+  // km per degree: ~111.32 north-south; east-west shrinks with the cosine of the latitude.
+  const meanLat = closed.slice(0, -1).reduce((s, p) => s + p[1], 0) / (closed.length - 1);
+  return degArea * 111.32 * 111.32 * Math.cos((meanLat * Math.PI) / 180);
 }
 
 /** Maximum field size in km² (50 km² ~ 12,355 acres, matching backend config). */
