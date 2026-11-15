@@ -1,8 +1,65 @@
-What's up? It's us. The farm guys
+# Farm Analog
 
-Farming it so hard rn
+**Your field's 2050s climate already exists somewhere today. Farm Analog finds it, and shows the crop rotations farmers there grow and the hazards they already face.**
 
-## Import NASA SMAP soil moisture
+NASA Space Apps Challenge 2026 · *Field Shift: Adapting Farms with NASA Data* · Region: the Palouse, eastern Washington.
+
+## What it does
+
+1. **Draw your field** on the map.
+2. **Your field today:** PRISM monthly climate (1995–2014), summarized as 8 numbers (average temperature and total precipitation per season) plus how much they vary from year to year.
+3. **Your field around 2050:** each of 8 NASA NEX-GDDP-CMIP6 climate models' change (2041–2060 vs. 1995–2014) is added to your field's real climate. Both SSP2-4.5 (moderate) and SSP5-8.5 (high emissions) are available.
+4. **Matching places:** 3,351 farmland cells (~4.6 km, USDA Cropland Data Layer) across the inland Northwest are scored with sigma dissimilarity (Mahony et al., 2017) under every model. Below 1 is a strong match; 4 or more means no real match (a "novel climate").
+5. **Rotation options:** what the matching places actually grew from 2016 to 2023, read pixel by pixel from the Cropland Data Layer. Your field's current rotation comes first, with at least three options in all, each with why, evidence, benefits, risks and gaps.
+6. **Hazard outlook:** hot days and frost dates (PRISM daily), heavy-rain days (NASA GPM IMERG), soil moisture (NASA SMAP) and bare-field months (Landsat NDVI). Each compares your field today with the matching place today.
+7. **Plain words:** a template summary (or Gemini, when a key is set; every number is checked), a glossary, and a reminder to check with your county extension agent.
+
+The tool supports a farmer's decision; it doesn't make it.
+
+## What we found (5 Palouse test fields, live with Earth Engine)
+
+| Field | Summer °C, today → 2050s (SSP2-4.5) | Best matches today | Under SSP5-8.5 |
+|---|---|---|---|
+| Cook Farm (Pullman) | 17.7 → 20.3 | Whitman Co., WA, 0.30σ (8/8 models) | 0.71σ (8/8) |
+| Colfax | 18.3 → 21.0 | Whitman / Walla Walla, 0.31σ (8/8) | 0.69σ (8/8) |
+| LaCrosse | 20.0 → 22.6 | Garfield Co., WA, 0.49σ (8/8) | 1.09σ (5/8) |
+| Lind | 20.0 → 22.6 | Gilliam Co., OR, 0.48σ (8/8) | 1.10σ (5/8) |
+| Dayton | 19.6 → 22.3 | Walla Walla Co., WA, 0.36σ (8/8) | 1.02σ (6/8) |
+
+- **Climate:** the matching places have more hot days and a frost-free season about a month longer than the fields today.
+- **Rotations:** the matching places rotate with more fallow.
+- **Limit:** a crop backtest (2008–2012 → 2019–2023) shows that climate alone predicts crop mix only slightly better than random farmland (similarity 0.53 vs. 0.52). That's why rotations are shown as evidence to discuss, not predictions. Details: [docs/REVIEWS.md](docs/REVIEWS.md).
+
+## Run it
+
+Setup (conda environment, Earth Engine login) is in [SETUP.md](SETUP.md). Then:
+
+```bash
+FARM_ANALOG_OFFLINE=1 uvicorn farm_analog.api:app --port 8000   # works without Earth Engine
+cd frontend && pnpm install && pnpm dev                          # http://localhost:5173
+```
+
+Without Earth Engine, a field drawn near one of the 5 test fields gets that field's saved live result (`data/samples/live_*.json`). Other Palouse fields get a regional demo. With `EE_PROJECT` set in `.env`, every field is analyzed live.
+
+**Checks:** `ruff check .`, `pytest` (186 tests), and in `frontend/`: `pnpm typecheck`, `pnpm lint`, `pnpm test` (39 tests). CI runs all of them on every pull request.
+
+## How it's built
+
+- **Backend** (`src/farm_analog/`): Python 3.11, pandas/NumPy/SciPy/scikit-learn, Pydantic, FastAPI, the Google Earth Engine API. Each module's docstring ends with a "Data flow" note: what it reads, what it produces and who uses it.
+- **Frontend** (`frontend/`): React 18 + TypeScript, Leaflet and Geoman. Its types are generated from the JSON contract in `contract/`.
+- **Docs** (`docs/`):
+  - [ARCHITECTURE.md](docs/ARCHITECTURE.md): the pipeline graph;
+  - [REVIEWS.md](docs/REVIEWS.md): a self-review per milestone;
+  - [OPEN_ISSUES.md](docs/OPEN_ISSUES.md);
+  - [TEACH_BACK.md](docs/TEACH_BACK.md);
+  - [HOW_WE_BUILD.md](docs/HOW_WE_BUILD.md): the team's build rules;
+  - [SUBMISSION.md](docs/SUBMISSION.md): the Space Apps submission text, including NASA data, references and how SI tools were used.
+
+## Data importers
+
+These team scripts download and summarize individual datasets for the Palouse. Small samples are committed in `data/samples/`.
+
+### Import NASA SMAP soil moisture
 
 A small, real Palouse sample is included in `data/samples/`: July 1–7, 2025,
 with 56 three-hour readings of regional surface and root-zone moisture.
@@ -35,7 +92,7 @@ not measurements of individual fields or projections for 2050.
 Source: [NASA SMAP L4 v8 on Earth Engine](https://developers.google.com/earth-engine/datasets/catalog/NASA_SMAP_SPL4SMGP_008).
 DOI: [10.5067/T5RUATAQREF8](https://doi.org/10.5067/T5RUATAQREF8).
 
-## First 2050 climate comparison
+### First 2050 climate comparison
 
 Run `PYTHONPATH=src python -m farm_analog.climate` after Earth Engine setup.
 This downloads monthly Palouse summaries for ACCESS-CM2: a 1995–2014 historical
@@ -45,7 +102,7 @@ The baseline is modeled climate, not observed weather. Temperature is converted
 from kelvin to Celsius; precipitation flux is integrated into mean monthly totals
 in millimetres. Both periods must contain complete, unique daily timestamps.
 
-## Import NASA ECOSTRESS land surface temperature
+### Import NASA ECOSTRESS land surface temperature
 
 A matching Palouse sample is included in `data/samples/`: July 1–7, 2025,
 with 30 rows covering 11 ECOSTRESS overpasses. The CSV and provenance JSON
@@ -83,7 +140,7 @@ LST is land surface skin temperature, not air temperature.
 Source: [ECOSTRESS L2T LSTE v002 at LP DAAC](https://lpdaac.usgs.gov/products/eco_l2t_lstev002/).
 DOI: [10.5067/ECOSTRESS/ECO_L2T_LSTE.002](https://doi.org/10.5067/ECOSTRESS/ECO_L2T_LSTE.002).
 
-## First Pacific Northwest analog search
+### First Pacific Northwest analog search
 
 Run `PYTHONPATH=src python -m farm_analog.search` after downloading the climate
 comparison. The search caches PRISM inputs, candidate rankings, and method metadata
@@ -105,7 +162,7 @@ the specified Next.js/FastAPI interface remains to be built.
 
 Check the scoring with `PYTHONPATH=src python -m unittest discover -s tests`.
 
-## Import USDA Cropland Data Layer (CDL)
+### Import USDA Cropland Data Layer (CDL)
 
 A matching Palouse sample is included in `data/samples/`: the 2025 CDL, with
 40 crop and land-cover classes. The CSV and provenance JSON can be used without
@@ -135,7 +192,7 @@ and pixel-counted acreage is not an official NASS acreage estimate.
 
 Source: [USDA NASS Cropland Data Layer](https://www.nass.usda.gov/Research_and_Science/Cropland/Release/index.php).
 
-## Import USDA NRCS SSURGO soils
+### Import USDA NRCS SSURGO soils
 
 A matching Palouse sample is included in `data/samples/`: all 422 SSURGO map
 units intersecting the box (8 soil survey areas in WA and ID), with acreage and
@@ -160,7 +217,7 @@ measurements; empty values mean SDA has no value.
 
 Source: [USDA NRCS SSURGO](https://www.nrcs.usda.gov/resources/data-and-reports/soil-survey-geographic-database-ssurgo).
 
-## Multi-model NEX-GDDP-CMIP6 climate comparison
+### Multi-model NEX-GDDP-CMIP6 climate comparison
 
 A sample is included in `data/samples/`: the same monthly 1995–2014 baseline vs
 2041–2060 SSP2-4.5 table as the Earth Engine climate comparison, for 8 models
@@ -187,7 +244,7 @@ One ensemble member per model; bias-corrected, statistically downscaled output.
 Source: [NASA NEX-GDDP-CMIP6](https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6).
 DOI: [10.7917/OFSG3345](https://doi.org/10.7917/OFSG3345).
 
-## Import NASA GPM IMERG precipitation
+### Import NASA GPM IMERG precipitation
 
 A sample is included in `data/samples/`: daily precipitation for the 2025 water
 year (October 1, 2024 – September 30, 2025, 365 rows). The CSV and provenance

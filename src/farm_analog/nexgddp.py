@@ -8,13 +8,14 @@ climate.py (Earth Engine, ACCESS-CM2 only), for several models plus their mean.
 Run from the repo root:
     PYTHONPATH=src python -m farm_analog.nexgddp
 """
+
 import argparse
 import csv
 import json
 import re
 import time
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 THREDDS = "https://ds.nccs.nasa.gov/thredds"
@@ -24,12 +25,28 @@ DOI = "10.7917/OFSG3345"
 # Same approximate Washington Palouse demo extent as the SMAP importer.
 PALOUSE_BOUNDS = (-118.2, 46.5, -117.0, 47.2)
 # Models with r1i1p1f1 runs spanning a range of climate sensitivities.
-DEFAULT_MODELS = ["ACCESS-CM2", "CanESM5", "EC-Earth3", "GFDL-ESM4",
-                  "MIROC6", "MPI-ESM1-2-HR", "MRI-ESM2-0", "NorESM2-MM"]
+DEFAULT_MODELS = [
+    "ACCESS-CM2",
+    "CanESM5",
+    "EC-Earth3",
+    "GFDL-ESM4",
+    "MIROC6",
+    "MPI-ESM1-2-HR",
+    "MRI-ESM2-0",
+    "NorESM2-MM",
+]
 PERIODS = [("baseline", 1995, 2014, "historical"), ("future", 2041, 2060, "ssp245")]
 VARIABLES = ["tas", "pr"]
-FIELDS = ["period", "start_year", "end_year", "model", "scenario", "month",
-          "precipitation_mm", "temperature_c"]
+FIELDS = [
+    "period",
+    "start_year",
+    "end_year",
+    "model",
+    "scenario",
+    "month",
+    "precipitation_mm",
+    "temperature_c",
+]
 NOLEAP = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 
@@ -55,8 +72,15 @@ def fetch_subset(session, url_path, variable, bounds, cache_dir):
     path = Path(cache_dir) / Path(url_path).name.replace(".nc", "_palouse.nc")
     if path.exists() and path.stat().st_size:
         return path
-    params = {"var": variable, "north": north, "south": south,
-              "west": west % 360, "east": east % 360, "temporal": "all", "accept": "netcdf4"}
+    params = {
+        "var": variable,
+        "north": north,
+        "south": south,
+        "west": west % 360,
+        "east": east % 360,
+        "temporal": "all",
+        "accept": "netcdf4",
+    }
     for attempt in range(5):
         try:
             response = session.get(f"{THREDDS}/ncss/grid/{url_path}", params=params, timeout=300)
@@ -66,11 +90,13 @@ def fetch_subset(session, url_path, variable, bounds, cache_dir):
                 tmp.replace(path)
                 return path
             if response.status_code < 500 and response.status_code != 429:
-                raise RuntimeError(f"NCSS refused {url_path} (HTTP {response.status_code}): {response.text[:200]}")
+                raise RuntimeError(
+                    f"NCSS refused {url_path} (HTTP {response.status_code}): {response.text[:200]}"
+                )
         except Exception as exc:  # network errors and 5xx: retry
             if attempt == 4 or isinstance(exc, RuntimeError):
                 raise
-        time.sleep(5 * 2 ** attempt)
+        time.sleep(5 * 2**attempt)
     raise RuntimeError(f"NCSS kept failing for {url_path}")
 
 
@@ -99,7 +125,7 @@ def monthly_sums(path, variable, bounds):
         lengths[1] = 29
     sums, start = [], 0
     for length in lengths:
-        chunk = regional[start:start + length]
+        chunk = regional[start : start + length]
         if np.isnan(chunk).any():
             raise RuntimeError(f"Missing daily values in {path.name}")
         sums.append(float(chunk.sum()))
@@ -107,8 +133,13 @@ def monthly_sums(path, variable, bounds):
     return sums, lengths
 
 
-def download_nexgddp(models=DEFAULT_MODELS, bounds=PALOUSE_BOUNDS, output_dir="data/nexgddp",
-                     cache_dir=None, workers=4):
+def download_nexgddp(
+    models=DEFAULT_MODELS,
+    bounds=PALOUSE_BOUNDS,
+    output_dir="data/nexgddp",
+    cache_dir=None,
+    workers=4,
+):
     """Save monthly baseline/future means per model plus an ensemble mean, and provenance."""
     try:
         import h5py  # noqa: F401
@@ -135,15 +166,17 @@ def download_nexgddp(models=DEFAULT_MODELS, bounds=PALOUSE_BOUNDS, output_dir="d
 
     def work(job):
         model, label, variable, year, url_path = job
-        return job, monthly_sums(fetch_subset(session, url_path, variable, bounds, cache_dir), variable, bounds)
+        return job, monthly_sums(
+            fetch_subset(session, url_path, variable, bounds, cache_dir), variable, bounds
+        )
 
     totals = {}
     with ThreadPoolExecutor(workers) as pool:
-        for (model, label, variable, year, _), (sums, lengths) in pool.map(work, jobs):
+        for (model, label, variable, _year, _), (sums, lengths) in pool.map(work, jobs):
             key = (model, label, variable)
             acc = totals.setdefault(key, {"sum": [0.0] * 12, "days": [0] * 12, "years": 0})
-            acc["sum"] = [a + b for a, b in zip(acc["sum"], sums)]
-            acc["days"] = [a + b for a, b in zip(acc["days"], lengths)]
+            acc["sum"] = [a + b for a, b in zip(acc["sum"], sums, strict=False)]
+            acc["days"] = [a + b for a, b in zip(acc["days"], lengths, strict=False)]
             acc["years"] += 1
             done += 1
             if done % 40 == 0 or done == len(jobs):
@@ -153,23 +186,36 @@ def download_nexgddp(models=DEFAULT_MODELS, bounds=PALOUSE_BOUNDS, output_dir="d
         for label, first, last, scenario in PERIODS:
             tas, pr = totals[(model, label, "tas")], totals[(model, label, "pr")]
             for m in range(12):
-                rows.append({
-                    "period": label, "start_year": first, "end_year": last, "model": model,
-                    "scenario": scenario, "month": m + 1,
-                    # pr is kg m-2 s-1 (= mm/s): daily flux sum × 86400 / years = mean monthly total.
-                    "precipitation_mm": pr["sum"][m] * 86400 / pr["years"],
-                    # tas is K: mean over all days in the month across the period.
-                    "temperature_c": tas["sum"][m] / tas["days"][m] - 273.15,
-                })
+                rows.append(
+                    {
+                        "period": label,
+                        "start_year": first,
+                        "end_year": last,
+                        "model": model,
+                        "scenario": scenario,
+                        "month": m + 1,
+                        # pr is kg m-2 s-1 (= mm/s):
+                        # daily flux sum × 86400 / years = mean monthly total.
+                        "precipitation_mm": pr["sum"][m] * 86400 / pr["years"],
+                        # tas is K: mean over all days in the month across the period.
+                        "temperature_c": tas["sum"][m] / tas["days"][m] - 273.15,
+                    }
+                )
     for label, first, last, scenario in PERIODS:
         for m in range(12):
             members = [r for r in rows if r["period"] == label and r["month"] == m + 1]
-            rows.append({
-                "period": label, "start_year": first, "end_year": last, "model": "ensemble_mean",
-                "scenario": scenario, "month": m + 1,
-                "precipitation_mm": sum(r["precipitation_mm"] for r in members) / len(members),
-                "temperature_c": sum(r["temperature_c"] for r in members) / len(members),
-            })
+            rows.append(
+                {
+                    "period": label,
+                    "start_year": first,
+                    "end_year": last,
+                    "model": "ensemble_mean",
+                    "scenario": scenario,
+                    "month": m + 1,
+                    "precipitation_mm": sum(r["precipitation_mm"] for r in members) / len(members),
+                    "temperature_c": sum(r["temperature_c"] for r in members) / len(members),
+                }
+            )
     directory = Path(output_dir)
     directory.mkdir(parents=True, exist_ok=True)
     csv_path = directory / "palouse_climate_nexgddp_ensemble_ssp245_2050.csv"
@@ -178,9 +224,13 @@ def download_nexgddp(models=DEFAULT_MODELS, bounds=PALOUSE_BOUNDS, output_dir="d
         writer.writeheader()
         writer.writerows(rows)
     metadata = {
-        "dataset": "NASA NEX-GDDP-CMIP6", "doi": DOI, "source": SOURCE,
+        "dataset": "NASA NEX-GDDP-CMIP6",
+        "doi": DOI,
+        "source": SOURCE,
         "access": f"{THREDDS}/ncss/grid/{DATASET_ROOT}/ (NetCDF Subset Service, no login)",
-        "models": list(models), "member": "r1i1p1f1", "scenario": "SSP2-4.5",
+        "models": list(models),
+        "member": "r1i1p1f1",
+        "scenario": "SSP2-4.5",
         "ensemble": "ensemble_mean rows are the unweighted mean of the listed models.",
         "bounds_west_south_east_north": list(bounds),
         "region_note": "Mean of 0.25° grid cells whose centers fall in the box.",
@@ -190,16 +240,24 @@ def download_nexgddp(models=DEFAULT_MODELS, bounds=PALOUSE_BOUNDS, output_dir="d
         "precipitation": "Mean monthly precipitation total in mm; sum(pr) × 86400 / 20 years",
         "file_versions": "Newest available version per year (_v2.0 > _v1.1 > unversioned).",
         "files_per_model": {m: len(f) for m, f in files_used.items()},
-        "limitations": "Bias-corrected, statistically downscaled GCM output at 0.25°; one ensemble member per model; unweighted ensemble. Regional means, not field-level. Not a forecast of any specific year.",
+        "limitations": (
+            "Bias-corrected, statistically downscaled GCM output at 0.25°; one ensemble member per"
+            " model; unweighted ensemble. Regional means, not field-level. Not a forecast of any "
+            "specific year."
+        ),
         "related": "climate.py builds the same table for ACCESS-CM2 through Earth Engine.",
-        "downloaded_utc": datetime.now(timezone.utc).isoformat(),
+        "downloaded_utc": datetime.now(UTC).isoformat(),
     }
-    csv_path.with_suffix(".json").write_text(json.dumps(metadata, indent=2, ensure_ascii=False) + "\n")
+    csv_path.with_suffix(".json").write_text(
+        json.dumps(metadata, indent=2, ensure_ascii=False) + "\n"
+    )
     return csv_path
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument("--models", nargs="+", default=DEFAULT_MODELS)
     parser.add_argument("--bounds", nargs=4, type=float, default=PALOUSE_BOUNDS)
     parser.add_argument("--output-dir", default="data/nexgddp")
@@ -207,7 +265,9 @@ def main():
     parser.add_argument("--workers", type=int, default=4, help="Parallel NCSS requests.")
     args = parser.parse_args()
     try:
-        path = download_nexgddp(args.models, args.bounds, args.output_dir, args.cache_dir, args.workers)
+        path = download_nexgddp(
+            args.models, args.bounds, args.output_dir, args.cache_dir, args.workers
+        )
     except Exception as exc:
         parser.exit(1, f"NEX-GDDP import failed: {exc}\n")
     print(f"Saved NEX-GDDP data: {path}")

@@ -76,16 +76,34 @@ ee.Initialize(project=os.environ["EE_PROJECT"])
 ## 6. Check that everything works
 
 ```bash
-python -c "import xarray, rasterio, geopandas, xclim, sklearn, ee, streamlit, anthropic; print('ok')"
+python -c "import xarray, rasterio, geopandas, xclim, sklearn, ee, pydantic, farm_analog; print('ok')"
 ```
 
-You should see `ok`. Then try:
+You should see `ok`. Then run the lint and tests, the same checks CI runs on every pull request:
 
 ```bash
-streamlit run app/app.py
+ruff check . && pytest
 ```
 
 ---
+
+## 7. Run the app
+
+Two terminals, from the repo root.
+
+**API** (Python, port 8000). Without Earth Engine it runs in offline-demo mode (Palouse fields only):
+
+```bash
+uvicorn farm_analog.api:app --reload
+```
+
+**Frontend** (React, port 5173). Needs Node and pnpm (`brew install node pnpm`):
+
+```bash
+cd frontend && pnpm install && pnpm dev
+```
+
+Open http://localhost:5173, click **Use example field**, then **Find analogs**.
 
 ## Project layout
 
@@ -146,42 +164,7 @@ If any of these are missing from the repo, create them with the contents below.
 
 ### `environment.yml`
 
-```yaml
-name: farm-analog
-channels:
-  - conda-forge
-dependencies:
-  - python=3.11
-  # gridded data
-  - xarray
-  - rioxarray
-  - rasterio
-  - netcdf4
-  - dask
-  - xclim
-  # analysis
-  - numpy
-  - scipy
-  - scikit-learn
-  - pandas
-  - geopandas
-  - pyarrow
-  # Earth Engine
-  - earthengine-api
-  - geemap
-  # app and charts
-  - streamlit
-  - leafmap
-  - plotly
-  # notebooks and utilities
-  - jupyterlab
-  - ipykernel
-  - python-dotenv
-  - requests
-  - pip
-  - pip:
-      - anthropic
-```
+The real file is [`environment.yml`](environment.yml) in the repo root. It isn't copied here so the two can't drift apart.
 
 ### `.env.example`
 

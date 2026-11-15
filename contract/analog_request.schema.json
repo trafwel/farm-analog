@@ -1,0 +1,70 @@
+{
+  "$defs": {
+    "PolygonGeometry": {
+      "additionalProperties": false,
+      "description": "A GeoJSON Polygon: the farmer's field as drawn on the map.",
+      "properties": {
+        "coordinates": {
+          "items": {
+            "items": {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            "type": "array"
+          },
+          "minItems": 1,
+          "title": "Coordinates",
+          "type": "array"
+        },
+        "type": {
+          "const": "Polygon",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "coordinates"
+      ],
+      "title": "PolygonGeometry",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Find analogs for one field.",
+  "properties": {
+    "field": {
+      "$ref": "#/$defs/PolygonGeometry"
+    },
+    "scenario": {
+      "default": "ssp245",
+      "enum": [
+        "ssp245",
+        "ssp585"
+      ],
+      "title": "Scenario",
+      "type": "string"
+    },
+    "top_n": {
+      "default": 20,
+      "maximum": 100,
+      "minimum": 1,
+      "title": "Top N",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "field"
+  ],
+  "title": "AnalogRequest",
+  "type": "object"
+}
