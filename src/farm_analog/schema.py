@@ -200,6 +200,22 @@ class Analog(_Model):
         return self
 
 
+class RotationTraits(_Model):
+    """Share of a rotation's years with each crop trait (M19), from the fixed crop-traits table
+    in ``rotations.TRAITS``. A cycle counts each year once; a flexible mix counts each of its
+    main crops as one year (an approximation, since their order and frequency vary). The
+    frontend scores farmer priorities from these numbers."""
+
+    years: int = Field(ge=1)  # cycle length, or number of main crops in a flexible mix
+    n_fixing: float = Field(ge=0, le=1)  # years with a nitrogen-fixing crop
+    high_residue: float = Field(ge=0, le=1)  # years leaving heavy residue (soil cover)
+    low_cover: float = Field(ge=0, le=1)  # years leaving little residue, fallow included
+    fallow: float = Field(ge=0, le=1)  # fallow years
+    low_water: float = Field(ge=0, le=1)  # years with a low-water crop or fallow
+    high_water: float = Field(ge=0, le=1)  # years with a high-water crop
+    break_crop: float = Field(ge=0, le=1)  # years with a non-cereal crop (pulses, canola, hay)
+
+
 class RotationStrategy(_Model):
     """One crop-rotation option (M12): the field's current rotation or one that farmers in the
     analog areas use. Every text field is written by code from observed data and a fixed
@@ -218,6 +234,7 @@ class RotationStrategy(_Model):
     benefits: list[str]
     risks: list[str]
     gaps: list[str]
+    traits: RotationTraits | None = None  # M19; None in results saved before it
 
 
 class AnalogResult(_Model):

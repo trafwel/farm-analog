@@ -109,6 +109,14 @@ export type Flexible = boolean;
 export type Gaps = string[];
 export type Name = string;
 export type Risks = string[];
+export type BreakCrop = number;
+export type Fallow = number;
+export type HighResidue = number;
+export type HighWater = number;
+export type LowCover = number;
+export type LowWater = number;
+export type NFixing = number;
+export type Years = number;
 export type Why = string;
 export type Source = "computed" | "fixture";
 
@@ -230,5 +238,22 @@ export interface RotationStrategy {
   gaps: Gaps;
   name: Name;
   risks: Risks;
+  traits?: RotationTraits | null;
   why: Why;
+}
+/**
+ * Share of a rotation's years with each crop trait (M19), from the fixed crop-traits table
+ * in ``rotations.TRAITS``. A cycle counts each year once; a flexible mix counts each of its
+ * main crops as one year (an approximation, since their order and frequency vary). The
+ * frontend scores farmer priorities from these numbers.
+ */
+export interface RotationTraits {
+  break_crop: BreakCrop;
+  fallow: Fallow;
+  high_residue: HighResidue;
+  high_water: HighWater;
+  low_cover: LowCover;
+  low_water: LowWater;
+  n_fixing: NFixing;
+  years: Years;
 }

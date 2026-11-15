@@ -94,3 +94,27 @@ def test_attach_keeps_the_contract_valid():
     enriched = rot.attach(result, s)
     AnalogResult.model_validate(enriched.model_dump())
     assert enriched.rotations[0].crops == [WW, P]
+
+
+def test_traits_count_each_year_of_the_cycle():
+    wwf = rot.traits_summary([WW, WW, F])
+    assert wwf.years == 3 and wwf.fallow == 0.333 and wwf.low_cover == 0.333
+    assert wwf.high_residue == 0.667 and wwf.n_fixing == 0 and wwf.break_crop == 0
+    pea = rot.traits_summary([WW, "Barley", P])
+    assert pea.n_fixing == 0.333 and pea.break_crop == 0.333 and pea.low_water == 0.333
+    assert pea.fallow == 0 and pea.high_water == 0
+    assert rot.traits_summary([WW]).high_residue == 1.0
+
+
+def test_strategies_carry_traits_and_saved_results_can_get_them():
+    field = {rot.Rotation("cycle", (WW, P)): 1.0}
+    out = rot.strategies(field, {1: {rot.Rotation("cycle", (WW, F)): 0.8}}, {1: (8, 8)})
+    assert all(s.traits is not None for s in out)
+    assert out[0].traits.n_fixing == 0.5
+    demo, _ = palouse_demo(top_n=3)
+    stripped = demo.model_copy(update={"rotations": [s.model_copy(update={"traits": None})
+                                                     for s in out]})
+    assert all(r.traits is None for r in stripped.rotations)
+    filled = rot.add_traits(stripped)
+    assert [r.traits for r in filled.rotations] == [s.traits for s in out]
+    assert rot.add_traits(demo) == demo  # no rotations: unchanged

@@ -584,3 +584,31 @@ The best match's soil is wetter than or about the same as the field's in 8 of 10
 ### Security, efficiency, other flaws
 - No new data leaves the browser; no new dependency; the chart is ~100 lines of SVG.
 - **Open:** SMAP is a 9 km model-assisted product (L4 assimilates satellite data into a land model), so a field on a ridge and one in a draw get the same number. Listed in OPEN_ISSUES.
+
+---
+
+## M19 — Farmer priorities (2026-11-15)
+
+**Built:** the farmer picks what matters most (save water, cut erosion, build organic matter, add nitrogen, break pest and disease cycles), and the rotation options re-sort by how well their crops fit. The field's current rotation always stays first.
+- **Backend** (`rotations.py`): `traits_summary` turns a rotation's crops into the share of its years with each trait from the fixed `TRAITS` table (nitrogen fixing, heavy residue, little residue, fallow, low or high water use, a non-cereal break crop). A new `RotationTraits` model sits on `RotationStrategy.traits` (optional, so older results still validate). Contract JSON Schema and TypeScript types regenerated.
+- **Saved results:** `python -m farm_analog.saved --traits-only` adds the traits to the 10 saved files offline. The diff adds `traits` blocks only; nothing else in the files changed.
+- **Frontend** (`lib/priorities.ts`, `RotationCards`): checkboxes, a score per priority from 0 to 1, the average for the chosen ones, sorting, a plain reason per priority ("nitrogen-fixing crop in 1 of 3 years"), a "Best fit for your choices" badge, and a screen-reader announcement when the order changes.
+
+### Why these choices
+- **Traits computed in the backend, scored in the frontend:** the table has one home (`TRAITS`); the browser only does arithmetic, so it works in the online demo with no server.
+- **No absolute "good fit" label.** The first version labeled every option "Poor fit" for "Add nitrogen" (one pulse crop in three years scores 0.33). That's a solid nitrogen rotation in dryland wheat, so a fixed scale misleads. The badge now compares the options with each other, and only when one actually beats another.
+- **No income option:** nothing in the data measures markets or prices, and the page says so instead of guessing.
+- **Priorities stay in the page.** They're not saved, sent or added to the page address.
+
+### Integration (what was run and checked)
+- Backend: ruff and 188 tests (2 new: trait shares per year, strategies carry traits and old results get them). Frontend: typecheck, lint, build and 53 tests (7 new for scoring, sorting, the badge and flexible mixes; plus the saved Colfax result re-sorting when "Add nitrogen" is ticked).
+- In the browser (offline API, saved Colfax result): ticking "Cut erosion" and "Add nitrogen" puts winter wheat → spring wheat → pulses right after the current rotation; both get the badge; the fallow rotations drop to the end. No console errors.
+
+### What the numbers say
+For Colfax, the field's current rotation is already the best fit for erosion and nitrogen. The matching places lean on fallow, which helps water but costs soil cover. That's the real trade-off the tool should surface: what fits the 2050s climate isn't automatically what fits the farmer's soil goals.
+
+### Other flaws
+- A flexible mix counts each of its 3 main crops as one year; the real frequencies vary.
+- Scores rest on the general `TRAITS` table, which still needs a WSU Extension read (open since M12).
+- Erosion uses crop residue only; tillage, slope and timing matter as much in the Palouse and aren't measured.
+- Typed priorities ("I want to save water") through Bill's parser would need the server, so they're left for later.

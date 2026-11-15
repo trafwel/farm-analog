@@ -268,3 +268,16 @@ _Built in the same away batch. M8 was skipped for now (no UI changes)._
    - Answer:
 2. Why does the glossary say this number is "not a reading from your field", and what would give the farmer their field's own value?
    - Answer:
+
+## M19 — Farmer priorities
+
+**Key concepts**
+- **Traits per year:** each rotation becomes shares of its years with a trait (nitrogen-fixing, heavy residue, fallow…), from one fixed table.
+- **Relative, not absolute:** options are compared with each other for the chosen priorities; there is no universal "good" score.
+- **The current rotation stays first**, so the farmer always compares against what they do now.
+
+**Questions**
+1. For Colfax, the current rotation is the best fit for "Cut erosion" and "Add nitrogen", yet none of the matching places use it. How should a farmer read that?
+   - Answer:
+2. Why is there no "extra income" priority, and what would it take to add one honestly?
+   - Answer:
