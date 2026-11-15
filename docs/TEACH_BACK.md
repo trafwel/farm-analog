@@ -109,3 +109,20 @@ _Built in the same away batch as M3–M7._
 2. Why match each model separately instead of matching against the average future?
    - Answer:
 
+## M5 — API
+
+_Built in the same away batch._
+
+**Key concepts**
+- **Validate at the edge, explain the refusal.** Bad shapes, fields outside the US and oversized fields get a 400 with a reason a farmer can act on; malformed JSON gets a 422 from the contract.
+- **Two modes, never faked.** With Earth Engine: the real per-field analysis. Without: the offline Palouse result, only for Palouse fields, with notes saying so.
+- **Privacy by construction.** Coordinates are never logged; results are cached under a hash of the field, in memory only.
+- **CORS.** Only the frontend's origin may call the API from a browser.
+- **Errors don't leak internals.** A failure returns a generic 503; the log records only the error type.
+
+**Questions**
+1. Why does the offline API refuse a field in Iowa instead of returning the Palouse demo result?
+   - Answer:
+2. Why cache by a hash of the field instead of by its coordinates?
+   - Answer:
+

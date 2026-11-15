@@ -200,3 +200,33 @@ Confirm the search area, build the candidate cache with Earth Engine, add an irr
 
 ### Moved to OPEN_ISSUES.md
 Place names (M7/M8), latitude check (M10), retiring `search.py` (team decision).
+
+## M5 — API (2026-11-14)
+
+**Built:** `pipeline.py` (mode selection, field checks with Shapely and ellipsoidal area via pyproj, live analysis chaining M1 → M2 → M3 → M4, offline Palouse demo), `api.py` (FastAPI `GET /health`, `POST /analogs`, CORS limited to `FRONTEND_ORIGINS`, in-memory cache keyed by a field hash, 400/422/503 errors), settings for the supported region and maximum field area, environment additions, 14 new tests (87 total).
+
+### Efficiency
+- Repeat requests for the same field, scenario and size are served from an in-memory cache (64 entries).
+- Candidates are loaded from the cache file, not recomputed.
+- Live requests are still heavy (about 10 Earth Engine jobs); logged with rate limiting.
+
+### Integration (what was run and checked)
+- `ruff check .` passes; `pytest`: 87 passed (FastAPI TestClient).
+- **Started the real server** (uvicorn) and called it over HTTP: `/health` reports offline-demo mode; a Colfax field returns 3 analogs (0.50, 0.69, 0.82σ, all strong); OpenAPI lists both endpoints; the server log contains no coordinates.
+- The response validates against the contract and round-trips through JSON.
+- **Not run:** live mode with Earth Engine (no credentials here).
+
+### Security and privacy
+- Request bodies and coordinates are never logged (test checks the log); failures log only the exception type.
+- 503 responses don't include internal error text (test).
+- CORS allows only the configured frontend origin (test).
+- Input limits: contract validation (vertex count, ranges), plus validity, region and area checks.
+- No secrets in the API; `EE_PROJECT` comes from the server's environment.
+
+### Other flaws
+- No rate limiting yet (logged).
+- The offline demo answers with the Palouse-wide result for any Palouse field, so two Palouse fields get the same analogs; the notes say the target is the regional average.
+- The cache is per process and unbounded in time; fine for a demo server.
+
+### Moved to OPEN_ISSUES.md
+Rate limiting, live end-to-end test.

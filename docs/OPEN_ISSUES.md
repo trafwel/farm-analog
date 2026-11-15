@@ -8,6 +8,9 @@ _None._ (M0's fixable items were fixed inside M0; see REVIEWS.md.)
 
 ## Waits for a milestone
 
+- **[M5 → deployment] No rate limiting.** Each live request runs about 10 Earth Engine jobs. Before a public deployment, add a per-client limit so one user can't exhaust the team's Earth Engine quota.
+- **[M5 → team member with Earth Engine] Live mode untested end to end.** With `EE_PROJECT` set, `POST /analogs` runs M1 + M2 + M4 for real; run it once on the 5 test fields.
+
 - **[M4 → M7/M8] Analogs have no place names.** `place_name` is empty; a farmer needs "near Walla Walla, WA". Add a reverse-geocoding step (for example nearest town from a public gazetteer) when evidence is added.
 - **[M4 → M10] The latitude (day-length) check isn't applied.** Within the inland Northwest every candidate is within 3° of the Palouse, so it has no effect yet; add it if the search area grows.
 
@@ -15,8 +18,6 @@ _None._ (M0's fixable items were fixed inside M0; see REVIEWS.md.)
 - **[M3 → M7] No irrigation filter yet.** Irrigated farmland can look like a match on climate while its crops depend on irrigation. Add an irrigated-lands mask (for example LANID) to the candidate build.
 
 - **[M0 → first PR] CI workflow never run.** It only runs on a pull request. Check it goes green when the M0 pull request is opened.
-- **[M0 → M5] No region or area checks on the field.** A valid polygon outside the western US, or one covering a whole state, passes the contract. M5 should reject fields outside `SEARCH_BBOX` and above a maximum area.
-- **[M0 → M5] Self-intersecting polygons pass validation.** M5 should check validity (for example with Shapely's `is_valid`) before computing.
 - **[M0 → M6] TypeScript generation from `contract/*.schema.json` untested.** Pydantic writes 2020-12 JSON Schema (tuples use `prefixItems`); confirm the chosen generator handles it, or adjust.
 - **[M0 → M9] The environment installs the Anthropic SDK, but the spec now uses Gemini.** Swap to the Gemini SDK when Bill is built.
 - **[M0 rebase → M1–M4] `search.py` is a working regional prototype of M1–M4, not the full milestones.** It matches the Palouse box's *regional mean* (not a farm), uses quarterly mean temperature (not highs and lows), one model (ACCESS-CM2, which runs warm: July +4.3°C), a sparse 20 km grid over `[-121, 44, -116, 49]`, and no cropland, irrigation or soil filter. Its best match is near Walla Walla (0.50σ), which is plausible. Still needed: farm-level target, `tasmax`/`tasmin`, a cropland mask, several models with an agreement count, output in the `AnalogResult` contract, and tests for `search.py`.
@@ -43,6 +44,9 @@ _None._ (M0's fixable items were fixed inside M0; see REVIEWS.md.)
 - **[M0] 3-D GeoJSON positions are rejected.** Leaflet drawing produces 2-D positions only; supporting altitude adds complexity for no benefit.
 
 ## Resolved
+
+- **[M5]** Field checks deferred from M0: the API rejects self-crossing outlines, fields outside the contiguous US, and fields over 50 km², each with a plain-language reason (HTTP 400).
+- **[M5]** Without Earth Engine, the API serves the real offline Palouse result only for Palouse fields and SSP2-4.5, and refuses anything else instead of faking it.
 
 - **[M4]** Matching against the farm's future across every model: `match.py` scores each model separately, reports the median and how many models agree, keeps the standardized-distance baseline, and produces the contract's `AnalogResult` (with a new optional `notes` field for caveats).
 - **[M0]** `zip(..., strict=False)` in `search.py`: no longer on the main path; `match.py` uses `strict=True`.
