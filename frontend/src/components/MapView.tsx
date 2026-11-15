@@ -264,7 +264,8 @@ function TestFieldMarkers({ testFields }: { testFields: TestField[] }) {
   return (
     <>
       {testFields.map((t) => {
-        const name = TEST_FIELD_NAMES[t.id] ?? t.label.split(' (')[0]!.split(',')[0];
+        const baseName = t.label.split(' (')[0]?.split(',')[0] ?? t.id;
+        const name = TEST_FIELD_NAMES[t.id] ?? baseName;
         return (
           <Rectangle
             key={t.id}
