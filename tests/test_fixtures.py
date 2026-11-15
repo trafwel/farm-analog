@@ -11,4 +11,4 @@ def test_committed_fixture_matches_the_contract():
 
 def test_committed_fixture_is_up_to_date():
     # If this fails, run: python scripts/make_fake_results.py
-    assert FIXTURE_PATH.read_text() == to_json(make_fake_results())
+    assert FIXTURE_PATH.read_text(encoding="utf-8") == to_json(make_fake_results())

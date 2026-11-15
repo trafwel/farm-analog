@@ -34,7 +34,7 @@ REQUEST = AnalogRequest.model_validate(
 def live(monkeypatch):
     monkeypatch.setenv("EE_PROJECT", "test-project")
     monkeypatch.delenv("FARM_ANALOG_OFFLINE", raising=False)
-    today = palouse_today_from_cache(json.loads(cand.TEAM_CACHE.read_text()))
+    today = palouse_today_from_cache(json.loads(cand.TEAM_CACHE.read_text(encoding="utf-8")))
     rows = [
         {"year": y, "month": m, "tmean": 10.0 + m, "ppt": 30.0 + m}
         for y in range(1995, 2015)

@@ -44,7 +44,7 @@ def run(data_dir="data/samples", output_dir=None):
     n_years = last_year - first_year + 1
     cache = folder / "palouse_prism_analog_inputs.json"
     if cache.exists():
-        payload = json.loads(cache.read_text())
+        payload = json.loads(cache.read_text(encoding="utf-8"))
     else:
         import ee
         from dotenv import load_dotenv

@@ -160,4 +160,4 @@ def to_json(results: list[AnalogResult]) -> str:
 
 
 def load_fake_results(path: Path = FIXTURE_PATH) -> list[AnalogResult]:
-    return [AnalogResult.model_validate(r) for r in json.loads(path.read_text())]
+    return [AnalogResult.model_validate(r) for r in json.loads(path.read_text(encoding="utf-8"))]

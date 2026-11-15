@@ -36,6 +36,6 @@ def write_schemas(directory: Path = CONTRACT_DIR) -> list[Path]:
     paths = []
     for filename, text in render_schemas().items():
         path = directory / filename
-        path.write_text(text)
+        path.write_text(text, encoding="utf-8")
         paths.append(path)
     return paths

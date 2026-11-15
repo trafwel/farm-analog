@@ -75,7 +75,7 @@ def nearest_saved(
     if best is None:
         return None
     km, label, path = best
-    saved = AnalogResult.model_validate_json(path.read_text())
+    saved = AnalogResult.model_validate_json(path.read_text(encoding="utf-8"))
     note = (
         f"Saved live result for the {label} test field ({km:.1f} km from your field's "
         "center), computed with Earth Engine. Your own field's climate may differ slightly."
@@ -96,7 +96,7 @@ def save_all(folder: Path = SAVED_DIR) -> list[Path]:
             result = pipeline.analyze(test_field_request(name, scenario))
             result = result.model_copy(update={"field_id": f"test-{name}"})
             path = path_for(name, scenario, folder)
-            path.write_text(result.model_dump_json(indent=2) + "\n")
+            path.write_text(result.model_dump_json(indent=2) + "\n", encoding="utf-8")
             best = result.analogs[0] if result.analogs else None
             print(f"{label} {scenario}: best sigma {best.sigma if best else None} "
                   f"({best.place_name if best else '-'}) -> {path.name}", flush=True)
@@ -121,8 +121,9 @@ def add_traits_to_saved(folder: Path = SAVED_DIR) -> list[Path]:
             path = path_for(name, scenario, folder)
             if not path.exists():
                 continue
-            result = rotations.add_traits(AnalogResult.model_validate_json(path.read_text()))
-            path.write_text(result.model_dump_json(indent=2) + "\n")
+            saved = AnalogResult.model_validate_json(path.read_text(encoding="utf-8"))
+            result = rotations.add_traits(saved)
+            path.write_text(result.model_dump_json(indent=2) + "\n", encoding="utf-8")
             written.append(path)
     return written
 
@@ -152,12 +153,13 @@ def write_summaries(llm, folder: Path = SAVED_DIR, out: Path | None = None) -> l
             path = path_for(name, scenario, folder)
             if not path.exists():
                 continue
-            summary = summarize(AnalogResult.model_validate_json(path.read_text()), llm)
+            result = AnalogResult.model_validate_json(path.read_text(encoding="utf-8"))
+            summary = summarize(result, llm)
             saved = {"text": summary.text, "source": summary.source, "notices": summary.notices,
                      "model": config.GEMINI_MODEL if summary.source == "gemini" else None,
                      "generated": date.today().isoformat()}
-            summary_path(name, scenario, out).write_text(json.dumps(saved, indent=2,
-                                                                    ensure_ascii=False) + "\n")
+            summary_path(name, scenario, out).write_text(
+                json.dumps(saved, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
             report.append({"file": f"{name}_{scenario}", "source": summary.source,
                            "error": summary.error})
     return report

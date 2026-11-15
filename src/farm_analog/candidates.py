@@ -133,7 +133,7 @@ def load_candidates(path: Path = CACHE_FILE, team_cache: Path = TEAM_CACHE):
 def team_candidates(team_cache: Path = TEAM_CACHE):
     """The team's committed 20 km grid, always (the offline Palouse demo and its regression
     tests use this so they give the same answer on every machine)."""
-    frame = from_team_cache(json.loads(team_cache.read_text()))
+    frame = from_team_cache(json.loads(team_cache.read_text(encoding="utf-8")))
     note = (
         f"{len(frame)} cells on the team's 20 km grid; not yet filtered to farmland "
         "(build data/candidates with Earth Engine for the full ~4 km farmland search)"

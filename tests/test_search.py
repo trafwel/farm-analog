@@ -16,8 +16,8 @@ def test_search_reproduces_the_committed_rankings_from_cache(tmp_path):
     old = pd.read_csv(SAMPLES / "palouse_analog_candidates.csv")
     pd.testing.assert_frame_equal(new, old, check_exact=False, rtol=1e-12)
 
-    new_summary = json.loads((tmp_path / "palouse_analog_summary.json").read_text())
-    old_summary = json.loads((SAMPLES / "palouse_analog_summary.json").read_text())
+    new_summary = json.loads((tmp_path / "palouse_analog_summary.json").read_text(encoding="utf-8"))
+    old_summary = json.loads((SAMPLES / "palouse_analog_summary.json").read_text(encoding="utf-8"))
     for key in old_summary:
         if key != "created_utc":
             assert new_summary[key] == old_summary[key], key

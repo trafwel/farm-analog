@@ -124,7 +124,7 @@ def palouse_demo(top_n: int = config.DEFAULT_TOP_N) -> tuple[AnalogResult, pd.Da
     Limits, stated in the result's notes: the target is the Palouse-wide average rather than
     a drawn field, and only one climate model (ACCESS-CM2) is available offline.
     """
-    payload = json.loads(cand.TEAM_CACHE.read_text())
+    payload = json.loads(cand.TEAM_CACHE.read_text(encoding="utf-8"))
     today = palouse_today_from_cache(payload)
     change = quarterly_change(pd.read_csv(TEAM_MODEL_CSV), "ACCESS-CM2")
     future = farm_future(fingerprint.from_contract(today.normal), [change])

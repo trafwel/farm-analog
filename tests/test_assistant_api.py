@@ -111,7 +111,7 @@ def test_farmer_text_and_coordinates_are_never_logged(client, monkeypatch, caplo
 def test_bill_models_stay_out_of_the_contract():
     # The frontend's types are generated from contract/; Bill's models must not change them.
     for path in CONTRACT_DIR.glob("*.schema.json"):
-        text = path.read_text()
+        text = path.read_text(encoding="utf-8")
         assert "BillSummary" not in text and "ParseResult" not in text
     paths = TestClient(api.app).get("/openapi.json").json()["paths"]
     assert "/bill/parse" in paths and "/bill/summary" in paths

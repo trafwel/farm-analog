@@ -99,7 +99,7 @@ def palouse_proof() -> dict:
     from farm_analog.match import palouse_demo, palouse_today_from_cache
 
     _, table = palouse_demo()
-    today = palouse_today_from_cache(json.loads(cand.TEAM_CACHE.read_text()))
+    today = palouse_today_from_cache(json.loads(cand.TEAM_CACHE.read_text(encoding="utf-8")))
     candidates, note = cand.team_candidates()
     return {
         "data": f"offline Palouse demo; candidates: {note}",

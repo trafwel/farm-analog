@@ -9,7 +9,8 @@ def folder(tmp_path):
     """A saved Colfax result (the offline demo's numbers, relabelled) in a temp folder."""
     result, _ = palouse_demo(top_n=20)
     result = result.model_copy(update={"field_id": "test-colfax", "notes": ["live caveat"]})
-    saved.path_for("colfax", "ssp245", tmp_path).write_text(result.model_dump_json())
+    path = saved.path_for("colfax", "ssp245", tmp_path)
+    path.write_text(result.model_dump_json(), encoding="utf-8")
     return tmp_path
 
 
@@ -49,7 +50,7 @@ def test_write_summaries_uses_the_number_check(tmp_path):
     from farm_analog import saved
 
     src = saved.path_for("colfax", "ssp245")
-    (tmp_path / src.name).write_text(src.read_text())
+    (tmp_path / src.name).write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
 
     class Fake:
         def generate(self, system, prompt):
@@ -59,7 +60,7 @@ def test_write_summaries_uses_the_number_check(tmp_path):
     assert report == [{"file": "colfax_ssp245", "source": "template",
                        "error": "number not in the input: 99"}]
     out = saved.summary_path("colfax", "ssp245", tmp_path / "summaries")
-    written = _json.loads(out.read_text())
+    written = _json.loads(out.read_text(encoding="utf-8"))
     assert written["source"] == "template" and written["model"] is None
     assert "used in 0 of 5 matching areas" in written["text"]
     assert set(written) == {"text", "source", "notices", "model", "generated"}

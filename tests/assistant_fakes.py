@@ -38,7 +38,7 @@ class FakeGenaiClient:
 
 
 def load_result(field_id: str) -> AnalogResult:
-    for raw in json.loads(FIXTURE_PATH.read_text()):
+    for raw in json.loads(FIXTURE_PATH.read_text(encoding="utf-8")):
         if raw["field_id"] == field_id:
             return AnalogResult.model_validate(raw)
     raise KeyError(field_id)

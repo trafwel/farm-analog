@@ -24,7 +24,8 @@ def _frame(n=3, fraction=0.5):
 
 
 def test_team_cache_becomes_candidates():
-    frame = candidates.from_team_cache(json.loads(candidates.TEAM_CACHE.read_text()))
+    payload = json.loads(candidates.TEAM_CACHE.read_text(encoding="utf-8"))
+    frame = candidates.from_team_cache(payload)
     assert len(frame) == 784
     assert list(frame.columns) == candidates.COLUMNS
     assert frame["cultivated_fraction"].isna().all()  # the team's grid has no farmland info
@@ -40,7 +41,7 @@ def test_load_falls_back_to_team_cache_with_an_honest_note(tmp_path):
 def test_save_and_load_round_trip(tmp_path):
     path = tmp_path / "candidates.parquet"
     candidates.save_candidates(_frame(), {"source": "test"}, path)
-    meta = json.loads(path.with_suffix(".json").read_text())
+    meta = json.loads(path.with_suffix(".json").read_text(encoding="utf-8"))
     assert meta["rows"] == 3 and meta["source"] == "test"
     frame, note = candidates.load_candidates(path=path)
     pd.testing.assert_frame_equal(frame, candidates.validate_candidates(_frame()))
