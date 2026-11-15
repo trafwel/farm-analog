@@ -1078,18 +1078,18 @@
       "analogs_checked": 5,
       "why": "Your field's current rotation: 67% of its sampled cropland followed it in 2016–2023.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016–2023: 0% of analog-area cropland; used in 0 of 5 analog areas."
+        "From 2016–2023, the USDA Cropland Data Layer shows this rotation on 0% of the sampled cropland across the matched areas. It appeared in 0 of the 5 areas we checked."
       ],
       "benefits": [
-        "Winter wheat: Main cash crop of the region; heavy residue protects the soil.",
-        "Barley: Shorter season than wheat; feed or malt market.",
-        "Pulses: Fixes nitrogen for the next wheat crop and breaks cereal disease and weed cycles.",
+        "Winter wheat - It's one of the main cash crops in the region, and the residue it leaves behind can protect the soil.",
+        "Barley - It has a shorter growing season than wheat and can be sold for feed or malt.",
+        "Pulses - They fix nitrogen for the next wheat crop and can help break cereal disease and weed cycles.",
         "Includes a nitrogen-fixing crop, which can cut fertilizer needs."
       ],
       "risks": [
-        "Winter wheat: Yield depends on spring rain and suffers from heat during grain fill in early summer.",
-        "Barley: Shares several diseases with wheat.",
-        "Pulses: Low residue leaves soil more exposed to erosion."
+        "Winter wheat - It depends on spring rain, and early summer heat can reduce yields as the grain develops.",
+        "Barley - It shares several diseases with wheat.",
+        "Pulses - They leave little residue, which can expose the soil to erosion."
       ],
       "gaps": [
         "None of the top analog areas use this rotation on 10% or more of their cropland, so the evidence that it suits your 2050s climate is thin.",
@@ -1122,17 +1122,17 @@
       "analogs_checked": 5,
       "why": "Used on 20% of sampled cropland across the top 5 analog areas, whose climate today matches your field's 2050s climate.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016–2023: 20% of analog-area cropland; used in 3 of 5 analog areas.",
+        "From 2016–2023, the USDA Cropland Data Layer shows this rotation on 20% of the sampled cropland across the matched areas. It appeared in 3 of the 5 areas we checked.",
         "Those analog areas match your 2050s climate in up to 8 of 8 climate models."
       ],
       "benefits": [
-        "Winter wheat: Main cash crop of the region; heavy residue protects the soil.",
-        "Pulses: Fixes nitrogen for the next wheat crop and breaks cereal disease and weed cycles.",
+        "Winter wheat - It's one of the main cash crops in the region, and the residue it leaves behind can protect the soil.",
+        "Pulses - They fix nitrogen for the next wheat crop and can help break cereal disease and weed cycles.",
         "Includes a nitrogen-fixing crop, which can cut fertilizer needs."
       ],
       "risks": [
-        "Winter wheat: Yield depends on spring rain and suffers from heat during grain fill in early summer.",
-        "Pulses: Low residue leaves soil more exposed to erosion."
+        "Winter wheat - It depends on spring rain, and early summer heat can reduce yields as the grain develops.",
+        "Pulses - They leave little residue, which can expose the soil to erosion."
       ],
       "gaps": [
         "Pest and disease pressure, yields and prices are not measured here.",
@@ -1165,19 +1165,19 @@
       "analogs_checked": 5,
       "why": "Used on 12% of sampled cropland across the top 5 analog areas, whose climate today matches your field's 2050s climate.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016–2023: 12% of analog-area cropland; used in 3 of 5 analog areas.",
+        "From 2016–2023, the USDA Cropland Data Layer shows this rotation on 12% of the sampled cropland across the matched areas. It appeared in 3 of the 5 areas we checked.",
         "Those analog areas match your 2050s climate in up to 8 of 8 climate models."
       ],
       "benefits": [
-        "Winter wheat: Main cash crop of the region; heavy residue protects the soil.",
-        "Spring wheat: Spring planting breaks winter-annual weed cycles.",
-        "Pulses: Fixes nitrogen for the next wheat crop and breaks cereal disease and weed cycles.",
+        "Winter wheat - It's one of the main cash crops in the region, and the residue it leaves behind can protect the soil.",
+        "Spring wheat - Planting in spring can help break the cycle of weeds that sprout in fall.",
+        "Pulses - They fix nitrogen for the next wheat crop and can help break cereal disease and weed cycles.",
         "Includes a nitrogen-fixing crop, which can cut fertilizer needs."
       ],
       "risks": [
-        "Winter wheat: Yield depends on spring rain and suffers from heat during grain fill in early summer.",
-        "Spring wheat: Shorter season; more exposed to early-summer heat and drought.",
-        "Pulses: Low residue leaves soil more exposed to erosion."
+        "Winter wheat - It depends on spring rain, and early summer heat can reduce yields as the grain develops.",
+        "Spring wheat - It has a shorter growing season and is more exposed to early summer heat and drought.",
+        "Pulses - They leave little residue, which can expose the soil to erosion."
       ],
       "gaps": [
         "Pest and disease pressure, yields and prices are not measured here.",
@@ -1210,19 +1210,19 @@
       "analogs_checked": 5,
       "why": "Used on 11% of sampled cropland across the top 5 analog areas, whose climate today matches your field's 2050s climate.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016–2023: 11% of analog-area cropland; used in 2 of 5 analog areas.",
+        "From 2016–2023, the USDA Cropland Data Layer shows this rotation on 11% of the sampled cropland across the matched areas. It appeared in 2 of the 5 areas we checked.",
         "Those analog areas match your 2050s climate in up to 8 of 8 climate models."
       ],
       "benefits": [
-        "Pulses: Fixes nitrogen for the next wheat crop and breaks cereal disease and weed cycles.",
-        "Spring wheat: Spring planting breaks winter-annual weed cycles.",
-        "Winter wheat: Main cash crop of the region; heavy residue protects the soil.",
+        "Pulses - They fix nitrogen for the next wheat crop and can help break cereal disease and weed cycles.",
+        "Spring wheat - Planting in spring can help break the cycle of weeds that sprout in fall.",
+        "Winter wheat - It's one of the main cash crops in the region, and the residue it leaves behind can protect the soil.",
         "Includes a nitrogen-fixing crop, which can cut fertilizer needs."
       ],
       "risks": [
-        "Pulses: Low residue leaves soil more exposed to erosion.",
-        "Spring wheat: Shorter season; more exposed to early-summer heat and drought.",
-        "Winter wheat: Yield depends on spring rain and suffers from heat during grain fill in early summer."
+        "Pulses - They leave little residue, which can expose the soil to erosion.",
+        "Spring wheat - It has a shorter growing season and is more exposed to early summer heat and drought.",
+        "Winter wheat - It depends on spring rain, and early summer heat can reduce yields as the grain develops."
       ],
       "gaps": [
         "Pest and disease pressure, yields and prices are not measured here.",

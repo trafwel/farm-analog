@@ -17,6 +17,7 @@ export const DEMO_BANNER = 'Demo data — not a real analysis';
 export interface ResultsPanelProps {
   result: AnalogResultView;
   selectedRank: number | null;
+  onShowOnMap?: (rank: number) => void;
   onSelect: (rank: number) => void;
   /** Bill's plain-language summary, when the server provided one. */
   billSummary?: BillSummary | null;
@@ -24,7 +25,7 @@ export interface ResultsPanelProps {
   onGoalsChange?: (g: PriorityId[]) => void;
 }
 
-export function ResultsPanel({ result, selectedRank, onSelect, billSummary, chosenGoals, onGoalsChange }: ResultsPanelProps) {
+export function ResultsPanel({ result, selectedRank, onSelect, onShowOnMap, billSummary, chosenGoals, onGoalsChange }: ResultsPanelProps) {
   const headline = getHeadline(result);
   const analogs = [...result.analogs].sort((a, b) => a.rank - b.rank);
   const notes = result.notes?.filter((n) => n.trim() !== '') ?? [];
@@ -62,7 +63,7 @@ export function ResultsPanel({ result, selectedRank, onSelect, billSummary, chos
       )}
 
       {compared && (
-        <PlaceComparison analog={compared} farmSoil={result.farm_soil} farmHazards={result.farm_hazards} />
+        <PlaceComparison onShowOnMap={onShowOnMap} analog={compared} farmSoil={result.farm_soil} farmHazards={result.farm_hazards} />
       )}
 
       <h3 id="analog-list-heading">Matching places ({analogs.length})</h3>

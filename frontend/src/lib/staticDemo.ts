@@ -106,7 +106,7 @@ export function analyzeStatic(body: AnalogRequest): AnalogResultView {
       'http',
       OUTSIDE_MESSAGE,
       [
-        `Draw your field within ${SAVED_RESULT_RADIUS_KM} km of one of them (green squares on the map), or pick one under “Try a test field”.`,
+        `Draw your field within ${SAVED_RESULT_RADIUS_KM} km of one of them (brown areas on the map), or choose one of the example field buttons.`,
         'The full app analyzes any US field live with Google Earth Engine; see the README to run it.',
       ],
       400,

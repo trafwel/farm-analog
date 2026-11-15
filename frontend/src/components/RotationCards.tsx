@@ -76,14 +76,14 @@ export function RotationCards({
           return (
             <li key={r.name} className={`rotation${r.current ? ' rotation-current' : ''}`}>
               <h4>
-                {r.current && <span className="badge">Your field now</span>}
+                {r.current && <span className="badge">Current Field</span>}
                 {r.name}
                 {best.has(r.name) && <span className="fit">Best fit for your choices</span>}
               </h4>
               <p className="rotation-stats small">
-                {pct(r.analog_share)} of analog-area cropland · used in {r.analogs_using} of {r.analogs_checked} analog
-                areas
-                {r.field_share != null && ` · ${pct(r.field_share)} of your field`}
+                This rotation covered {pct(r.analog_share)} of the sampled cropland and appeared in{' '}
+                {r.analogs_using} of the {r.analogs_checked} matched areas.
+                {r.field_share != null && ` It covered ${pct(r.field_share)} of your field.`}
               </p>
               <p className="small">{r.why}</p>
               {fit && (

@@ -19,6 +19,9 @@ export function Legend({ className = '' }: { className?: string }) {
       </button>
       {open && (
         <ul id="legend-list">
+          <li className="match-gradient-key">
+            <span>50</span><span className="match-gradient" aria-hidden="true" /><span>100</span>
+          </li>
           {MATCH_QUALITY_ORDER.map((q) => {
             const s = MATCH_QUALITY_STYLES[q];
             return (

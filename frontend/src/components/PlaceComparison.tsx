@@ -95,12 +95,13 @@ export function HazardTable({ farm, place, placeLabel }: {
 
 export interface PlaceComparisonProps {
   analog: Analog;
+  onShowOnMap?: (rank: number) => void;
   farmSoil: SoilProfile | null | undefined;
   farmHazards: Hazards | null | undefined;
 }
 
 /** Everything known about one matching place, side by side with the farm. */
-export function PlaceComparison({ analog, farmSoil, farmHazards }: PlaceComparisonProps) {
+export function PlaceComparison({ analog, farmSoil, farmHazards, onShowOnMap }: PlaceComparisonProps) {
   const s = MATCH_QUALITY_STYLES[analog.match_quality];
   const label = analog.place_name ?? `the rank ${analog.rank} place`;
   const hasDetails = analog.climograph || analog.crops?.length || analog.soil || analog.hazards;
@@ -118,6 +119,10 @@ export function PlaceComparison({ analog, farmSoil, farmHazards }: PlaceComparis
           Lat {analog.lat.toFixed(3)}, lon {analog.lon.toFixed(3)}.
         </p>
       </div>
+
+      {onShowOnMap && (
+        <button type="button" onClick={() => onShowOnMap(analog.rank)}>Show on map</button>
+      )}
 
       {!hasDetails && <p className="muted small">{NEEDS_LIVE}</p>}
 
