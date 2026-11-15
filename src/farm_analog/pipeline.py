@@ -86,7 +86,8 @@ def _analyze_offline(request: AnalogRequest) -> AnalogResult:
             "Without Earth Engine, only fields in the Palouse demo area can be analyzed."
         )
     result, _ = palouse_demo(top_n=request.top_n)
-    return result.model_copy(update={"field_id": field_id(request.field)})
+    notes = [*result.notes, "Crop, soil and climate details need Earth Engine (live mode)."]
+    return result.model_copy(update={"field_id": field_id(request.field), "notes": notes})
 
 
 def _analyze_live(request: AnalogRequest) -> AnalogResult:
@@ -113,4 +114,17 @@ def _analyze_live(request: AnalogRequest) -> AnalogResult:
             f"{len(future.failed_models)} climate model(s) had no usable data and were "
             f"skipped: {', '.join(sorted(future.failed_models))}."
         )
-    return to_result(table, today, future, field_id(request.field), request.top_n, notes)
+    result = to_result(table, today, future, field_id(request.field), request.top_n, notes)
+    try:
+        from farm_analog.evidence import add_evidence
+
+        return add_evidence(result, today.monthly, future, list(future.changes))
+    except Exception as exc:  # evidence is helpful but optional; never lose the match itself
+        return result.model_copy(
+            update={
+                "notes": [
+                    *result.notes,
+                    f"Crop, soil and climate details unavailable ({type(exc).__name__}).",
+                ]
+            }
+        )

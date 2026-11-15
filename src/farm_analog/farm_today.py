@@ -28,6 +28,7 @@ class FarmToday:
     yearly: pd.DataFrame  # one fingerprint per year, columns fingerprint.FEATURES
     years: tuple[int, int]
     support: str  # "field_mean" or "centroid_cell" (see fetch_prism_monthly)
+    monthly: pd.DataFrame | None = None  # the year x month table it came from (climograph, M7)
 
     @property
     def yearly_matrix(self) -> np.ndarray:
@@ -76,6 +77,7 @@ def farm_today(monthly: pd.DataFrame, years: tuple[int, int], support: str) -> F
         yearly=yearly,
         years=years,
         support=support,
+        monthly=monthly,
     )
 
 

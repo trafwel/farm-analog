@@ -92,6 +92,7 @@ class FarmFuture:
     scenario: str
     future_years: tuple[int, int]
     failed_models: dict[str, str] = field(default_factory=dict)  # model -> reason
+    changes: tuple[QuarterlyChange, ...] = ()  # each model's change (climograph, M7)
 
     @property
     def models(self) -> list[str]:
@@ -139,6 +140,7 @@ def farm_future(
         scenario=scenario,
         future_years=future_years,
         failed_models=dict(failed_models or {}),
+        changes=tuple(changes),
     )
 
 
