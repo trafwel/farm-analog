@@ -57,6 +57,20 @@ GRID_SCALE_M: Final = 4000
 CDL_YEARS: Final = (2019, 2023)
 MIN_CULTIVATED_FRACTION: Final = 0.3
 
+# Day-length check (M10): candidates farther than this from the farm's latitude are dropped,
+# because day length shapes crop development even where the climate matches. Within the
+# inland Northwest it has no effect; it matters if the search area grows.
+MAX_LATITUDE_DIFF_DEG: Final = 5.0
+
+# Backtest (M10): find analogs for each test cell's climate "now" among every cell's
+# climate "then", and check whether those places grew "then" what the test cell grows "now".
+# CDL covers the inland Northwest from 2008 on, so the periods are short (5 years each).
+BACKTEST_THEN_YEARS: Final = (2008, 2012)
+BACKTEST_NOW_YEARS: Final = (2019, 2023)
+BACKTEST_TEST_CELLS: Final = 200  # test cells sampled from the candidate cache
+BACKTEST_ANALOGS: Final = 5  # top analogs (and random cells) compared per test cell
+BACKTEST_EXCLUDE_KM: Final = 25.0  # skip cells this close, so "analog" isn't just "neighbor"
+
 # Sigma dissimilarity thresholds (Mahony et al., 2017).
 STRONG_SIGMA: Final = 1.0  # like a typical year at the farm
 GOOD_SIGMA: Final = 2.0  # good analog

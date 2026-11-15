@@ -102,8 +102,18 @@ def _analyze_live(request: AnalogRequest) -> AnalogResult:
         request.field, fingerprint.from_contract(today.normal), scenario=request.scenario
     )
     candidates, candidate_note = cand.load_candidates()
-    table = match(today, future, candidates)
+    centroid = Polygon(*_rings(request.field)).centroid
+    nearby = cand.near_latitude(candidates, centroid.y)
+    if nearby.empty:
+        raise FieldNotSupported("No farmland in the search area has a similar day length.")
+    table = match(today, future, nearby)
     notes = [f"Candidates: {candidate_note}."]
+    if len(nearby) < len(candidates):
+        notes.append(
+            f"{len(candidates) - len(nearby)} candidate place(s) more than "
+            f"{config.MAX_LATITUDE_DIFF_DEG:g}° of latitude away were skipped (different day "
+            "length)."
+        )
     if today.support == "centroid_cell":
         notes.append(
             "The field is smaller than one ~4 km climate cell, so its climate is the cell "

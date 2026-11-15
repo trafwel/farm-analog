@@ -86,3 +86,13 @@ def test_live_pipeline_survives_evidence_failure(live, monkeypatch):
     result = pipeline.analyze(REQUEST)
     assert len(result.analogs) == 20 and result.analogs[0].crops is None
     assert any("details unavailable (TimeoutError)" in n for n in result.notes)
+
+
+def test_live_pipeline_skips_places_with_a_different_day_length(live, monkeypatch):
+    candidates, note = cand.load_candidates()
+    far = candidates.head(2).assign(lat=30.0, cell_id=["far-1", "far-2"])
+    monkeypatch.setattr(cand, "load_candidates", lambda: (pd.concat([candidates, far]), note))
+    monkeypatch.setattr(evidence, "fetch_evidence", lambda points: {})
+    result = pipeline.analyze(REQUEST)
+    assert all(a.lat > 40 for a in result.analogs)
+    assert any("2 candidate place(s)" in n for n in result.notes)

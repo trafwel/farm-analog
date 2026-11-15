@@ -63,6 +63,13 @@ def keep_farmland(frame: pd.DataFrame, min_fraction: float = config.MIN_CULTIVAT
     return frame[~known | (frame["cultivated_fraction"] >= min_fraction)].reset_index(drop=True)
 
 
+def near_latitude(
+    frame: pd.DataFrame, lat: float, max_diff: float = config.MAX_LATITUDE_DIFF_DEG
+) -> pd.DataFrame:
+    """Candidates within ``max_diff`` degrees of latitude (similar day length)."""
+    return frame[(frame["lat"] - lat).abs() <= max_diff].reset_index(drop=True)
+
+
 def matrix(frame: pd.DataFrame) -> np.ndarray:
     """Candidates x features, the input sigma dissimilarity expects."""
     return frame[fingerprint.FEATURES].to_numpy(dtype=float)
