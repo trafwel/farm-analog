@@ -33,6 +33,17 @@
         "fingerprint": {
           "$ref": "#/$defs/SeasonalFingerprint"
         },
+        "hazards": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Hazards"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
         "lat": {
           "maximum": 90,
           "minimum": -90,
@@ -155,6 +166,161 @@
       "title": "CropShare",
       "type": "object"
     },
+    "Hazards": {
+      "additionalProperties": false,
+      "description": "Hazard history and field conditions at one place (M13), from PRISM daily (heat, frost;\n1995-2014), NASA GPM IMERG (extreme rain; 2014-2023), NASA SMAP L4 (root-zone soil\nmoisture; 2016-2023) and Landsat 8/9 (NDVI; 2019-2023). Any value may be missing.",
+      "properties": {
+        "bare_months": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bare Months"
+        },
+        "extreme_rain_days": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Extreme Rain Days"
+        },
+        "first_fall_frost_doy": {
+          "anyOf": [
+            {
+              "maximum": 366,
+              "minimum": 1,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "First Fall Frost Doy"
+        },
+        "frost_free_days": {
+          "anyOf": [
+            {
+              "maximum": 366,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Frost Free Days"
+        },
+        "heat_days": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Heat Days"
+        },
+        "last_spring_frost_doy": {
+          "anyOf": [
+            {
+              "maximum": 366,
+              "minimum": 1,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Spring Frost Doy"
+        },
+        "max_1day_rain_mm": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max 1Day Rain Mm"
+        },
+        "missing_sources": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Missing Sources",
+          "type": "array"
+        },
+        "ndvi_monthly": {
+          "anyOf": [
+            {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ndvi Monthly"
+        },
+        "soil_moisture_monthly": {
+          "anyOf": [
+            {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Soil Moisture Monthly"
+        }
+      },
+      "title": "Hazards",
+      "type": "object"
+    },
     "MonthlyClimate": {
       "additionalProperties": false,
       "description": "Twelve monthly values, January first: mean temperature in \u00b0C, precipitation in mm.",
@@ -183,6 +349,110 @@
         "ppt"
       ],
       "title": "MonthlyClimate",
+      "type": "object"
+    },
+    "RotationStrategy": {
+      "additionalProperties": false,
+      "description": "One crop-rotation option (M12): the field's current rotation or one that farmers in the\nanalog areas use. Every text field is written by code from observed data and a fixed\ncrop-traits table, never by an LLM.",
+      "properties": {
+        "analog_share": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Analog Share",
+          "type": "number"
+        },
+        "analogs_checked": {
+          "minimum": 0,
+          "title": "Analogs Checked",
+          "type": "integer"
+        },
+        "analogs_using": {
+          "minimum": 0,
+          "title": "Analogs Using",
+          "type": "integer"
+        },
+        "benefits": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Benefits",
+          "type": "array"
+        },
+        "crops": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Crops",
+          "type": "array"
+        },
+        "current": {
+          "default": false,
+          "title": "Current",
+          "type": "boolean"
+        },
+        "evidence": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "field_share": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Field Share"
+        },
+        "flexible": {
+          "default": false,
+          "title": "Flexible",
+          "type": "boolean"
+        },
+        "gaps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Gaps",
+          "type": "array"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "risks": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Risks",
+          "type": "array"
+        },
+        "why": {
+          "title": "Why",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "crops",
+        "analog_share",
+        "analogs_using",
+        "analogs_checked",
+        "why",
+        "evidence",
+        "benefits",
+        "risks",
+        "gaps"
+      ],
+      "title": "RotationStrategy",
       "type": "object"
     },
     "SeasonalFingerprint": {
@@ -343,6 +613,17 @@
     "farm_future": {
       "$ref": "#/$defs/SeasonalFingerprint"
     },
+    "farm_hazards": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Hazards"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
     "farm_soil": {
       "anyOf": [
         {
@@ -383,9 +664,31 @@
       "title": "Models",
       "type": "array"
     },
+    "notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Notes",
+      "type": "array"
+    },
     "novel_climate": {
       "title": "Novel Climate",
       "type": "boolean"
+    },
+    "rotations": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/RotationStrategy"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rotations"
     },
     "scenario": {
       "enum": [

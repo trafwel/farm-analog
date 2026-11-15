@@ -1,4 +1,13 @@
-"""Download a first NEX-GDDP-CMIP6 climate comparison for the Palouse."""
+"""Download a first NEX-GDDP-CMIP6 climate comparison for the Palouse.
+
+Data flow:
+Inputs:  NEX-GDDP-CMIP6 (ACCESS-CM2, historical + ssp245) over config.PALOUSE_BOUNDS, via
+         Earth Engine (needs EE_PROJECT).
+Outputs: data/samples/palouse_climate_ACCESS-CM2_ssp245_2050.csv (monthly temperature and
+         precipitation, 1995-2014 baseline and 2041-2060 future) and a matching .json with metadata.
+Used by: search.py and match.palouse_demo (the offline model change),
+         future.quarterly_change (parses this CSV's layout), app/app.py (2050 charts).
+"""
 
 import csv
 import json
