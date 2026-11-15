@@ -332,3 +332,45 @@ Live evidence test, organic-carbon unit check, soil source decision, showing evi
 
 ### Moved to OPEN_ISSUES.md
 The live Gemini check, wiring the UI to Bill (and rendering his text as plain text), Bill's models in the contract (deferred), rate limiting, how strict grounding should be, and free-tier data use.
+
+---
+
+## M10 — Proof (2026-11-14)
+
+_M8 (comparison panel) was skipped for now at the user's request: no UI changes in this round._
+
+**Built:** `proof.py` with three checks.
+- **Self-check:** match the farm today against every place today; its own area should come out as a strong match.
+- **Sigma vs. baseline:** Spearman correlation and top-20 overlap between the sigma ranking and the plain standardized distance, plus model agreement on the top analogs.
+- **Backtest:** analogs for each test cell's 2019–2023 climate among every cell's 2008–2012 climate; crop-mix similarity (1 − Bray–Curtis) of those analogs' 2008–2012 crops with the test cell's 2019–2023 crops, against random farmland cells and against "nothing changed". Cells within 25 km are excluded so an analog can't just be a neighbor.
+
+Also: the day-length check (`candidates.near_latitude`, `config.MAX_LATITUDE_DIFF_DEG` = 5°) in the live pipeline, with a note when places are skipped. `python -m farm_analog.proof` writes `data/proof/proof.json` (ignored by git). 8 new tests (155 total, on top of M9).
+
+The "more climate models with an agreement count" and "standardized-Euclidean baseline" parts of M10 were already built in M2 and M4; M10 measures them.
+
+### Results on the team's data (offline Palouse demo)
+- **Self-check passes.** Of 784 cells, the best match for the Palouse today is a Palouse cell (≈0σ). All 28 Palouse cells are good matches (median 0.16σ; 82% strong); elsewhere the median is 3.2σ.
+- **Sigma barely differs from the plain baseline here:** Spearman 0.997, and 17 of the top 20 are the same. With one model and a small regional grid, the PCA whitening changes little. Sigma's advantage (correlated variables, the farm's own variability) is expected to show more on the full farmland grid with 8 models; re-measure live before claiming it.
+- **Model agreement** is trivially 1/1 offline (one model). The live run reports it for 8.
+- **Backtest not run** (needs Earth Engine). Its arithmetic is tested with a synthetic grid where crops follow climate: analogs score 1.0, "nothing changed" scores 0.
+
+### Efficiency
+- The backtest fetches crops only for the cells it needs (test cells, their analogs and random draws), in chunks of 500 points, instead of for every cell.
+- The two candidate fetches (then and now) reuse M3's tiled `fetch_candidates`.
+
+### Integration (what was run and checked)
+- `ruff check .` passes; `pytest`: 155 passed. `python -m farm_analog.proof` runs offline and prints the numbers above.
+- The live pipeline test now also checks that far-latitude places are skipped with a note.
+- **Not run:** the backtest and the live model-agreement numbers (no Earth Engine credentials).
+
+### Security and privacy
+- The proof uses only candidate cells (public places), never a farmer's field.
+
+### Other flaws
+- The backtest periods are short (5 years each, because CDL starts in 2008 here) and only 11 years apart, so climate shifted little; "nothing changed" may beat the analogs. That would be an honest result, not a bug: report all three numbers.
+- The test cells' own year-to-year variation comes from 1995–2014, not from the "then" period (too short for 8 features).
+- Crop mix is measured within half a cell (2 km) of each cell center, not over the whole 4 km cell.
+
+### Moved to OPEN_ISSUES.md
+Run the backtest live; re-measure sigma vs. baseline with 8 models; the comparison panel (M8) is still to do.
+

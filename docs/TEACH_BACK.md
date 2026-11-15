@@ -180,3 +180,23 @@ _Built in the same away batch._
    - Answer:
 4. Why does the summary cache skip results where Gemini failed?
    - Answer:
+
+---
+
+## M10 — Proof
+
+_Built in the same away batch. M8 was skipped for now (no UI changes)._
+
+**Key concepts**
+- **Self-check.** A farm's climate today should match its own area today. If it doesn't, the matching is broken.
+- **A baseline to beat.** Sigma dissimilarity is only worth its complexity if it ranks places differently (and better) than a plain standardized distance.
+- **Backtest: "did the past predict the present?"** Places whose climate *then* matches a cell's climate *now* should have grown *then* what the cell grows *now*, more than random farmland does.
+- **Crop-mix similarity (1 − Bray–Curtis):** the share of crops two places have in common; 1 is identical, 0 is nothing in common.
+- **Exclude neighbors.** Without the 25 km rule, the best "analog" would usually be the cell next door, and the backtest would only show that crops are similar nearby.
+
+**Questions**
+1. Offline, sigma and the plain distance agree almost perfectly (Spearman 0.997). Does that mean sigma is useless? What would you check next?
+   - Answer:
+2. In the backtest, "nothing changed" might score higher than the analogs. Why could that happen, and how would you present it to judges?
+   - Answer:
+
