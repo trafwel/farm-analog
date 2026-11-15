@@ -550,3 +550,12 @@ Pure helpers in `lib/hazards.ts`: day of year to a date, month ranges, hazard co
 ### Moved to OPEN_ISSUES.md
 The farm's own soil, the panel length on phones, and the uncertainty band (still open from M2).
 
+---
+
+## M15 — Submission package (2026-11-15)
+
+**Built:** `docs/SUBMISSION.md`, the text for each field of the Space Apps project form: project name, summary, detailed description, use of SI, NASA data with links, partner data (none) and references. It follows the Judging & Awards Guide's rules: a demo of at most 7 slides or a 30-second video, English throughout, every outside resource referenced, and a description of how SI tools were used. The demo itself is left to the team.
+
+**Checked:** every number in the summary comes from the saved live results, the M11 review or the proof output.
+
+**For the team before submitting (see OPEN_ISSUES):** make the demo, add its link and any deployed link, read SUBMISSION.md once, and submit before 11:59 p.m. local time.
