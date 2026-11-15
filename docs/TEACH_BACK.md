@@ -60,6 +60,8 @@ _Team confirmed understanding in chat on 2026-11-14 and chose to do M2 next._
 
 ## M2 — Farm in 2050
 
+_Team asked to continue to M3 in chat on 2026-11-14._
+
 **Key concepts**
 - **The delta method.** Climate models are biased, so we use only their *change* (future minus reference) and apply it to the farm's real PRISM climate: add it for temperature, multiply by the ratio for precipitation.
 - **Why a ratio for rain.** Adding "−20 mm" to a place that only gets 10 mm would give negative rain; multiplying by 0.8 can't.
@@ -73,5 +75,21 @@ _Team confirmed understanding in chat on 2026-11-14 and chose to do M2 next._
 2. Why is the headline future the median of the models rather than their average?
    - Answer:
 3. ACCESS-CM2 warms Jul–Sep by about 4 °C. Should we drop it as an outlier? What would change in M4 if we did?
+   - Answer:
+
+## M3 — Candidates
+
+_Built while the team was away (asked to do M3–M7 in one go); the teach-back gate is waived for this batch, but please answer before the next milestones._
+
+**Key concepts**
+- **Candidates are the same for every farm**, so they're computed once and cached, not per request.
+- **Farmland only.** A cell counts if at least 30% of it is "cultivated" in the Cropland Data Layer (2019–2023). An analog in a forest or a city would be useless to a farmer.
+- **Tiles keep downloads small.** Earth Engine allows about 5,000 features per direct download, so the search area is fetched in 1° tiles.
+- **Honest fallback.** Without the cache, the app uses the team's 20 km grid and says it isn't farmland-filtered.
+
+**Questions**
+1. Why compute candidates once instead of for each farm?
+   - Answer:
+2. What could go wrong if we didn't filter to farmland?
    - Answer:
 

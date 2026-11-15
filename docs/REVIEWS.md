@@ -146,3 +146,32 @@ Live Earth Engine test for fields, Bill's summarizer field names (M9), two diffe
 
 ### Moved to OPEN_ISSUES.md
 Live model download and model availability (Earth Engine), the ensemble range in the contract (M8), `search.py` still on the regional prototype (M4).
+
+## M3 — Candidates (2026-11-14)
+
+**Context:** built while the team was away (they asked for M3–M7 in one go). Search area set to the recommended default (inland Northwest, ~4 km, farmland only); logged as a team decision to confirm.
+
+**Built:** `candidates.py` (validation, farmland filter, Parquet cache with provenance, offline fallback to the team's 784-cell cache, tiled Earth Engine fetch of PRISM fingerprints plus Cropland Data Layer cultivated share), config for the search area and farmland threshold, 12 new tests (68 total).
+
+### Efficiency
+- Built once and cached; the API never re-queries Earth Engine for candidates.
+- One Earth Engine request per 1° tile (25 tiles for the inland Northwest).
+- The farmland share is computed by averaging 30 m CDL into each PRISM cell on Earth Engine, not downloaded at 30 m.
+
+### Integration (what was run and checked)
+- `ruff check .` passes; `pytest`: 68 passed.
+- The team's committed cache converts cleanly: 784 cells, fingerprint columns in the shared order.
+- Save/load round trip with provenance JSON; fallback note when the cache is missing.
+- **Not run:** the Earth Engine fetch (no credentials here). Logged.
+
+### Security and privacy
+- No farm data is involved: candidates are public climate and land-cover grids.
+- The cache lives in `data/` (ignored by git).
+
+### Other flaws
+- No irrigation filter yet (logged for M7).
+- The fallback grid isn't farmland-filtered; results say so in their notes (M4).
+- 30% cultivated is a judgment call; it's one setting in `config.py`.
+
+### Moved to OPEN_ISSUES.md
+Confirm the search area, build the candidate cache with Earth Engine, add an irrigation filter.

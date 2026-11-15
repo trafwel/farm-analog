@@ -8,6 +8,9 @@ _None._ (M0's fixable items were fixed inside M0; see REVIEWS.md.)
 
 ## Waits for a milestone
 
+- **[M3 → team member with Earth Engine] Build the candidate cache.** Run `python -m farm_analog.candidates` once to create `data/candidates/candidates.parquet` (~4 km farmland cells). Until then the app uses the team's 20 km grid, which isn't filtered to farmland, and says so in the result notes.
+- **[M3 → M7] No irrigation filter yet.** Irrigated farmland can look like a match on climate while its crops depend on irrigation. Add an irrigated-lands mask (for example LANID) to the candidate build.
+
 - **[M0 → first PR] CI workflow never run.** It only runs on a pull request. Check it goes green when the M0 pull request is opened.
 - **[M0 → M5] No region or area checks on the field.** A valid polygon outside the western US, or one covering a whole state, passes the contract. M5 should reject fields outside `SEARCH_BBOX` and above a maximum area.
 - **[M0 → M5] Self-intersecting polygons pass validation.** M5 should check validity (for example with Shapely's `is_valid`) before computing.
@@ -18,13 +21,14 @@ _None._ (M0's fixable items were fixed inside M0; see REVIEWS.md.)
 - **[M0 rebase → M4] `zip(..., strict=False)` in `search.py`.** Added as an explicit default to satisfy lint without changing behavior. `strict=True` would catch a feature-count mismatch; switch when M4 reworks this code.
 - **[M1 → team member with Earth Engine] The live field download is untested.** `fetch_prism_monthly` / `farm_today_for_field` couldn't run here (no Earth Engine credentials on this machine). Run it once on the 5 test fields; check `support` (most fields will report `centroid_cell`, since a field is smaller than a ~4 km PRISM cell) and that the normal fingerprint is close to the regional values in `palouse_analog_summary.json`.
 - **[M1 → M9] Bill's summarizer reads the old fingerprint names** (`tmax_djf`, `tmin_djf`, ...) in `src/farm_analog/assistant/summarizer.py` on `m9-bill`. After M1 merges, M9 must rebase onto it and switch to `tmean_jfm`... / `ppt_jfm`... (temperature becomes one average instead of high and low).
-- **[M1 → M3] Two search areas.** `config.SEARCH_BBOX` is the western US (`-125, 31, -100, 49`); the team's `search.py` uses the inland Northwest (`-121, 44, -116, 49`). M3 decides which and uses `config` for it.
 - **[M1 → M4] `search.py` still targets the Palouse regional mean with one model.** M2 now provides the farm-level future for any field and model (`future.farm_future_for_field`); M4 should match against that instead of the regional prototype.
 - **[M2 → team member with Earth Engine] The model download is untested live,** like M1's PRISM download (no credentials here). Run `farm_future_for_field` on the 5 test fields and check that all 8 models in `config.CLIMATE_MODELS` exist in `NASA/GDDP-CMIP6` with an `ssp245` run; any that don't are reported in `failed_models` instead of stopping the run.
 - **[M2 → M8] The contract carries only the ensemble median future** (`AnalogResult.farm_future`). The low-high range across models (`FarmFuture.low` / `.high`) should reach the frontend for the climograph's uncertainty band; add it to the contract in M8.
 - **[M0 rebase → M7] No tests for the SMAP, ECOSTRESS and climate importers.** Their `validate_request` functions and the CSV/JSON writers can be tested with recorded responses; add tests when M7 wires them into the contract.
 
 ## Team decision
+
+- **[M3] Confirm the search area.** Built with the recommended default while the team was away: the inland Northwest (`-121, 44, -116, 49`) at ~4 km, farmland only (≥30% cultivated in the Cropland Data Layer, 2019–2023). The western US would need an Earth Engine export to Drive.
 
 - **[M0] Definition of `novel_climate`.** The contract uses "best analog's median sigma ≥ 4". The alternative is "best sigma ≥ 4 for most climate models". Median is simpler to explain; confirm.
 - **[M0 rebase] `data.py` now means "SMAP importer".** The plan used `data.py` for shared data loading. Rename it `smap.py`?
@@ -36,6 +40,8 @@ _None._ (M0's fixable items were fixed inside M0; see REVIEWS.md.)
 - **[M0] 3-D GeoJSON positions are rejected.** Leaflet drawing produces 2-D positions only; supporting altitude adds complexity for no benefit.
 
 ## Resolved
+
+- **[M3]** One search area, in `config.SEARCH_BBOX`, used by the candidate builder.
 
 - **[M2]** The future climate is now built at the farm, per model: `future.py` applies each model's quarterly change (temperature added, precipitation multiplied) to the farm's present-day fingerprint. `search.py` uses the same functions; its regression test confirms identical rankings.
 - **[M2]** Earth Engine field averaging (with the fall-back to the cell under the field's center) is written once, in `earthengine.py`, and shared by M1 and M2.

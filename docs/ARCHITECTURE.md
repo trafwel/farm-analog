@@ -19,7 +19,7 @@ flowchart TD
     FPRINT["Shared 8-value fingerprint: fingerprint.py<br/><b>built [M1]</b>"]
     F50["Farm 2050: future.py<br/>delta method per model + median/range<br/><b>built [M2]</b>"]
     EEH["earthengine.py: field averaging helper<br/><b>built [M2]</b>"]
-    CAND["Candidate points (cached Parquet)<br/><i>planned [M3]</i>"]
+    CAND["candidates.py: farmland cells, cached Parquet<br/>(falls back to team 20 km cache)<br/><b>built [M3]</b>"]
     SIGMA["sigma_dissimilarity()<br/><b>built</b>"]
     MATCH["Match + novel-climate flag<br/><i>planned [M4]</i>"]
     EVID["Evidence: crops, soil, climograph<br/><i>planned [M7]</i>"]
@@ -73,6 +73,8 @@ flowchart TD
 Dotted arrows are build-time relationships (shared types and fake data), not runtime data flow.
 
 ## Changelog
+
+- 2026-11-14 (M3): Added `candidates.py`: farmland PRISM cells in the inland Northwest with the shared fingerprint and cultivated share, fetched in tiles from Earth Engine and cached as Parquet; offline fallback to the team's 20 km cache. Search area set in `config.SEARCH_BBOX`.
 
 - 2026-11-14 (M2): Added `future.py` (per-model delta method at the farm, ensemble median and range, Earth Engine fetch of model climatologies) and `earthengine.py` (shared field averaging). `config.CLIMATE_MODELS` lists 8 models. `search.py` uses the shared delta functions (rankings unchanged).
 
