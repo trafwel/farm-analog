@@ -47,7 +47,7 @@ cd frontend && pnpm install && pnpm dev                          # http://localh
 
 Without Earth Engine, a field drawn near one of the 5 test fields gets that field's saved live result (`data/samples/live_*.json`). Other Palouse fields get a regional demo. With `EE_PROJECT` set in `.env`, every field is analyzed live.
 
-**Checks:** `ruff check .`, `pytest` (186 tests), and in `frontend/`: `pnpm typecheck`, `pnpm lint`, `pnpm test` (39 tests). CI runs all of them on every pull request.
+**Checks:** `ruff check .`, `pytest` (199 tests), and in `frontend/`: `pnpm typecheck`, `pnpm lint`, `pnpm test` (60 tests). CI runs all of them on every pull request.
 
 ## How it's built
 

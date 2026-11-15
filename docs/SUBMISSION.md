@@ -28,7 +28,7 @@ Every number comes from data, and a plain-language summary and glossary make it 
 
 ## Link to final project
 
-- Code: https://github.com/trafwel/farm-analog (PRs #2–#15 build it milestone by milestone)
+- Code: https://github.com/trafwel/farm-analog (PRs #2–#20 build it milestone by milestone)
 - Live demo (no install): https://trafwel.github.io/farm-analog/ shows the saved Earth Engine results for the 5 Palouse test fields; other fields need the app running with Earth Engine
 
 ## Link to project demo
@@ -67,7 +67,7 @@ Every number comes from data, and a plain-language summary and glossary make it 
 - Python 3.11: pandas, NumPy, SciPy, scikit-learn, Pydantic, FastAPI, Google Earth Engine API.
 - TypeScript and React 18 with Leaflet and Geoman.
 - Gemini, via google-genai, for the optional plain-language layer.
-- GitHub Actions for CI: 186 backend tests and 42 frontend tests.
+- GitHub Actions for CI: 199 backend tests and 60 frontend tests.
 
 ## Use of Super Intelligence (SI)
 

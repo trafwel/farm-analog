@@ -6,7 +6,7 @@ import { ClimateChart } from './ClimateChart';
 import { SoilMoistureChart } from './SoilMoistureChart';
 
 export const NEEDS_LIVE =
-  'Detailed crop rotations, soil surveys, climate charts, and hazard profiles are evaluated for the top 3 matches. Ranks 4–20 provide seasonal climate fingerprint matching.';
+  'Crops, topsoil, the monthly climate chart and hazards are fetched for the top 3 matches only. Ranks 4–20 are climate matches; select one of the top 3 for the full comparison.';
 
 function SoilTable({ farm, place }: { farm: SoilProfile | null | undefined; place: SoilProfile | null | undefined }) {
   const rows: { label: string; key: keyof SoilProfile }[] = [

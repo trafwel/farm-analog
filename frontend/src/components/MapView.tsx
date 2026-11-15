@@ -17,6 +17,26 @@ export const FIELD_COLOR = FIELD_COLOR_SWATCH;
 
 const FIELD_STYLE: L.PathOptions = { color: FIELD_COLOR, fillColor: FIELD_COLOR, fillOpacity: 0.3, weight: 3 };
 
+/** Stops any drawing in progress and removes Geoman's half-drawn shape and markers. Uses
+ * Geoman internals (no public API for this), so every step is guarded. */
+function cancelDrawing(map: L.Map) {
+  map.pm.disableDraw();
+  const pmDraw = (map.pm as unknown as {
+    Draw?: { Polygon?: { _cleanUpMarkers?: () => void; _layer?: L.Layer | null }; Rectangle?: { _layer?: L.Layer | null } };
+  })?.Draw;
+  if (pmDraw?.Polygon) {
+    if (typeof pmDraw.Polygon._cleanUpMarkers === 'function') pmDraw.Polygon._cleanUpMarkers();
+    if (pmDraw.Polygon._layer) {
+      map.removeLayer(pmDraw.Polygon._layer);
+      pmDraw.Polygon._layer = null;
+    }
+  }
+  if (pmDraw?.Rectangle?._layer) {
+    map.removeLayer(pmDraw.Rectangle._layer);
+    pmDraw.Rectangle._layer = null;
+  }
+}
+
 /** Adds Geoman's polygon-drawing control. Every new drawing replaces the field. */
 function DrawControl({ onDraw, cancelSignal }: { onDraw: (ring: LonLat[]) => void; cancelSignal?: unknown }) {
   const map = useMap();
@@ -28,21 +48,7 @@ function DrawControl({ onDraw, cancelSignal }: { onDraw: (ring: LonLat[]) => voi
   // Cancel drawing and clean up temporary markers when external actions happen (e.g. clear field, pick test field, search)
   useEffect(() => {
     try {
-      map.pm.disableDraw();
-      const pmDraw = (map.pm as unknown as { Draw?: { Polygon?: { _cleanUpMarkers?: () => void; _layer?: L.Layer | null }; Rectangle?: { _layer?: L.Layer | null } } })?.Draw;
-      if (pmDraw?.Polygon) {
-        if (typeof pmDraw.Polygon._cleanUpMarkers === 'function') {
-          pmDraw.Polygon._cleanUpMarkers();
-        }
-        if (pmDraw.Polygon._layer) {
-          map.removeLayer(pmDraw.Polygon._layer);
-          pmDraw.Polygon._layer = null;
-        }
-      }
-      if (pmDraw?.Rectangle?._layer) {
-        map.removeLayer(pmDraw.Rectangle._layer);
-        pmDraw.Rectangle._layer = null;
-      }
+      cancelDrawing(map);
     } catch {
       // ignore
     }
@@ -53,21 +59,7 @@ function DrawControl({ onDraw, cancelSignal }: { onDraw: (ring: LonLat[]) => voi
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         try {
-          map.pm.disableDraw();
-          const pmDraw = (map.pm as unknown as { Draw?: { Polygon?: { _cleanUpMarkers?: () => void; _layer?: L.Layer | null }; Rectangle?: { _layer?: L.Layer | null } } })?.Draw;
-          if (pmDraw?.Polygon) {
-            if (typeof pmDraw.Polygon._cleanUpMarkers === 'function') {
-              pmDraw.Polygon._cleanUpMarkers();
-            }
-            if (pmDraw.Polygon._layer) {
-              map.removeLayer(pmDraw.Polygon._layer);
-              pmDraw.Polygon._layer = null;
-            }
-          }
-          if (pmDraw?.Rectangle?._layer) {
-            map.removeLayer(pmDraw.Rectangle._layer);
-            pmDraw.Rectangle._layer = null;
-          }
+          cancelDrawing(map);
         } catch {
           // ignore
         }

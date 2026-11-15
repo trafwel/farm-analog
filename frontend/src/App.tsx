@@ -88,13 +88,6 @@ export default function App() {
     window.history.replaceState(null, '', newUrl);
   }, [field, scenario, chosenGoals]);
 
-  // Bring back results on reload if a field is present in the URL
-  useEffect(() => {
-    if (initial.field) {
-      findAnalogs(initial.field, initial.scenario);
-    }
-  }, []);
-
   useEffect(() => {
     if (IS_STATIC) return;
     let live = true;
@@ -168,6 +161,15 @@ export default function App() {
       if (abortRef.current === ctrl) setLoading(false);
     }
   };
+
+  // Bring back results on reload if a field is present in the URL. Runs once, on load only.
+  // Deferred, with cleanup, so React's development double-run starts only one analysis.
+  useEffect(() => {
+    if (!initial.field) return;
+    const timer = setTimeout(() => findAnalogs(initial.field, initial.scenario), 0);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleScenarioChange = (newScenario: Scenario) => {
     setCancelDrawKey((k) => k + 1);

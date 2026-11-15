@@ -667,3 +667,24 @@ After harvest the matches run hotter than the fields in most cases (Colfax +3.9 
 ### Security, efficiency, other flaws
 - No new secrets: Earth Engine runs under the existing project. One more server-side request per analysis, run in parallel.
 - Open (in OPEN_ISSUES): surface vs. air, land cover on the day, varying pass times, 2018 start, and the 1 km circle as a sample of the place.
+
+---
+
+## Fix pass — consolidation after M16–M19 and M17 (2026-11-15)
+
+**Why:** after PR #20 merged, `main`'s CI and the online-demo deploy were failing.
+
+**Found and fixed**
+- **`main` didn't build** (`978f9c8`, pushed without CI): a missing `useState` import and a strict-null error in `MapView`, three in a test, and two React lint errors (a hook value modified in place; an effect calling `findAnalogs` before it's declared). The duplicated "cancel drawing" cleanup is now one function; the reload analysis runs after `findAnalogs` exists, deferred with cleanup so React's development double-run starts it once.
+- **Frost-free row didn't add up:** its difference had been switched to the sum of the frost-date shifts, so the table could read "155 days | 191 days | +35 days". The season is averaged per year, so it isn't exactly the gap between averaged dates; the row's difference is again taken from its own values, and the test checks that.
+- **Field area assumed 46°N everywhere** (77 km per degree of longitude), about 20% off in the southern US; it now uses the field's latitude.
+- **The ranks 4–20 note said "soil surveys" and "detailed crop rotations"** for the top 3; it now says what's fetched (crops, topsoil, climate chart, hazards).
+- **A size-limit test expected old wording**; it never ran on `main` because the typecheck stopped CI first.
+
+**Checked**
+- Backend: ruff, 199 tests. Frontend: typecheck, lint, 60 tests, static build.
+- All 10 saved results validate against the contract: 20 named matches, ≥3 rotations with traits, ECOSTRESS for the field and top 3, no missing sources, sorted by sigma; every saved summary passes the number check against the current data and names the best match.
+- Online demo (static build): all 5 fields × 2 scenarios show headline, 3–4 rotation options, 10 hazard rows with no gaps and a summary, with no "NaN"/"undefined"; reload from a shared link restores the result; priorities reach the URL; rank 10 shows the note; a far field is refused; no console errors.
+- Offline API: `/health`, `/analogs` (20 matches, ECOSTRESS, saved-result note), `/bill/summary` (template without a key), a far field and a self-crossing field both refused with 400.
+
+**Consolidated:** OPEN_ISSUES moved 10 items that today's live runs and milestones settled to Resolved, merged the duplicate sigma-vs-baseline item, and added two team decisions (direct pushes to `main`; field and priorities in the page address). README and SUBMISSION test counts and PR range updated.
