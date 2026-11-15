@@ -202,8 +202,10 @@ def fetch_candidates(
     rows = []
     for tile in _tiles(bbox):
         region = ee.Geometry.Rectangle(list(tile), geodesic=False)
+        # Sample on PRISM's own grid (~4.6 km): a fixed 4 km step picked some cells twice,
+        # which listed the same place as two analogs.
         features = image.sample(
-            region=region, projection=native, scale=config.GRID_SCALE_M, geometries=True
+            region=region, projection=native, scale=native.nominalScale(), geometries=True
         ).getInfo()["features"]
         for f in features:
             lon, lat = f["geometry"]["coordinates"]
