@@ -559,3 +559,28 @@ The farm's own soil, the panel length on phones, and the uncertainty band (still
 **Checked:** every number in the summary comes from the saved live results, the M11 review or the proof output.
 
 **For the team before submitting (see OPEN_ISSUES):** make the demo, add its link and any deployed link, read SUBMISSION.md once, and submit before 11:59 p.m. local time.
+
+---
+
+## M16 — SMAP soil moisture on screen (2026-11-15)
+
+**Built:** the 12 monthly SMAP root-zone soil-moisture values that M13 already saves for the field and each top match are now shown. Frontend only; no Earth Engine run and no contract change.
+- **Hazard table row:** "Soil water in the driest month (top 1 m, % by volume)", e.g. Colfax 18.9% (Sep) vs. Whitman County 21.1% (Sep), +2.2 points. Helpers `driestMonth` and `soilWaterPct` in `lib/hazards.ts`.
+- **Chart** (`SoilMoistureChart`): soil water by month, field vs. the selected match, same colors as the climate chart, gaps for missing months instead of bridging them, and a table version.
+- **Source note** under the hazard table and a glossary entry saying it's a ~9 km grid-cell average, not a reading from the field.
+
+### Why these choices
+- **Driest month, not the yearly mean:** late-summer soil water is what limits a spring or double crop in dryland wheat country; a yearly mean hides it.
+- **Percent by volume and "points":** m³/m³ is unreadable to most farmers; a change of 0.022 m³/m³ is "+2.2 points", not "+12%", which would be a relative change.
+
+### Integration (what was run and checked)
+- Frontend: typecheck, lint, build, and 45 tests (3 new: driest month, row formatting, one-sided data; plus the saved Cook result now checks the row and the chart).
+- In the browser (offline API, saved Colfax result): the row and the chart render, no console errors, and no horizontal scrolling at 375 px. Fixed during the check: the top tick label crowded the axis title (more top padding).
+- The online demo uses the same components and the same saved files, so it shows them too once deployed.
+
+### What the numbers say (all 10 saved results, driest month)
+The best match's soil is wetter than or about the same as the field's in 8 of 10 cases (e.g. LaCrosse 16.9% vs. Garfield 21.3%). Warmer matches don't mean drier soil here: soil water isn't part of the match, and SMAP's ~9 km cell blends land cover, soil texture and terrain. The app shows it as context, not as a forecast.
+
+### Security, efficiency, other flaws
+- No new data leaves the browser; no new dependency; the chart is ~100 lines of SVG.
+- **Open:** SMAP is a 9 km model-assisted product (L4 assimilates satellite data into a land model), so a field on a ridge and one in a draw get the same number. Listed in OPEN_ISSUES.

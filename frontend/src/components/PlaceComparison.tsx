@@ -3,6 +3,7 @@ import { MATCH_QUALITY_STYLES } from '../lib/matchQuality';
 import { agreementText } from '../lib/headline';
 import { hazardRows } from '../lib/hazards';
 import { ClimateChart } from './ClimateChart';
+import { SoilMoistureChart } from './SoilMoistureChart';
 
 export const NEEDS_LIVE =
   'Crops, soil, climate charts and hazards for this place appear when the analysis runs with Earth Engine, or near one of the 5 saved test fields.';
@@ -76,7 +77,8 @@ export function HazardTable({ farm, place, placeLabel }: {
         </table>
       </div>
       <p className="muted small">
-        Heat and frost: PRISM daily, 1995–2014. Heavy rain: NASA GPM IMERG, 2014–2023. Green cover:
+        Heat and frost: PRISM daily, 1995–2014. Heavy rain: NASA GPM IMERG, 2014–2023. Soil water: NASA SMAP
+        L4 root zone, 2016–2023. Green cover:
         Landsat NDVI, 2019–2023 (below 0.25 counts as bare). Values are for the ~4–10 km grid cell
         around each point, except green cover, which is within 200 m.
         {missing.length > 0 && ` Not available: ${missing.join(', ')}.`}
@@ -131,6 +133,12 @@ export function PlaceComparison({ analog, farmSoil, farmHazards }: PlaceComparis
       <SoilTable farm={farmSoil} place={analog.soil} />
 
       <HazardTable farm={farmHazards} place={analog.hazards} placeLabel={label} />
+
+      <SoilMoistureChart
+        farm={farmHazards?.soil_moisture_monthly}
+        place={analog.hazards?.soil_moisture_monthly}
+        placeLabel={label}
+      />
     </section>
   );
 }

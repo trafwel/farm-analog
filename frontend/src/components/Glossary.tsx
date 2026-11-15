@@ -25,6 +25,11 @@ export const GLOSSARY: { term: string; meaning: string }[] = [
       'A satellite measure of green plant cover (Landsat). Low values mean bare soil or stubble, which is more exposed to wind and water erosion.',
   },
   {
+    term: 'Root-zone soil moisture (SMAP)',
+    meaning:
+      'How much water the top 1 m of soil holds, as a share of its volume, from NASA’s SMAP satellite combined with a land model. It is an average over a ~9 km grid cell, not a reading from your field; a soil probe or your own records show your field’s soil.',
+  },
+  {
     term: 'Frost-free season',
     meaning: 'Days between the average last spring frost and first fall frost (minimum temperature at or below 0 °C).',
   },

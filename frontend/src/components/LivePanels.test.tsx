@@ -33,6 +33,9 @@ describe('M8 panels on a live result', () => {
     expect(hazards).toHaveTextContent('Hot days above 32 °C');
     expect(hazards).toHaveTextContent('18 days');
     expect(hazards).toHaveTextContent('28 days');
+    expect(hazards).toHaveTextContent('Soil water in the driest month');
+    expect(hazards).toHaveTextContent('16.6% (Sep)');
+    expect(screen.getByRole('img', { name: /Root-zone soil water by month/ })).toBeInTheDocument();
     rerender(<ResultsPanel result={cook} selectedRank={2} onSelect={() => {}} />);
     expect(screen.getByRole('heading', { name: /Compare with rank 2/ })).toBeInTheDocument();
   });
