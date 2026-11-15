@@ -63,6 +63,9 @@ GOOD_SIGMA: Final = 2.0  # good analog
 NOVEL_SIGMA: Final = 4.0  # at or above this, no real match exists ("novel climate")
 
 # API limits.
+# Fields must sit in the contiguous US (where PRISM has data) and be at most this big.
+SUPPORTED_REGION_BBOX: Final = (-125.0, 24.0, -66.5, 49.5)
+MAX_FIELD_AREA_KM2: Final = 50.0
 DEFAULT_TOP_N: Final = 20
 MAX_TOP_N: Final = 100
 MAX_POLYGON_VERTICES: Final = 1000

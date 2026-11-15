@@ -26,6 +26,12 @@ dependencies:
   - plotly
   # data contract
   - pydantic>=2
+  # API (M5)
+  - fastapi
+  - uvicorn
+  - httpx
+  - shapely
+  - pyproj
   # notebooks and utilities
   - jupyterlab
   - ipykernel
