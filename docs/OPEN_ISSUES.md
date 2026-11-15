@@ -8,6 +8,12 @@ Every unresolved item from a milestone review. See rule 3 in [HOW_WE_BUILD.md](H
 
 ## Waits for a milestone
 
+- **[M15 → team, before 11:59 p.m. tonight] Submit.**
+  1. Make the demo: up to 7 slides, or a video of 30 seconds at most.
+  2. Paste each section of `docs/SUBMISSION.md` into the project form, adding the demo link and a deployed link if there is one.
+  3. Check that every team member is registered for the same Local Event.
+  4. Tick both confirmation boxes.
+
 - **[M8] The farm's own soil isn't fetched.** `evidence.add_evidence` never passes `farm_soil`, so the comparison's soil table shows only the matching place. Add the field's center as one more point in `fetch_evidence`, then rerun `python -m farm_analog.saved`.
 - **[M8] The results panel is long on phones.** Rotation cards, comparison, list, summary, fingerprint and glossary stack in one column. Consider collapsing sections or using tabs.
 
