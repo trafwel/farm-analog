@@ -73,7 +73,7 @@ describe('request body builder', () => {
       [-117.0, 47.0],
       [-118.0, 47.0],
     ];
-    expect(() => buildAnalogRequest(huge, 'ssp245')).toThrow(/too large/i);
+    expect(() => buildAnalogRequest(huge, 'ssp245')).toThrow(/exceeds the maximum limit of 50 km²/);
   });
 
   it('example field is near Colfax, WA', () => {

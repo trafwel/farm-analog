@@ -30,16 +30,17 @@ describe('hazard helpers', () => {
     expect(hazardRows(null, null)).toEqual([]);
   });
 
-  it('ensures frost-free days change equals spring shift plus fall shift', () => {
-    // e.g. Colfax: spring 18 days earlier, fall 17 days later -> ffd change must be +35 days
+  it('keeps each row consistent with its own values, frost-free season included', () => {
+    // Colfax-like: the frost dates shift 18 + 17 days, but the season (averaged per year) is
+    // 147 -> 183 days, so its row must say +36, matching the numbers shown beside it.
     const rows = hazardRows(
-      { frost_free_days: 147.2, last_spring_frost_doy: 126.0, first_fall_frost_doy: 279.0 },
-      { frost_free_days: 183.0, last_spring_frost_doy: 108.0, first_fall_frost_doy: 296.0 },
+      { frost_free_days: 147.2, last_spring_frost_doy: 126.0, first_fall_frost_doy: 279.0, missing_sources: [] },
+      { frost_free_days: 183.0, last_spring_frost_doy: 108.0, first_fall_frost_doy: 296.0, missing_sources: [] },
     );
     const byId = Object.fromEntries(rows.map((r) => [r.id, r]));
-    expect(byId.spring.change).toBe('18 days earlier');
-    expect(byId.fall.change).toBe('17 days later');
-    expect(byId.ffd.change).toBe('+35 days');
+    expect(byId.spring!.change).toBe('18 days earlier');
+    expect(byId.fall!.change).toBe('17 days later');
+    expect(byId.ffd).toMatchObject({ farm: '147 days', place: '183 days', change: '+36 days' });
   });
 });
 

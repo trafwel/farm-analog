@@ -87,20 +87,10 @@ export function hazardRows(farm: Hazards | null | undefined, place: Hazards | nu
   add('heat', 'Hot days above 32 °C (90 °F) per year', f.heat_days, p.heat_days, days,
     (a, b) => signed(Math.round(b) - Math.round(a), ' days'));
 
-  const hasSpring = num(f.last_spring_frost_doy) && num(p.last_spring_frost_doy);
-  const hasFall = num(f.first_fall_frost_doy) && num(p.first_fall_frost_doy);
-  const ffdChange = (a: number, b: number) => {
-    // When both spring and fall dates exist, compute frost-free total directly from the two
-    // rounded shifts so they always sum up consistently (e.g. 18 days earlier + 17 days later = +35 days).
-    if (hasSpring && hasFall) {
-      const springShift = Math.round(f.last_spring_frost_doy!) - Math.round(p.last_spring_frost_doy!);
-      const fallShift = Math.round(p.first_fall_frost_doy!) - Math.round(f.first_fall_frost_doy!);
-      return signed(springShift + fallShift, ' days');
-    }
-    return signed(Math.round(b) - Math.round(a), ' days');
-  };
-
-  add('ffd', 'Frost-free season', f.frost_free_days, p.frost_free_days, days, ffdChange);
+  // The frost-free season is averaged year by year, so it isn't exactly the gap between the
+  // averaged frost dates; the difference is taken from this row's own rounded values.
+  add('ffd', 'Frost-free season', f.frost_free_days, p.frost_free_days, days,
+    (a, b) => signed(Math.round(b) - Math.round(a), ' days'));
   add('spring', 'Last spring frost (average)', f.last_spring_frost_doy, p.last_spring_frost_doy, doyToDate,
     (a, b) => { const d = Math.round(b) - Math.round(a); return d === 0 ? 'same' : `${Math.abs(d)} days ${d < 0 ? 'earlier' : 'later'}`; });
   add('fall', 'First fall frost (average)', f.first_fall_frost_doy, p.first_fall_frost_doy, doyToDate,
