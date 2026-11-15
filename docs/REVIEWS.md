@@ -507,3 +507,46 @@ The drier 2050s analogs rotate with more fallow. This is an observed pattern, no
 ### Moved to OPEN_ISSUES.md
 All of the above, plus showing rotations and hazards in the UI (M8).
 
+---
+
+## M8 — Comparison panel, rotation cards and hazard outlook (2026-11-15)
+
+**Built:** the frontend now shows what M7, M12 and M13 compute. Below the headline and caveats, the results panel has:
+- **Rotation options** (`RotationCards`): one card per strategy, with the field's current rotation first and marked "Your field now". Each card gives its share of analog-area cropland and how many analog areas use it. Why, evidence, benefits, risks and gaps open on request. The intro states plainly that these are observed practice, not recommendations.
+- **Compare with this place** (`PlaceComparison`): the selected match, or rank 1 by default, with:
+  - a monthly climate chart (`ClimateChart`): temperature lines and precipitation bars for the field today, the field in the 2050s, and the place today, plus a table version;
+  - its crop shares as bars;
+  - its topsoil;
+  - a hazard outlook table: hot days, frost-free season, last and first frost, heavy-rain days, wettest day and bare months, the field today against the place today, with differences and sources.
+- **In plain words** (`BillSummaryCard`): Bill's summary from `POST /bill/summary`, fetched after each result and shown as plain text, with a label saying whether a template or Gemini wrote it. It's optional: a failure just leaves it out.
+- **Words used here** (`Glossary`): analog, sigma, model agreement, SSP2-4.5 and SSP5-8.5, NDVI, frost-free season, fallow and nitrogen-fixing, plus a closing reminder to check with local experts.
+
+Pure helpers in `lib/hazards.ts`: day of year to a date, month ranges, hazard comparison rows. The charts are hand-written SVG; no new dependencies.
+
+### Integration (what was run and checked)
+- Frontend: typecheck, lint, 39 tests (9 new) and build pass. A new test renders the real saved Cook result (`data/samples/live_cook_ssp245.json`) and checks:
+  - rotation cards with the current rotation first;
+  - the comparison following the selection;
+  - the hazard numbers (18 → 28 hot days);
+  - the fallback text for places without details;
+  - Bill's text staying plain text;
+  - demo data hiding the new sections.
+- Backend unchanged: 186 tests pass.
+- **In the browser** (offline API serving the saved Colfax result for the example field), all sections render with no console errors:
+  - rotation cards: the current rotation, winter wheat → barley → pulses, appears in none of the analog areas;
+  - the chart: Whitman County's climate today follows the field's 2050s line;
+  - the hazard outlook: 23 → 31 hot days, frost-free season +36 days.
+- No horizontal scrolling at phone width (375 px).
+
+### Fixed during the browser check
+- The temperature chart's gridlines stopped below the summer peak (20 vs. 21 °C). Gridlines now always cover the data, with a test.
+- Bill's long summary pushed the rotation cards far down. It now sits below the match list.
+
+### Other flaws
+- The farm's own soil isn't fetched yet (`evidence.add_evidence` passes no `farm_soil`), so the soil table shows only the place.
+- The JavaScript bundle is ~620 kB, mostly Leaflet and Geoman; code-splitting is still open from M6.
+- The panel is long. Collapsible sections or tabs would help on phones.
+
+### Moved to OPEN_ISSUES.md
+The farm's own soil, the panel length on phones, and the uncertainty band (still open from M2).
+
