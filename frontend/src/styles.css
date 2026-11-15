@@ -172,3 +172,18 @@ h5 { font-size: 0.85rem; margin: 0.6rem 0 0.2rem; }
 .fit { font-size: 0.75rem; font-weight: 600; border-radius: 999px; padding: 0.05rem 0.5rem; border: 1px solid #08306b; color: #08306b; background: #e3eefb; }
 .rotation ul.fit-reasons { margin: 0.2rem 0; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+/* Match score ring and statistical details */
+.score-ring { flex: none; display: block; }
+.score-ring-value { font-weight: 700; fill: var(--text); font-variant-numeric: tabular-nums; }
+.comparison-score { display: flex; align-items: center; gap: 0.75rem; margin: 0.3rem 0 0.4rem; }
+.result-details > summary { cursor: pointer; font-weight: 700; color: #0b4392; padding: 0.4rem 0; }
+.result-details .score-bands { margin: 0.3rem 0 0.6rem; padding-left: 1.1rem; }
+.stat-table { margin-top: 0.6rem; }
+
+/* Full-screen results panel: the map is hidden (kept mounted) and the panel fills the page. */
+.panel-toolbar { display: flex; justify-content: flex-end; }
+.panel-full-toggle { font-size: 0.85rem; padding: 0.3rem 0.65rem; }
+.layout.panel-full { grid-template-columns: minmax(0, 1fr); }
+.layout.panel-full .map-column[hidden] { display: none; }
+.layout.panel-full .panel { max-width: 1100px; width: 100%; margin: 0 auto; max-height: none; overflow: visible; }

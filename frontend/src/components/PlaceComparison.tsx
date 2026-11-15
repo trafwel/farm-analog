@@ -1,9 +1,9 @@
 import type { Analog, Hazards, SoilProfile } from '../types/contract';
-import { MATCH_QUALITY_STYLES } from '../lib/matchQuality';
-import { agreementText } from '../lib/headline';
+import { MATCH_QUALITY_STYLES, matchScore } from '../lib/matchQuality';
 import { hazardRows } from '../lib/hazards';
 import { ClimateChart } from './ClimateChart';
 import { SoilMoistureChart } from './SoilMoistureChart';
+import { ScoreRing } from './ScoreRing';
 
 export const NEEDS_LIVE =
   'Crops, topsoil, the monthly climate chart and hazards are fetched for the top 3 matches only. Ranks 4–20 are climate matches; select one of the top 3 for the full comparison.';
@@ -110,10 +110,14 @@ export function PlaceComparison({ analog, farmSoil, farmHazards }: PlaceComparis
         Compare with rank {analog.rank}
         {analog.place_name ? `: ${analog.place_name}` : ''}
       </h3>
-      <p className="small">
-        {s.label} (sigma {analog.sigma.toFixed(2)}) · {agreementText(analog)}. Lat {analog.lat.toFixed(3)}, lon{' '}
-        {analog.lon.toFixed(3)}.
-      </p>
+      <div className="comparison-score">
+        <ScoreRing score={matchScore(analog.sigma)} quality={analog.match_quality} size={64} />
+        <p className="small">
+          <strong>{s.label}</strong> (match score {matchScore(analog.sigma)} out of 100).
+          <br />
+          Lat {analog.lat.toFixed(3)}, lon {analog.lon.toFixed(3)}.
+        </p>
+      </div>
 
       {!hasDetails && <p className="muted small">{NEEDS_LIVE}</p>}
 

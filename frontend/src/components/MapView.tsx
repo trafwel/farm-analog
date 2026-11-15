@@ -4,8 +4,7 @@ import '@geoman-io/leaflet-geoman-free';
 import { CircleMarker, MapContainer, Polygon, Rectangle, TileLayer, Tooltip, useMap } from 'react-leaflet';
 import type { TestField } from '../lib/staticDemo';
 import type { Analog } from '../types/contract';
-import { matchQualityStyle } from '../lib/matchQuality';
-import { agreementText } from '../lib/headline';
+import { matchQualityStyle, matchScore } from '../lib/matchQuality';
 import type { LatLngLike, LonLat } from '../lib/request';
 import { distinctPointCount, latLngsToLonLat } from '../lib/request';
 import { Legend } from './Legend';
@@ -226,6 +225,15 @@ function FitToResult({ analogs, field, resultKey }: { analogs: Analog[]; field: 
   return null;
 }
 
+/** Leaflet measures its container once; re-measure when the map is shown again after being hidden. */
+function ResizeWhenVisible({ hidden }: { hidden: boolean }) {
+  const map = useMap();
+  useEffect(() => {
+    if (!hidden) map.invalidateSize();
+  }, [hidden, map]);
+  return null;
+}
+
 export interface MapViewProps {
   field: LonLat[] | null;
   onFieldDrawn: (ring: LonLat[]) => void;
@@ -236,6 +244,8 @@ export interface MapViewProps {
   /** Static demo: the test fields that have saved results, outlined so people can find them. */
   testFields?: TestField[];
   cancelSignal?: unknown;
+  /** True while the results panel is full screen (the map is hidden but kept mounted). */
+  hidden?: boolean;
 }
 
 const TEST_FIELD_NAMES: Record<string, string> = {
@@ -285,7 +295,7 @@ function TestFieldMarkers({ testFields }: { testFields: TestField[] }) {
   );
 }
 
-export function MapView({ field, onFieldDrawn, analogs, resultKey, selectedRank, onSelect, testFields = [], cancelSignal }: MapViewProps) {
+export function MapView({ field, onFieldDrawn, analogs, resultKey, selectedRank, onSelect, testFields = [], cancelSignal, hidden = false }: MapViewProps) {
   const selected = analogs.find((a) => a.rank === selectedRank);
   // Draw the best matches on top.
   const ordered = [...analogs].sort((a, b) => b.rank - a.rank);
@@ -338,15 +348,14 @@ export function MapView({ field, onFieldDrawn, analogs, resultKey, selectedRank,
                 <strong>Rank {a.rank}</strong>
                 {a.place_name ? ` — ${a.place_name}` : ''}
                 <br />
-                {style.label}, sigma {a.sigma.toFixed(2)}
-                <br />
-                {agreementText(a)}
+                {style.label}, match score {matchScore(a.sigma)}/100
               </Tooltip>
             </CircleMarker>
           );
         })}
         <FlyToSelected analog={selected} />
         <FitToResult analogs={analogs} field={field} resultKey={resultKey} />
+        <ResizeWhenVisible hidden={hidden} />
       </MapContainer>
       <Legend className="map-legend" />
     </div>

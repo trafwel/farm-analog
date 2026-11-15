@@ -63,6 +63,17 @@ export default function App() {
   const [health, setHealth] = useState<Health>(IS_STATIC ? 'static' : 'checking');
   const [billSummary, setBillSummary] = useState<BillSummary | null>(null);
   const [cancelDrawKey, setCancelDrawKey] = useState(0);
+  const [panelFull, setPanelFull] = useState(false);
+
+  // Esc leaves full screen.
+  useEffect(() => {
+    if (!panelFull) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setPanelFull(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [panelFull]);
   const abortRef = useRef<AbortController | null>(null);
 
   // Sync field, scenario, and rotation goals to URL query params so they survive reload and are shareable
@@ -197,9 +208,10 @@ export default function App() {
         </p>
       </header>
 
-      <main className="layout">
-        <div className="map-column">
+      <main className={`layout${panelFull ? ' panel-full' : ''}`}>
+        <div className="map-column" hidden={panelFull}>
           <MapView
+            hidden={panelFull}
             testFields={IS_STATIC ? TEST_FIELDS : []}
             field={field}
             onFieldDrawn={onFieldDrawn}
@@ -226,7 +238,19 @@ export default function App() {
           </p>
         </div>
 
-        <aside className="panel">
+        <aside className="panel" id="side-panel">
+          <div className="panel-toolbar">
+            <button
+              type="button"
+              className="panel-full-toggle"
+              aria-pressed={panelFull}
+              aria-controls="side-panel"
+              onClick={() => setPanelFull((v) => !v)}
+              title={panelFull ? 'Show the map again (Esc)' : 'Hide the map and use the whole page for this panel'}
+            >
+              <span aria-hidden="true">{panelFull ? '⤡' : '⤢'}</span> {panelFull ? 'Exit full screen' : 'Full screen'}
+            </button>
+          </div>
           <section className="controls" aria-labelledby="controls-heading">
             <h2 id="controls-heading">Your field</h2>
             <p className="small" aria-live="polite">

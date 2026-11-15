@@ -24,8 +24,8 @@ def _grounded_reply(data: dict) -> str:
     return (
         f"By the {data['future_decade']}, the farm's Jul-Sep average temperature goes from "
         f"{summer['avg_temp_c']['today']} to about {summer['avg_temp_c']['future']}°C. "
-        f"The closest place today is {a['place_name']}, with a sigma of {a['sigma']}; lower "
-        f"means closer. {a['models_agree']} of {a['models_total']} models agree."
+        f"The closest place today is {a['place_name']}, with a match score of "
+        f"{a['match_score']} out of 100; higher means closer."
     )
 
 
@@ -68,9 +68,9 @@ def test_advice_falls_back_to_template(phrase):
 
 def test_rounding_is_allowed_but_not_new_values():
     data = summary_input(COLFAX)
-    sigma = data["top_analogs"][0]["sigma"]  # e.g. 0.51
-    assert grounding_problems(f"sigma about {round(sigma, 1)}", data) == []
-    assert grounding_problems("sigma about 0.93", data) != []
+    temp = data["quarterly_climate"]["Jul-Sep"]["avg_temp_c"]["today"]  # e.g. 18.4
+    assert grounding_problems(f"about {round(temp)}°C", data) == []
+    assert grounding_problems("about 0.93°C", data) != []
     assert grounding_problems("from 2041-2060 and 1,995 too", data) == []  # ranges, commas
 
 
@@ -176,7 +176,7 @@ def test_summary_input_adds_rotations_and_hazards_from_a_saved_result():
     from farm_analog.schema import AnalogResult as _Result
 
     path = Path(__file__).resolve().parents[1] / "data/samples/live_colfax_ssp245.json"
-    data = summary_input(_Result.model_validate_json(path.read_text()))
+    data = summary_input(_Result.model_validate_json(path.read_text(encoding="utf-8")))
     rot = data["rotations"]
     assert rot["current"]["name"] == "Winter wheat → Barley → Pulses"
     assert rot["current"]["used_in_analog_areas"] == 0
@@ -193,3 +193,12 @@ def test_summary_input_adds_rotations_and_hazards_from_a_saved_result():
         "Whitman County has 31 hot days a year against 23 here, 8 more, and 36 more "
         "frost-free days.",
         data) == []
+
+
+def test_summary_shows_match_score_not_sigma_or_agreement():
+    data = summary_input(COLFAX)
+    assert all("sigma" not in a and "models_agree" not in a for a in data["top_analogs"])
+    text = template_summary(data)
+    assert "match score" in text and "out of 100" in text
+    assert "sigma" not in text.lower() and "models agree" not in text
+    assert "sigma" not in json.dumps(data).lower()

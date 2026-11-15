@@ -1,6 +1,6 @@
 import type { AnalogResultView } from '../types/extensions';
-import { MATCH_QUALITY_STYLES } from '../lib/matchQuality';
-import { agreementText, getHeadline } from '../lib/headline';
+import { MATCH_QUALITY_STYLES, matchScore } from '../lib/matchQuality';
+import { getHeadline } from '../lib/headline';
 import { SCENARIO_LABELS } from '../lib/scenario';
 import type { BillSummary } from '../lib/api';
 import type { PriorityId } from '../lib/priorities';
@@ -9,10 +9,10 @@ import { FingerprintTable } from './FingerprintTable';
 import { Glossary } from './Glossary';
 import { PlaceComparison } from './PlaceComparison';
 import { RotationCards } from './RotationCards';
+import { ScoreRing } from './ScoreRing';
+import { ResultDetails } from './ResultDetails';
 
 export const DEMO_BANNER = 'Demo data — not a real analysis';
-export const SIGMA_EXPLAINER =
-  "Sigma measures how different a place's climate today is from your field's future climate, in units of your field's normal year-to-year swings. Lower sigma means a closer climate match.";
 
 export interface ResultsPanelProps {
   result: AnalogResultView;
@@ -48,8 +48,6 @@ export function ResultsPanel({ result, selectedRank, onSelect, billSummary, chos
         <p className="headline">{headline.text}</p>
       )}
 
-      <p className="muted small">{SIGMA_EXPLAINER}</p>
-
       <dl className="meta">
         <dt>Scenario</dt>
         <dd>{SCENARIO_LABELS[result.scenario]}</dd>
@@ -57,20 +55,7 @@ export function ResultsPanel({ result, selectedRank, onSelect, billSummary, chos
         <dd>
           {result.baseline_years.join('–')} → {result.future_years.join('–')}
         </dd>
-        <dt>Climate models ({result.models.length})</dt>
-        <dd>{result.models.join(', ')}</dd>
       </dl>
-
-      {notes.length > 0 && (
-        <div className="notes">
-          <h3>About this result</h3>
-          <ul>
-            {notes.map((n, i) => (
-              <li key={i}>{n}</li>
-            ))}
-          </ul>
-        </div>
-      )}
 
       {result.rotations && result.rotations.length > 0 && (
         <RotationCards rotations={result.rotations} chosen={chosenGoals} onChosenChange={onGoalsChange} />
@@ -94,15 +79,13 @@ export function ResultsPanel({ result, selectedRank, onSelect, billSummary, chos
                 aria-pressed={selected}
                 onClick={() => onSelect(a.rank)}
               >
-                <span className="swatch dot" style={{ background: s.color }} aria-hidden="true" />
+                <ScoreRing score={matchScore(a.sigma)} quality={a.match_quality} />
                 <span className="analog-text">
                   <strong>
                     Rank {a.rank}
                     {a.place_name ? `: ${a.place_name}` : ''}
                   </strong>
-                  <span>
-                    {s.label} (sigma {a.sigma.toFixed(2)}) · {agreementText(a)}
-                  </span>
+                  <span>{s.label}</span>
                 </span>
               </button>
             </li>
@@ -120,6 +103,8 @@ export function ResultsPanel({ result, selectedRank, onSelect, billSummary, chos
       />
 
       <Glossary />
+
+      <ResultDetails analogs={analogs} models={result.models} notes={notes} rotations={result.rotations} />
     </section>
   );
 }

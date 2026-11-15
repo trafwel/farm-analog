@@ -44,6 +44,37 @@ def match_quality(sigma: float) -> MatchQuality:
     return "none"
 
 
+# Sigma -> 0-100 score anchors, on the quality thresholds above, so score bands (85+, 70-84,
+# 50-69, below 50) always agree with match_quality. Must match frontend/src/lib/matchQuality.ts.
+SCORE_ANCHORS: tuple[tuple[float, float], ...] = (
+    (0.0, 100.0),
+    (config.STRONG_SIGMA, 85.0),
+    (config.GOOD_SIGMA, 70.0),
+    (config.NOVEL_SIGMA, 50.0),
+    (2 * config.NOVEL_SIGMA, 0.0),
+)
+_BAND_MAX = {"strong": 100, "good": 84, "weak": 69, "none": 49}
+
+
+def match_score(sigma: float) -> int:
+    """Plain 0-100 match score for a sigma (higher = closer), shown to farmers instead of sigma.
+
+    Linear between SCORE_ANCHORS, rounded down, and capped at the top of the sigma's quality band
+    so a sigma exactly on a threshold (e.g. 1.0, "good") never shows 85 ("strong").
+    """
+    if not math.isfinite(sigma):
+        return 0
+    if sigma <= 0:
+        return 100
+    raw = 0.0
+    for (s0, v0), (s1, v1) in zip(SCORE_ANCHORS, SCORE_ANCHORS[1:], strict=False):
+        if sigma <= s1:
+            raw = v0 + (sigma - s0) * (v1 - v0) / (s1 - s0)
+            break
+    # The epsilon keeps float noise (e.g. 96.99999 for sigma 0.2) from losing a point.
+    return max(0, min(math.floor(raw + 1e-9), _BAND_MAX[match_quality(sigma)]))
+
+
 class _Model(BaseModel):
     # Reject unknown fields (catches typos on both sides) and make results immutable.
     model_config = ConfigDict(extra="forbid", frozen=True)

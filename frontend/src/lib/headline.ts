@@ -1,6 +1,6 @@
 import type { Analog } from '../types/contract';
 import type { AnalogResultView } from '../types/extensions';
-import { MATCH_QUALITY_STYLES } from './matchQuality';
+import { MATCH_QUALITY_STYLES, matchScore } from './matchQuality';
 
 export const NOVEL_CLIMATE_WARNING =
   "No place today has a close match to this field's future climate. Treat these suggestions with extra caution.";
@@ -26,6 +26,6 @@ export function getHeadline(result: AnalogResultView): Headline {
   return {
     kind: 'best',
     best,
-    text: `Best match: rank ${best.rank}, ${quality}, ${agreementText(best)}.`,
+    text: `Best match: rank ${best.rank}, ${quality} (score ${matchScore(best.sigma)} out of 100).`,
   };
 }

@@ -5,6 +5,11 @@ import { bestFit, NOT_SCORED, PRIORITIES, type PriorityId, priorityFit, sortByPr
 export const ROTATION_INTRO =
   'Crop rotations seen on farmland whose climate today matches your field’s 2050s climate, next to the rotation your field grows now. They show what already works in that climate; they are not recommendations.';
 
+/** Evidence lines about climate-model agreement; shown under Result Details instead. */
+export function isModelAgreementLine(line: string): boolean {
+  return /\bof \d+ climate models\b/i.test(line);
+}
+
 function pct(v: number): string {
   return `${Math.round(v * 100)}%`;
 }
@@ -92,7 +97,7 @@ export function RotationCards({
               )}
               <details>
                 <summary>Evidence, benefits, risks and gaps</summary>
-                <List title="Evidence" items={r.evidence} />
+                <List title="Evidence" items={r.evidence.filter((e) => !isModelAgreementLine(e))} />
                 <List title="Possible benefits" items={r.benefits} />
                 <List title="Risks" items={r.risks} />
                 <List title="What we don't know" items={r.gaps} />

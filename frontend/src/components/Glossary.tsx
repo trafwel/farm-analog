@@ -5,14 +5,9 @@ export const GLOSSARY: { term: string; meaning: string }[] = [
       'A place whose climate today is close to your field’s projected climate around 2050. What farmers there do now has already been tried in that climate.',
   },
   {
-    term: 'Sigma',
+    term: 'Match score',
     meaning:
-      'How different two climates are, measured in your field’s normal year-to-year swings. Below 1 is like an ordinary year at your field; 4 or more means no real match.',
-  },
-  {
-    term: 'Climate models agreeing',
-    meaning:
-      'We run 8 NASA-downscaled climate models (NEX-GDDP-CMIP6). A place counts as agreed by a model when it is a good match (sigma below 2) under that model’s future.',
+      'How close a place’s climate today is to your field’s projected climate, from 0 to 100. 85 and above is a strong match, 70 to 84 good, 50 to 69 weak, and below 50 no real match. The numbers behind it are under Result Details.',
   },
   {
     term: 'SSP2-4.5 and SSP5-8.5',
@@ -33,18 +28,6 @@ export const GLOSSARY: { term: string; meaning: string }[] = [
     term: 'Afternoon ground temperature (ECOSTRESS)',
     meaning:
       'The temperature of the ground or crop surface, measured at 70 m by NASA’s ECOSTRESS instrument on the space station on clear summer afternoons. It is not air temperature: a dry or bare surface can be 10 °C hotter than the air, and a green, well-watered crop stays cooler. That is why June (crops growing) and July–August (mostly stubble and fallow after harvest) are shown separately.',
-  },
-  {
-    term: 'Frost-free season',
-    meaning: 'Days between the average last spring frost and first fall frost (minimum temperature at or below 0 °C).',
-  },
-  {
-    term: 'Fallow',
-    meaning: 'A year with no crop, used in dry areas to store soil water for the next crop.',
-  },
-  {
-    term: 'Nitrogen-fixing crop',
-    meaning: 'Peas, lentils, chickpeas and other legumes, which add nitrogen to the soil for the next crop.',
   },
 ];
 
