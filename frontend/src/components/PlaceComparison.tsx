@@ -18,25 +18,27 @@ function SoilTable({ farm, place }: { farm: SoilProfile | null | undefined; plac
   // The pipeline doesn't fetch the farm's own soil yet; show its column only when it has data.
   const showFarm = rows.some((r) => farm?.[r.key] != null);
   return (
-    <table className="fp-table">
-      <caption>Topsoil (OpenLandMap, 250 m)</caption>
-      <thead>
-        <tr>
-          <th scope="col"> </th>
-          {showFarm && <th scope="col">Your field</th>}
-          <th scope="col">This place</th>
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((r) => (
-          <tr key={r.key}>
-            <th scope="row">{r.label}</th>
-            {showFarm && <td>{fmt(farm?.[r.key])}</td>}
-            <td>{fmt(place?.[r.key])}</td>
+    <div className="table-scroll">
+      <table className="fp-table">
+        <caption>Topsoil (OpenLandMap, 250 m)</caption>
+        <thead>
+          <tr>
+            <th scope="col"> </th>
+            {showFarm && <th scope="col">Your field</th>}
+            <th scope="col">This place</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.key}>
+              <th scope="row">{r.label}</th>
+              {showFarm && <td>{fmt(farm?.[r.key])}</td>}
+              <td>{fmt(place?.[r.key])}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
@@ -50,27 +52,29 @@ export function HazardTable({ farm, place, placeLabel }: {
   const missing = [...new Set([...(farm?.missing_sources ?? []), ...(place?.missing_sources ?? [])])];
   return (
     <>
-      <table className="fp-table">
-        <caption>Hazard outlook: your field today vs. {placeLabel} today</caption>
-        <thead>
-          <tr>
-            <th scope="col"> </th>
-            <th scope="col">Your field today</th>
-            <th scope="col">This place today (a preview of your 2050s)</th>
-            <th scope="col">Difference</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r) => (
-            <tr key={r.id}>
-              <th scope="row">{r.label}</th>
-              <td>{r.farm}</td>
-              <td>{r.place}</td>
-              <td>{r.change}</td>
+      <div className="table-scroll">
+        <table className="fp-table">
+          <caption>Hazard outlook: your field today vs. {placeLabel} today</caption>
+          <thead>
+            <tr>
+              <th scope="col"> </th>
+              <th scope="col">Your field today</th>
+              <th scope="col">This place today (a preview of your 2050s)</th>
+              <th scope="col">Difference</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr key={r.id}>
+                <th scope="row">{r.label}</th>
+                <td>{r.farm === '—' ? <span title="Data not available for this location">—</span> : r.farm}</td>
+                <td>{r.place === '—' ? <span title="Data not available for this location">—</span> : r.place}</td>
+                <td>{r.change === '—' ? <span title="Data not available for this location">—</span> : r.change}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <p className="muted small">
         Heat and frost: PRISM daily, 1995–2014. Heavy rain: NASA GPM IMERG, 2014–2023. Green cover:
         Landsat NDVI, 2019–2023 (below 0.25 counts as bare). Values are for the ~4–10 km grid cell

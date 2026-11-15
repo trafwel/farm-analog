@@ -161,13 +161,24 @@ def attach(
     farm_monthly: pd.DataFrame | None = None,
     future_months: pd.DataFrame | None = None,
     farm_soil: SoilProfile | None = None,
+    extra_place_names: dict[int, str | None] | None = None,
 ) -> AnalogResult:
-    """Return a copy of ``result`` with evidence attached to the analogs it covers (by rank)."""
+    """Return a copy of ``result`` with evidence attached to the analogs it covers (by rank).
+
+    ``extra_place_names`` supplies names for analogs not in ``evidence`` (e.g. ranks 4-20
+    when only the top 3 have full evidence).
+    """
+    names = extra_place_names or {}
     analogs = []
     for analog in result.analogs:
         found = evidence.get(analog.rank)
         if found is None:
-            analogs.append(analog)
+            # Apply an extra place name if available.
+            pn = names.get(analog.rank)
+            if pn is not None and analog.place_name is None:
+                analogs.append(analog.model_copy(update={"place_name": pn}))
+            else:
+                analogs.append(analog)
             continue
         climograph = None
         if found.monthly is not None and farm_monthly is not None and future_months is not None:
@@ -195,6 +206,31 @@ def attach(
 # ---------------------------------------------------------------------------
 # Earth Engine (needs login and network)
 # ---------------------------------------------------------------------------
+
+
+def fetch_place_names(points: list[tuple[int, float, float]]) -> dict[int, str | None]:
+    """County name for each (rank, lon, lat) — cheap TIGER lookup only."""
+    from farm_analog.earthengine import initialize
+
+    ee = initialize()
+    fc = ee.FeatureCollection(
+        [ee.Feature(ee.Geometry.Point([lon, lat]), {"rank": rank}) for rank, lon, lat in points]
+    )
+    counties = ee.FeatureCollection("TIGER/2018/Counties")
+    county_values = {
+        f["properties"]["rank"]: f["properties"]
+        for f in fc.map(
+            lambda f: f.set(
+                ee.Feature(counties.filterBounds(f.geometry()).first()).toDictionary(
+                    ["NAME", "STATEFP"]
+                )
+            )
+        ).getInfo()["features"]
+    }
+    return {
+        rank: place_name(c.get("NAME"), c.get("STATEFP"))
+        for rank, c in county_values.items()
+    }
 
 
 def fetch_evidence(points: list[tuple[int, float, float]]) -> dict[int, AnalogEvidence]:
@@ -298,10 +334,24 @@ def add_evidence(
     changes: list[QuarterlyChange],
     top: int = EVIDENCE_FOR_TOP,
 ) -> AnalogResult:
-    """Fetch and attach evidence for the top analogs (live mode)."""
-    points = [(a.rank, a.lon, a.lat) for a in result.analogs[:top]]
-    if not points:
+    """Fetch and attach evidence for the top analogs (live mode).
+
+    Full evidence (crops, soil, climograph) is fetched for the top ``top`` analogs.
+    Place names (county from TIGER) are fetched for *all* analogs, since the lookup is cheap.
+    """
+    if not result.analogs:
         return result
+    # Full evidence for the top few.
+    points = [(a.rank, a.lon, a.lat) for a in result.analogs[:top]]
     evidence = fetch_evidence(points)
+    # Place names for the rest (ranks not already covered by full evidence).
+    covered_ranks = set(evidence.keys())
+    extra_points = [
+        (a.rank, a.lon, a.lat) for a in result.analogs if a.rank not in covered_ranks
+    ]
+    extra_names = fetch_place_names(extra_points) if extra_points else {}
     farm_months = monthly_normals(farm_monthly_table)
-    return attach(result, evidence, farm_months, future_monthly(farm_months, changes))
+    return attach(
+        result, evidence, farm_months, future_monthly(farm_months, changes),
+        extra_place_names=extra_names,
+    )

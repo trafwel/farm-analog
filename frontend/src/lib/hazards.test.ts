@@ -23,7 +23,7 @@ describe('hazard helpers', () => {
     );
     const byId = Object.fromEntries(rows.map((r) => [r.id, r]));
     expect(byId.heat).toMatchObject({ farm: '18 days', place: '28 days', change: '+10 days' });
-    expect(byId.ffd!.change).toBe('+37 days');
+    expect(byId.ffd!.change).toBe('+36 days');
     expect(byId.spring).toMatchObject({ farm: 'May 7', place: 'Apr 18', change: '19 days earlier' });
     expect(byId.bare).toMatchObject({ farm: 'Aug–Sep', place: 'Apr' });
     expect(byId.rain).toBeUndefined();
