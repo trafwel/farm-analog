@@ -62,4 +62,18 @@ describe('ResultsPanel', () => {
     expect(headline.nextElementSibling).toHaveClass('meta');
     expect(headline.parentElement).not.toHaveTextContent(/70 to 84 good, 50 to 69 weak\./);
   });
+
+  it('allows collapsing and expanding the results section', () => {
+    render(<ResultsPanel result={getDemoResult('fake-colfax')} selectedRank={null} onSelect={() => {}} />);
+    const collapseBtn = screen.getByRole('button', { name: /Results section, click to collapse/i });
+    expect(collapseBtn).toHaveTextContent('Collapse');
+    expect(screen.getByText('Jan–Mar average temperature')).toBeInTheDocument();
+
+    fireEvent.click(collapseBtn);
+    expect(screen.getByRole('button', { name: /Results section, click to expand/i })).toHaveTextContent('Expand');
+    expect(screen.queryByText('Jan–Mar average temperature')).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /Results section, click to expand/i }));
+    expect(screen.getByText('Jan–Mar average temperature')).toBeInTheDocument();
+  });
 });
