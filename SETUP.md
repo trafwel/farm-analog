@@ -87,6 +87,24 @@ ruff check . && pytest
 
 ---
 
+## 7. Run the app
+
+Two terminals, from the repo root.
+
+**API** (Python, port 8000). Without Earth Engine it runs in offline-demo mode (Palouse fields only):
+
+```bash
+uvicorn farm_analog.api:app --reload
+```
+
+**Frontend** (React, port 5173). Needs Node and pnpm (`brew install node pnpm`):
+
+```bash
+cd frontend && pnpm install && pnpm dev
+```
+
+Open http://localhost:5173, click **Use example field**, then **Find analogs**.
+
 ## Project layout
 
 ```

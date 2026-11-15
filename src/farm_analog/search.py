@@ -1,4 +1,14 @@
-"""Reproducible first PNW analog search; regional prototype, not crop advice."""
+"""Reproducible first PNW analog search; regional prototype, not crop advice.
+
+Data flow:
+Inputs:  data/samples/palouse_prism_analog_inputs.json (cached PRISM years; rebuilt from
+         Earth Engine only if missing) and data/samples/palouse_climate_ACCESS-CM2_ssp245_
+         2050.csv (from climate.py).
+Outputs: palouse_analog_candidates.csv (every grid cell ranked by sigma) and
+         palouse_analog_summary.json, in ``output_dir`` (default: the data folder).
+Used by: app/app.py (the Streamlit preview reads both outputs); tests/test_search.py and
+         tests/test_match.py (regression: match.py must reproduce these rankings).
+"""
 
 import json
 import os
@@ -17,6 +27,7 @@ from .config import (
     PRISM_DATASET_TYPE,
 )
 from .fingerprint import FEATURES, QUARTER_LABELS, QUARTERS
+from .future import apply_delta, quarterly_change
 
 # Quarter label -> (first month, last month), from the shared fingerprint definition.
 PERIODS = {QUARTER_LABELS[code]: months for code, months in QUARTERS.items()}
@@ -114,17 +125,8 @@ def run(data_dir="data/samples", output_dir=None):
     annual = pd.DataFrame(payload["annual"])[FEATURES].to_numpy()
     candidates = pd.DataFrame(payload["candidates"])
     observed = annual.mean(axis=0)
-    target = observed.copy()
     model = pd.read_csv(folder / "palouse_climate_ACCESS-CM2_ssp245_2050.csv")
-    for q, (lo, hi) in enumerate(PERIODS.values()):
-        part = model[model.month.between(lo, hi)]
-        baseline = part[part.period == "baseline"]
-        future = part[part.period == "future"]
-        target[2 * q] += future.temperature_c.mean() - baseline.temperature_c.mean()
-        denominator = baseline.precipitation_mm.sum()
-        if denominator <= 0:
-            raise ValueError("Cannot apply rainfall ratio to a zero baseline.")
-        target[2 * q + 1] *= future.precipitation_mm.sum() / denominator
+    target = apply_delta(observed, quarterly_change(model, "ACCESS-CM2"))
     matrix = candidates[FEATURES].to_numpy()
     candidates["sigma"] = sigma_dissimilarity(target, annual, matrix)
     candidates["standardized_euclidean"] = np.linalg.norm(

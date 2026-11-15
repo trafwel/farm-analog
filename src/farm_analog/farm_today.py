@@ -9,6 +9,16 @@ Two halves, kept apart on purpose:
 
 The yearly fingerprints are what sigma dissimilarity needs: they show how much each value,
 and each combination of values, normally swings at this farm.
+
+Data flow:
+Inputs:  the drawn field (schema.PolygonGeometry) from pipeline._analyze_live; PRISM monthly
+         grids from Earth Engine (config.PRISM_COLLECTION, BASELINE_YEARS 1995-2014).
+Outputs: ``FarmToday``: ``normal`` (schema.SeasonalFingerprint, the 20-year average),
+         ``yearly`` (20 x 8 DataFrame, the year-to-year swings that set the sigma scale),
+         ``years``, ``support`` ("field_mean" or "centroid_cell") and ``monthly`` (the raw
+         year x month table, for climographs).
+Used by: future.farm_future_for_field (takes ``normal``), match.match (``yearly``),
+         evidence.add_evidence (``monthly``), proof.self_check, pipeline.py (notes).
 """
 
 from dataclasses import dataclass
@@ -28,6 +38,7 @@ class FarmToday:
     yearly: pd.DataFrame  # one fingerprint per year, columns fingerprint.FEATURES
     years: tuple[int, int]
     support: str  # "field_mean" or "centroid_cell" (see fetch_prism_monthly)
+    monthly: pd.DataFrame | None = None  # the year x month table it came from (climograph, M7)
 
     @property
     def yearly_matrix(self) -> np.ndarray:
@@ -76,6 +87,7 @@ def farm_today(monthly: pd.DataFrame, years: tuple[int, int], support: str) -> F
         yearly=yearly,
         years=years,
         support=support,
+        monthly=monthly,
     )
 
 
@@ -89,13 +101,9 @@ def fetch_prism_monthly(
     field's center instead. Returns (records, support), where support says which was used.
     Needs ``EE_PROJECT`` in ``.env`` and ``earthengine authenticate``.
     """
-    import os
+    from farm_analog.earthengine import field_geometry, initialize, reduce_field
 
-    import ee
-    from dotenv import load_dotenv
-
-    load_dotenv()
-    ee.Initialize(project=os.environ["EE_PROJECT"])
+    ee = initialize()
     first, last = years
     source = (
         ee.ImageCollection(config.PRISM_COLLECTION)
@@ -108,17 +116,11 @@ def fetch_prism_monthly(
     if count != expected:
         raise ValueError(f"expected {expected} PRISM months for {first}-{last}, found {count}")
     native = source.first().select("tmean").projection()
-    area = ee.Geometry.Polygon(field.coordinates, proj="EPSG:4326", geodesic=False)
-    center = area.centroid(maxError=1)
+    area = field_geometry(ee, field)
 
     def summarize(item):
         image = ee.Image(item)
-        kwargs = {"crs": native, "scale": native.nominalScale(), "maxPixels": 1_000_000}
-        mean = image.reduceRegion(ee.Reducer.mean(), area, **kwargs)
-        cell = image.reduceRegion(ee.Reducer.first(), center, **kwargs)
-        inside = ee.Number(ee.Algorithms.IsEqual(mean.get("tmean"), None)).Not()
-        values = ee.Dictionary(ee.Algorithms.If(inside, mean, cell))
-        support = ee.Algorithms.If(inside, "field_mean", "centroid_cell")
+        values, support = reduce_field(ee, image, area, native, "tmean")
         return ee.Feature(None, values).set(
             {"date": image.date().format("YYYY-MM"), "support": support}
         )
