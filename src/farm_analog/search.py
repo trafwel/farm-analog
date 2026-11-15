@@ -1,4 +1,14 @@
-"""Reproducible first PNW analog search; regional prototype, not crop advice."""
+"""Reproducible first PNW analog search; regional prototype, not crop advice.
+
+Data flow:
+Inputs:  data/samples/palouse_prism_analog_inputs.json (cached PRISM years; rebuilt from
+         Earth Engine only if missing) and data/samples/palouse_climate_ACCESS-CM2_ssp245_
+         2050.csv (from climate.py).
+Outputs: palouse_analog_candidates.csv (every grid cell ranked by sigma) and
+         palouse_analog_summary.json, in ``output_dir`` (default: the data folder).
+Used by: app/app.py (the Streamlit preview reads both outputs); tests/test_search.py and
+         tests/test_match.py (regression: match.py must reproduce these rankings).
+"""
 
 import json
 import os

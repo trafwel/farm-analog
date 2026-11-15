@@ -9,6 +9,17 @@ Candidates are the same for every farm, so they're computed once (Earth Engine, 
 and cached as Parquet in ``data/candidates/`` (ignored by git). Until someone with Earth
 Engine access builds that cache, ``load_candidates`` falls back to the team's committed
 20 km search cache, which has the same fingerprint but no farmland filter.
+
+Data flow:
+Inputs:  Earth Engine (PRISM normals + Cropland Data Layer cultivated band) when building the
+         cache with ``python -m farm_analog.candidates``; otherwise
+         data/candidates/candidates.parquet if it exists, else the team's
+         data/samples/palouse_prism_analog_inputs.json (784-cell, 20 km grid).
+Outputs: a DataFrame with COLUMNS (cell_id, lon, lat, the 8 FEATURES,
+         cultivated_fraction) plus a one-line note saying which source was used;
+         data/candidates/candidates.parquet (+ metadata) when the cache is built.
+Used by: match.match (scores every row), pipeline._analyze_live (after near_latitude),
+         match.palouse_demo, proof.py (self-check pool and backtest cells).
 """
 
 import json
@@ -63,6 +74,13 @@ def keep_farmland(frame: pd.DataFrame, min_fraction: float = config.MIN_CULTIVAT
     return frame[~known | (frame["cultivated_fraction"] >= min_fraction)].reset_index(drop=True)
 
 
+def near_latitude(
+    frame: pd.DataFrame, lat: float, max_diff: float = config.MAX_LATITUDE_DIFF_DEG
+) -> pd.DataFrame:
+    """Candidates within ``max_diff`` degrees of latitude (similar day length)."""
+    return frame[(frame["lat"] - lat).abs() <= max_diff].reset_index(drop=True)
+
+
 def matrix(frame: pd.DataFrame) -> np.ndarray:
     """Candidates x features, the input sigma dissimilarity expects."""
     return frame[fingerprint.FEATURES].to_numpy(dtype=float)
@@ -109,6 +127,12 @@ def load_candidates(path: Path = CACHE_FILE, team_cache: Path = TEAM_CACHE):
     if path.exists():
         frame = validate_candidates(pd.read_parquet(path))
         return keep_farmland(frame), f"{len(frame)} farmland cells (~4 km, Cropland Data Layer)"
+    return team_candidates(team_cache)
+
+
+def team_candidates(team_cache: Path = TEAM_CACHE):
+    """The team's committed 20 km grid, always (the offline Palouse demo and its regression
+    tests use this so they give the same answer on every machine)."""
     frame = from_team_cache(json.loads(team_cache.read_text()))
     note = (
         f"{len(frame)} cells on the team's 20 km grid; not yet filtered to farmland "
@@ -149,7 +173,7 @@ def fetch_candidates(
     n_years = last - first + 1
     prism = (
         ee.ImageCollection(config.PRISM_COLLECTION)
-        .filter(ee.Filter.eq("dataset_type", config.PRISM_DATASET_TYPE))
+        .filter(ee.Filter.inList("dataset_type", list(config.PRISM_DATASET_TYPES)))
         .filterDate(f"{first}-01-01", f"{last + 1}-01-01")
     )
     count = prism.size().getInfo()
@@ -172,6 +196,9 @@ def fetch_candidates(
         cdl.select("cultivated")
         .map(lambda img: img.eq(2))
         .mean()
+        # A collection's mean has no projection of its own; give it CDL's 30 m grid back so
+        # reduceResolution knows what it is averaging from.
+        .setDefaultProjection(cdl.first().select("cultivated").projection())
         .reduceResolution(ee.Reducer.mean(), maxPixels=65535)
         .reproject(native)
         .rename("cultivated_fraction")
@@ -181,8 +208,10 @@ def fetch_candidates(
     rows = []
     for tile in _tiles(bbox):
         region = ee.Geometry.Rectangle(list(tile), geodesic=False)
+        # Sample on PRISM's own grid (~4.6 km): a fixed 4 km step picked some cells twice,
+        # which listed the same place as two analogs.
         features = image.sample(
-            region=region, projection=native, scale=config.GRID_SCALE_M, geometries=True
+            region=region, projection=native, scale=native.nominalScale(), geometries=True
         ).getInfo()["features"]
         for f in features:
             lon, lat = f["geometry"]["coordinates"]
@@ -196,7 +225,7 @@ def build_cache(path: Path = CACHE_FILE) -> Path:
     ``python -m farm_analog.candidates``."""
     frame = fetch_candidates()
     metadata = {
-        "prism": f"{config.PRISM_COLLECTION} ({config.PRISM_DATASET_TYPE})",
+        "prism": f"{config.PRISM_COLLECTION} ({'/'.join(config.PRISM_DATASET_TYPES)})",
         "baseline_years": list(config.BASELINE_YEARS),
         "cdl": "USDA/NASS/CDL cultivated band",
         "cdl_years": list(config.CDL_YEARS),

@@ -106,3 +106,11 @@ def test_place_names():
     assert evidence.place_name("Walla Walla", "53") == "Walla Walla County, WA"
     assert evidence.place_name("Umatilla", 41) == "Umatilla County, OR"
     assert evidence.place_name(None, "53") is None
+
+
+def test_cdl_class_names_reads_earth_engine_strings():
+    names = evidence.cdl_class_names("0,1,24", "Background,Corn,Winter Wheat")
+    assert names == {0: "Background", 1: "Corn", 24: "Winter Wheat"}
+    assert evidence.cdl_class_names([0, 1], ["Background", "Corn"])[1] == "Corn"
+    with pytest.raises(ValueError):
+        evidence.cdl_class_names("0,1", "Background")

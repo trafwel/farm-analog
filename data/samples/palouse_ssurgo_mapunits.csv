@@ -1,0 +1,423 @@
+mukey,areasymbol,musym,muname,acres,percent_of_mapped,dominant_component,dominant_component_pct,farmland_class,drainage_class,nonirrigated_capability_class,hydrologic_group,aws_0_100cm_cm,slope_pct,water_table_min_cm,bedrock_min_cm
+68563,WA075,65,"Palouse silt loam, 7 to 25 percent slopes",242589.2,13.784,Palouse,100,Farmland of statewide importance,Well drained,4,B,20,16,,
+68590,WA075,2vz5d,"Athena silt loam, 7 to 25 percent slopes",160204.4,9.103,Athena,80,Farmland of statewide importance,Well drained,4,A,17.14,10.5,,
+68497,WA075,117,"Walla Walla silt loam, 7 to 25 percent slopes",144764.3,8.226,Walla Walla,100,Farmland of statewide importance,Well drained,3,B,19,14,,
+68483,WA075,104,"Thatuna silt loam, 7 to 25 percent slopes",64264.1,3.652,Thatuna,100,Farmland of statewide importance,Moderately well drained,4,C,20,16,99,
+68127,WA001,AMC,"Anders-Kuhl extremely rocky silt loams, 0 to 15 percent slopes",62119.3,3.53,Rock outcrop,40,Farmland of statewide importance,Well drained,8,,8.68,8,,0
+68570,WA075,71,"Palouse-Thatuna silt loams, 7 to 25 percent slopes",57492.7,3.267,Palouse,50,Farmland of statewide importance,Well drained,4,B,20,16,104,
+68546,WA075,5,"Anders-Kuhl complex, 3 to 15 percent slopes",47234.9,2.684,Anders,40,Farmland of statewide importance,Well drained,3,C,10.89,9,,41
+68541,WA075,45,"Kuhl-Alpowa complex, 30 to 65 percent slopes",36568.5,2.078,Kuhl,50,Not prime farmland,Well drained,7,D,8.66,48,,41
+68281,WA001,WLD,"Walla Walla silt loam, 5 to 30 percent slopes",25407.3,1.444,Walla Walla,100,Farmland of statewide importance,Well drained,4,B,19,18,,
+68556,WA075,59,"Naff silt loam, 7 to 25 percent slopes",24506.6,1.393,Naff,100,Farmland of statewide importance,Well drained,4,C,19.23,16,,
+68131,WA001,BGC,"Benge gravelly silt loam, 0 to 15 percent slopes",23118.8,1.314,Benge,100,Farmland of statewide importance,Well drained,3,B,11.36,8,,
+68551,WA075,54,Latah silt loam,19811.4,1.126,Latah,100,Prime farmland if drained,Somewhat poorly drained,4,C/D,18.52,2,46,
+68489,WA075,2vz5f,"Athena silt loam, 25 to 40 percent slopes",17726.5,1.007,Athena,80,Farmland of statewide importance,Well drained,6,A,17.09,24.3,,
+69782,WA623,AoD,"Athena silt loam, 7 to 25 percent slopes",17528.8,0.996,Athena,80,Farmland of statewide importance,Well drained,4,B,20,16,,
+68134,WA001,BRD,"Benge very rocky silt loam, 0 to 30 percent slopes",15330.3,0.871,Benge,55,Farmland of statewide importance,Well drained,4,B,11.69,15,,0
+68499,WA075,119,"Walla Walla silt loam, 25 to 40 percent slopes",15145.6,0.861,Walla Walla,100,Not prime farmland,Well drained,6,B,19,33,,
+68512,WA075,2vz54,"Caldwell silt loam, 0 to 3 percent slopes",14927.2,0.848,Caldwell,85,All areas are prime farmland,Somewhat poorly drained,3,C,19.56,2.2,61,
+68596,WA075,95,"Starbuck-Alpowa complex, 30 to 65 percent slopes",13449.3,0.764,Starbuck,50,Not prime farmland,Well drained,7,D,8.04,48,,38
+68542,WA075,46,"Kuhl-Anders complex, 3 to 15 percent slopes",12241.2,0.696,Kuhl,40,Not prime farmland,Well drained,6,D,9.74,9,,41
+68591,WA075,90,"Snow silt loam, 7 to 15 percent slopes",11974.8,0.68,Snow,100,Farmland of statewide importance,Well drained,3,B,22.46,11,,
+69798,WA623,CdE,"Chard silt loam, 25 to 40 percent slopes",11778.0,0.669,Chard,100,Not prime farmland,Well drained,6,B,15.74,35,,
+69813,WA623,LkF,"Lickskillet-Bakeoven complex, 10 to 50 percent slopes",11597.0,0.659,Lickskillet,50,Not prime farmland,Well drained,6,D,3.62,30,,18
+68511,WA075,18,"Benge complex, 0 to 15 percent slopes",11303.9,0.642,Benge,55,Farmland of statewide importance,Well drained,4,B,10.79,7.4,,
+68601,WA075,126,Water,11283.4,0.641,Water,100,Not prime farmland,,,,,,,
+68565,WA075,67,"Palouse silt loam, 25 to 40 percent slopes",11208.8,0.637,Palouse,100,Not prime farmland,Well drained,6,B,20,33,,
+68559,WA075,61,"Naff-Garfield complex, 3 to 25 percent slopes",11199.7,0.636,Naff,55,Farmland of statewide importance,Well drained,4,C,17.2,15.2,,
+69842,WA623,WwD,"Walla Walla silt loam, 7 to 25 percent slopes",11173.5,0.635,Walla Walla,80,Farmland of statewide importance,Well drained,4,B,19,16,,
+68507,WA075,14,"Bakeoven-Tucannon complex, 0 to 30 percent slopes",10775.7,0.612,Bakeoven,40,Not prime farmland,Well drained,7,D,7.47,15.4,,20
+68133,WA001,BND,"Benge very stony silt loam, 0 to 30 percent slopes",9305.3,0.529,Benge,100,Not prime farmland,Well drained,6,B,11.82,15,,
+68562,WA075,64,"Palouse silt loam, 3 to 7 percent slopes",9279.5,0.527,Palouse,100,All areas are prime farmland,Well drained,2,B,20,5,,
+68496,WA075,116,"Walla Walla silt loam, 3 to 7 percent slopes",9256.6,0.526,Walla Walla,100,All areas are prime farmland,Well drained,2,B,19,5,,
+68126,WA001,ALC,"Anders-Kuhl very rocky silt loams, 0 to 15 percent slopes",9080.8,0.516,Anders,40,Farmland of statewide importance,Well drained,3,C,9.15,8,,0
+2651360,WA075,2vz58,"Athena silt loam, 0 to 8 percent slopes",9021.5,0.513,Athena,85,All areas are prime farmland,Well drained,2,A,16.86,4.4,,
+68522,WA075,28,"Chard silt loam, 15 to 25 percent slopes",8843.8,0.503,Chard,100,Farmland of statewide importance,Well drained,4,B,16.61,20,,
+69673,WA613,KvF,"Kuhl extremely rocky silt loam, 30 to 65 percent slopes",8619.1,0.49,Kuhl,55,Not prime farmland,Well drained,7,D,6.25,48,,0
+2487278,ID057,33,"Naff-Palouse complex, 7 to 25 percent slopes",8406.6,0.478,Naff,50,Farmland of statewide importance,Well drained,4,C,18.46,16,,
+69793,WA623,AtC,"Athena-Spofford silt loams, 0 to 15 percent slopes",8207.8,0.466,Athena,75,Farmland of statewide importance,Well drained,2,B,19.75,6.8,,
+69792,WA623,AsE2,"Athena-Lance silt loams, 10 to 40 percent slopes, eroded",7997.6,0.454,Athena,65,Farmland of statewide importance,Well drained,4,B,18.25,25,,
+68576,WA075,77,"Risbeck silt loam, 15 to 40 percent slopes",7963.1,0.452,Risbeck,100,Farmland of statewide importance,Well drained,4,C,16.4,28,,
+69803,WA623,GrF,"Gwin-Rock outcrop complex, 10 to 50 percent slopes",7908.5,0.449,Gwin,60,Not prime farmland,Well drained,6,D,3.37,30,,0
+69825,WA623,OsC,"Oliphant-Spofford silt loams, 0 to 15 percent slopes",7730.9,0.439,Oliphant,75,Farmland of statewide importance,Well drained,3,B,17.9,8,,
+69812,WA623,LcF,"Lickskillet extremely stony silt loam, 10 to 50 percent slopes",7698.0,0.437,Lickskillet,100,Not prime farmland,Well drained,6,D,5.03,30,,48
+68510,WA075,17,"Benge silt loam, 3 to 8 percent slopes",7551.6,0.429,Benge,100,Farmland of statewide importance,Well drained,3,B,13.92,6,,
+68135,WA001,BTD,"Benge extremely rocky silt loam, 0 to 30 percent slopes",7471.8,0.425,Rock outcrop,50,Farmland of statewide importance,,8,,12.13,15,,0
+68561,WA075,63,Onyx silt loam,7442.5,0.423,Onyx,100,Prime farmland if protected from flooding or not frequently flooded during the growing season,Well drained,3,B,20,3,,
+68537,WA075,41,Hermiston silt loam,7228.1,0.411,Hermiston,100,All areas are prime farmland,Well drained,2,B,19.56,2,,
+68534,WA075,39,"Gwin-Linville complex, 30 to 65 percent slopes",7226.1,0.411,Gwin,60,Not prime farmland,Well drained,7,D,8.72,48,,46
+69786,WA623,ApD,"Athena silt loam, calcareous substratum, 7 to 25 percent slopes",7184.3,0.408,Athena,80,Farmland of statewide importance,Well drained,4,B,20,16,,
+68526,WA075,31,Covello silt loam,7064.8,0.401,Covello,100,Prime farmland if drained and either protected from flooding or not frequently flooded during the growing season,Somewhat poorly drained,3,C,19.54,2,92,
+68516,WA075,22,"Calouse silt loam, 7 to 25 percent slopes",6875.4,0.391,Calouse,100,Farmland of statewide importance,Well drained,4,B,19.24,16,,
+69728,WA613,WwD,"Walla Walla silt loam, 8 to 30 percent slopes",6664.8,0.379,Walla Walla,50,Farmland of statewide importance,Well drained,4,B,19,19,,
+69783,WA623,AoE,"Athena silt loam, 25 to 40 percent slopes",6494.3,0.369,Athena,100,Not prime farmland,Well drained,7,B,20,35,,
+68573,WA075,74,Pedigo silt loam,6450.4,0.367,Pedigo,100,Farmland of statewide importance,Somewhat poorly drained,4,B,20,2,114,
+68514,WA075,20,"Caldwell silt loam, drained",6449.2,0.366,Caldwell,100,Prime farmland if drained,Somewhat poorly drained,3,C,20,2,130,
+69781,WA623,AoB,"Athena silt loam, 0 to 7 percent slopes",6340.6,0.36,Athena,90,All areas are prime farmland,Well drained,2,B,20,4,,
+69797,WA623,CdD,"Chard silt loam, 7 to 25 percent slopes",6179.3,0.351,Chard,80,Farmland of statewide importance,Well drained,4,B,15.74,16,,
+68527,WA075,32,"Covello silt loam, drained",5902.7,0.335,Covello,100,Prime farmland if protected from flooding or not frequently flooded during the growing season,Moderately well drained,3,B,19.54,2,122,
+68530,WA075,35,"Endicott silt loam, 3 to 15 percent slopes",5842.5,0.332,Endicott,100,Farmland of statewide importance,Well drained,3,C,14.97,9,,
+2947431,WA075,2vz5c,"Athena silt loam, moist, 7 to 25 percent slopes",5833.0,0.331,Athena,80,Farmland of statewide importance,Well drained,4,A,17.29,10.2,,
+68528,WA075,33,Emdent silt loam,5766.3,0.328,Emdent,100,Not prime farmland,Somewhat poorly drained,6,B/D,18,2,0,
+68545,WA075,49,"Lance silt loam, 25 to 40 percent slopes",5709.9,0.324,Lance,100,Not prime farmland,Well drained,6,C,15,33,,
+68484,WA075,105,"Thatuna silt loam, 25 to 40 percent slopes",5626.5,0.32,Thatuna,100,Not prime farmland,Moderately well drained,6,C,20,33,99,
+68493,WA075,113,"Tucannon silt loam, 7 to 25 percent slopes",5498.8,0.312,Tucannon,100,Farmland of statewide importance,Well drained,4,C,15.1,16,,76
+68577,WA075,78,"Ritzville silt loam, 3 to 30 percent slopes",5486.4,0.312,Ritzville,100,Farmland of statewide importance,Well drained,4,B,20,17,,
+68502,WA075,121,"Walla Walla silt loam, 40 to 55 percent slopes",5473.0,0.311,Walla Walla,100,Not prime farmland,Well drained,7,B,19,48,,
+69775,WA623,AlD,"Asotin silt loam, 7 to 25 percent slopes",5447.0,0.31,Asotin,80,Farmland of statewide importance,Well drained,4,C,12.41,16,,68
+2487279,ID057,34,"Naff-Thatuna complex, 7 to 25 percent slopes",5354.4,0.304,Naff,40,Farmland of statewide importance,Well drained,4,C,18.59,15.1,92,
+68477,WA075,1,"Almota silt loam, 7 to 25 percent slopes",5334.9,0.303,Almota,100,Farmland of statewide importance,Well drained,4,C,15.8,16,,89
+68571,WA075,72,"Palouse-Thatuna silt loams, 25 to 40 percent slopes",5254.1,0.299,Palouse,50,Not prime farmland,Well drained,6,B,20,33,104,
+68560,WA075,62,Narcisse silt loam,5176.7,0.294,Narcisse,100,All areas are prime farmland,Moderately well drained,4,B,16.23,3,122,
+68555,WA075,58,Mondovi silt loam,5062.3,0.288,Mondovi,100,All areas are prime farmland,Well drained,3,B,20,2,,
+69818,WA623,OlD,"Oliphant silt loam, 5 to 25 percent slopes",4957.3,0.282,Oliphant,80,Farmland of statewide importance,Well drained,4,B,19.66,15,,
+69843,WA623,WwE,"Walla Walla silt loam, 25 to 40 percent slopes",4931.4,0.28,Walla Walla,100,Not prime farmland,Well drained,6,B,19,35,,
+68552,WA075,55,"Linville silt loam, 30 to 65 percent slopes",4891.5,0.278,Linville,100,Not prime farmland,Well drained,7,B,19.53,48,,
+68543,WA075,47,"Kuhl-Asotin complex, 7 to 30 percent slopes",4817.0,0.274,Kuhl,50,Not prime farmland,Well drained,6,D,8.89,18,,41
+68486,WA075,107,"Thatuna-Tilma silt loams, 7 to 25 percent slopes",4712.0,0.268,Thatuna,65,Farmland of statewide importance,Moderately well drained,4,C,19.48,16,51,
+69743,WA623,W,Water,4588.7,0.261,Water,100,Not prime farmland,,,,,,,
+2487273,ID057,28,"Latahco-Thatuna complex, 0 to 5 percent slopes",4584.0,0.26,Latahco,55,Prime farmland if drained,Somewhat poorly drained,4,C/D,19.17,2.4,30,
+69844,WA623,WwF,"Walla Walla silt loam, 40 to 55 percent slopes",4459.6,0.253,Walla Walla,100,Not prime farmland,Well drained,7,B,18,48,,
+68535,WA075,4,"Anders silt loam, 3 to 15 percent slopes",4306.8,0.245,Anders,100,Farmland of statewide importance,Well drained,3,C,14.33,9,,81
+69708,WA613,RuF,"Roloff-Kuhl complex, 30 to 65 percent slopes",4285.1,0.243,Roloff,50,Not prime farmland,Well drained,7,C,9.59,48,,41
+2487269,ID057,24,"Larkin silt loam, 12 to 35 percent slopes",4268.0,0.243,Larkin,85,Not prime farmland,Well drained,4,C,21.25,24,,
+68154,WA001,EFB,"Emdent silt loam, moderately shallow, 0 to 8 percent slopes",4199.2,0.239,Emdent variant,100,Not prime farmland,Somewhat poorly drained,6,C/D,15.2,4,0,76
+69815,WA623,LnF,"Linville silt loam, 40 to 65 percent slopes",4135.2,0.235,Linville,100,Not prime farmland,Well drained,7,B,19.64,50,,
+68155,WA001,EGC,"Emdent very rocky silt loam, 0 to 15 percent slopes",4125.2,0.234,Emdent,60,Not prime farmland,Somewhat poorly drained,6,B/D,17.3,4,0,0
+68152,WA001,ECB,"Emdent silt loam, 0 to 5 percent slopes",4124.6,0.234,Emdent,100,Not prime farmland,Somewhat poorly drained,6,B/D,18,3,0,
+68520,WA075,26,"Chard silt loam, 3 to 7 percent slopes",4104.2,0.233,Chard,100,Farmland of statewide importance,Well drained,2,B,17.15,5,,
+68287,WA001,WMD,"Walla Walla silt loam, moderately shallow, 5 to 30 percent slopes",4092.0,0.233,Walla Walla,100,Farmland of statewide importance,Well drained,4,B,19.54,18,,
+68588,WA075,88,"Schumacher silt loam, 15 to 25 percent slopes",4018.5,0.228,Schumacher,100,Farmland of statewide importance,Well drained,4,C,17.16,20,,109
+68482,WA075,103,"Thatuna silt loam, 3 to 7 percent slopes",3913.6,0.222,Thatuna,100,All areas are prime farmland,Moderately well drained,3,C,20,5,84,
+69802,WA623,GnF,"Gwin extremely stony silt loam, 10 to 50 percent slopes",3875.5,0.22,Gwin,100,Not prime farmland,Well drained,6,D,3.37,30,,36
+68564,WA075,66,"Palouse silt loam, 7 to 25 percent slopes, eroded",3825.5,0.217,Palouse,100,Farmland of statewide importance,Well drained,4,B,20,16,,
+68495,WA075,115,"Uhlig silt loam, 7 to 15 percent slopes",3811.4,0.217,Uhlig,100,Farmland of statewide importance,Well drained,3,B,18.26,11,,
+68156,WA001,EMC,"Emdent extremely rocky silt loam, 0 to 15 percent slopes",3790.5,0.215,Rock outcrop,40,Not prime farmland,Somewhat poorly drained,6,,16.88,5.4,0,0
+68494,WA075,114,"Tucannon-Bakeoven complex, 0 to 30 percent slopes",3648.6,0.207,Tucannon,40,Farmland of statewide importance,Well drained,4,C,9.37,15.6,,20
+68536,WA075,40,"Gwin-Tucannon complex, 3 to 30 percent slopes",3513.4,0.2,Gwin,60,Not prime farmland,Well drained,6,D,6.4,15.8,,46
+68521,WA075,27,"Chard silt loam, 7 to 15 percent slopes",3447.3,0.196,Chard,100,Farmland of statewide importance,Well drained,3,B,16.94,11,,
+68557,WA075,6,"Asotin silt loam, 7 to 25 percent slopes",3310.7,0.188,Asotin,100,Farmland of statewide importance,Well drained,4,C,14.08,16,,76
+2947433,WA075,2vz5g,"Athena silt loam, 40 to 55 percent slopes",3303.8,0.188,Athena,80,Not prime farmland,Well drained,7,A,16.72,35.7,,
+2487301,ID057,56,"Tilma-Naff complex, 7 to 25 percent slopes",3250.1,0.185,Tilma,50,"Farmland of statewide importance, if drained",Moderately well drained,4,C/D,17.79,14.8,46,
+68280,WA001,WLB,"Walla Walla silt loam, 0 to 5 percent slopes",3175.7,0.18,Walla Walla,100,Prime farmland if irrigated,Well drained,2,B,19,3,,
+69628,WA613,W,Water,3175.0,0.18,Water,100,Not prime farmland,,,,,,,
+69822,WA623,OnD,"Oliphant silt loam, moderately shallow, 5 to 25 percent slopes",3172.0,0.18,Oliphant,80,Farmland of statewide importance,Well drained,4,B,20,15,,135
+68524,WA075,3,"Alpowa cobbly silt loam, 30 to 65 percent slopes",3077.5,0.175,Alpowa,100,Not prime farmland,Well drained,7,B,12.6,48,,112
+68593,WA075,92,"Speigle-Rock outcrop complex, 30 to 65 percent slopes",3075.8,0.175,Speigle,70,Not prime farmland,Well drained,7,B,12,48,,0
+68586,WA075,86,"Roloff-Starbuck complex, 0 to 30 percent slopes",3016.2,0.171,Roloff,40,Farmland of statewide importance,Well drained,4,C,10.34,15,,38
+69777,WA623,AmC,"Asotin silt loam, high rainfall, 0 to 15 percent slopes",2864.3,0.163,Asotin,100,Farmland of statewide importance,Well drained,3,C,15.71,8,,91
+68579,WA075,2vz59,"Athena silt loam, moist, 0 to 8 percent slopes",2839.9,0.161,Athena,85,All areas are prime farmland,Well drained,2,A,17.1,4.2,,
+69698,WA613,ReD,"Ritzville silt loam, 8 to 30 percent slopes",2817.0,0.16,Ritzville,50,Farmland of statewide importance,Well drained,4,B,20,19,,
+68548,WA075,51,"Larkin silt loam, 15 to 25 percent slopes",2787.7,0.158,Larkin,100,Farmland of statewide importance,Well drained,4,C,20,20,,
+68186,WA001,ONB,"Onyx silt loam, 0 to 6 percent slopes",2753.4,0.156,Onyx,100,Prime farmland if irrigated,Well drained,3,B,20,3,,
+68519,WA075,25,"Calouse silt loam, 25 to 40 percent slopes, eroded",2726.0,0.155,Calouse,100,Not prime farmland,Well drained,6,B,19.24,33,,
+2487270,ID057,25,"Latah silt loam, 0 to 3 percent slopes",2710.4,0.154,Latah,75,Prime farmland if drained,Somewhat poorly drained,6,D,18.99,2,46,
+69819,WA623,OlE,"Oliphant silt loam, 25 to 40 percent slopes",2706.3,0.154,Oliphant,100,Not prime farmland,Well drained,6,B,19.66,35,,
+69666,WA613,FeD,"Farrell very fine sandy loam, 15 to 30 percent slopes",2705.8,0.154,Farrell,100,Farmland of statewide importance,Well drained,4,B,16.86,23,,
+68498,WA075,118,"Walla Walla silt loam, 15 to 30 percent slopes, eroded",2581.9,0.147,Walla Walla,100,Farmland of statewide importance,Well drained,4,B,19,23,,
+2487290,ID057,45,"Southwick silt loam, 12 to 25 percent slopes",2496.3,0.142,Southwick,85,Not prime farmland,Moderately well drained,4,C,19.58,19,76,
+69784,WA623,AoF,"Athena silt loam, 40 to 55 percent slopes",2444.0,0.139,Athena,100,Not prime farmland,Well drained,7,B,20,48,,
+68153,WA001,EDB,"Emdent silt loam, drained, 0 to 5 percent slopes",2411.3,0.137,Emdent,100,Farmland of statewide importance,Moderately well drained,3,C,18,3,84,
+68129,WA001,BEB,"Benge silt loam, 0 to 5 percent slopes",2352.7,0.134,Benge,100,Prime farmland if irrigated,Well drained,3,B,11.06,3,,
+69805,WA623,Hr,Hermiston silt loam,2311.0,0.131,Hermiston,90,Farmland of statewide importance,Well drained,2,B,19.64,2,,
+69730,WA613,WwE,"Walla Walla silt loam, 30 to 40 percent slopes",2274.0,0.129,Walla Walla,100,Not prime farmland,Well drained,6,B,19,35,,
+69732,WA613,WwF,"Walla Walla silt loam, 40 to 65 percent slopes",2209.2,0.126,Walla Walla,100,Not prime farmland,Well drained,7,B,19,53,,
+68151,WA001,CHD,"Chard silt loam, 5 to 30 percent slopes",2189.5,0.124,Chard,100,Farmland of statewide importance,Well drained,4,B,15.98,18,,
+2487281,ID057,36,"Palouse silt loam, 7 to 25 percent slopes",2126.1,0.121,Palouse,90,Farmland of statewide importance,Well drained,4,B,20,16,,
+68199,WA001,RAD2,"Ritzcal silt loam, 15 to 30 percent slopes, eroded",2121.4,0.121,Ritzcal,100,Farmland of statewide importance,Well drained,4,B,18.4,23,,
+68574,WA075,75,"Pedigo silt loam, hardpan substratum",2106.3,0.12,Pedigo,100,Farmland of statewide importance,Somewhat poorly drained,4,B,20,2,114,
+68558,WA075,60,"Naff silt loam, 25 to 40 percent slopes",2094.0,0.119,Naff,100,Not prime farmland,Well drained,6,C,18.04,33,,
+68125,WA001,AKC,"Anders-Kuhl very stony silt loams, 0 to 15 percent slopes",2035.1,0.116,Anders,45,Farmland of statewide importance,Well drained,3,C,7.97,8,,38
+69705,WA613,RsE,"Roloff silt loam, 30 to 45 percent slopes",2030.9,0.115,Roloff,100,Not prime farmland,Well drained,6,C,13.9,38,,71
+68517,WA075,23,"Calouse silt loam, 5 to 25 percent slopes, eroded",2015.6,0.115,Calouse,100,Farmland of statewide importance,Well drained,4,B,19.24,15,,
+68508,WA075,15,"Beckley sandy loam, 0 to 20 percent slopes",2012.0,0.114,Beckley,100,Farmland of statewide importance,Somewhat excessively drained,4,A,7.5,10,,
+69647,WA613,ChD,"Chard silt loam, 15 to 30 percent slopes",1993.8,0.113,Chard,100,Farmland of statewide importance,Well drained,4,B,17.15,23,,
+69785,WA623,ApB,"Athena silt loam, calcareous substratum, 0 to 7 percent slopes",1986.4,0.113,Athena,100,All areas are prime farmland,Well drained,2,B,20,4,,
+68540,WA075,44,Konert silt loam,1972.8,0.112,Konert,100,Farmland of statewide importance,Somewhat poorly drained,4,C/D,18.02,1,15,
+69814,WA623,LlF,"Lickskillet-Rock outcrop complex, 0 to 50 percent slopes",1963.4,0.112,Lickskillet,60,Not prime farmland,Well drained,6,D,5.03,25,,0
+69823,WA623,OnE,"Oliphant silt loam, moderately shallow, 25 to 40 percent slopes",1899.7,0.108,Oliphant,100,Not prime farmland,Well drained,6,B,20,35,,135
+68599,WA075,98,"Tekoa silt loam, 3 to 25 percent slopes",1859.2,0.106,Tekoa,100,Farmland of statewide importance,Well drained,3,C,11.92,14,,96
+2487299,ID057,54,"Thatuna-Naff complex, 25 to 40 percent slopes",1834.4,0.104,Thatuna,60,Not prime farmland,Moderately well drained,6,C,19.18,33,92,
+68200,WA001,RAE2,"Ritzcal silt loam, 30 to 40 percent slopes, eroded",1822.9,0.104,Ritzcal,100,Not prime farmland,Well drained,6,B,18.4,35,,
+2487302,ID057,57,"Tilma-Thatuna complex, 7 to 25 percent slopes",1819.3,0.103,Tilma,50,"Farmland of statewide importance, if drained",Moderately well drained,4,C/D,18.72,14,46,
+69820,WA623,OlF,"Oliphant silt loam, 40 to 55 percent slopes",1812.4,0.103,Oliphant,100,Not prime farmland,Well drained,7,B,19.66,48,,
+68481,WA075,102,"Tekoa stony silt loam, 25 to 40 percent slopes",1810.5,0.103,Tekoa,100,Not prime farmland,Well drained,6,C,10.17,33,,96
+68491,WA075,111,"Tilma silt loam, 7 to 25 percent slopes",1810.3,0.103,Tilma,100,Farmland of statewide importance,Moderately well drained,4,C/D,18.12,16,51,
+68289,WA001,WMF,"Walla Walla silt loam, moderately shallow, 40 to 65 percent slopes",1795.9,0.102,Walla Walla,100,Farmland of statewide importance,Well drained,7,B,19.54,53,,
+69770,WA623,AaF,"Alpowa very stony silt loam, 25 to 65 percent slopes",1726.3,0.098,Alpowa,100,Not prime farmland,Well drained,6,B,12.18,48,,152
+69816,WA623,Mo,Mondovi silt loam,1643.7,0.093,Mondovi,90,All areas are prime farmland,Well drained,3,B,20,2,,
+68582,WA075,82,Rock outcrop,1638.6,0.093,Rock outcrop,100,Not prime farmland,,8,,,45,,0
+69702,WA613,Ro,Rock outcrop,1601.1,0.091,Rock outcrop,85,Not prime farmland,,8,,,75,,0
+68525,WA075,30,"Cheney very cobbly silt loam, 0 to 20 percent slopes",1597.7,0.091,Cheney,100,Farmland of statewide importance,Well drained,4,B,13.55,10,,
+69646,WA613,ChC,"Chard silt loam, 8 to 15 percent slopes",1594.4,0.091,Chard,100,Farmland of statewide importance,Well drained,3,B,17.15,12,,
+69787,WA623,ApE,"Athena silt loam, calcareous substratum, 25 to 40 percent slopes",1593.0,0.091,Athena,100,Not prime farmland,Well drained,6,B,20,35,,
+69707,WA613,RuD,"Roloff-Kuhl complex, 8 to 30 percent slopes",1577.8,0.09,Roloff,50,Farmland of statewide importance,Well drained,4,C,9.59,19.7,,41
+68283,WA001,WLE,"Walla Walla silt loam, 30 to 40 percent slopes",1560.2,0.089,Walla Walla,100,Not prime farmland,Well drained,6,B,19,35,,
+69794,WA623,AtD,"Athena-Spofford silt loams, 15 to 30 percent slopes",1541.6,0.088,Athena,75,Farmland of statewide importance,Well drained,4,B,19.75,22.3,,
+2487271,ID057,26,"Latahco silt loam, 0 to 3 percent slopes",1524.9,0.087,Latahco,80,Prime farmland if drained,Somewhat poorly drained,4,C/D,18.78,2,30,
+69667,WA613,FeE,"Farrell very fine sandy loam, 30 to 45 percent slopes",1519.4,0.086,Farrell,100,Not prime farmland,Well drained,6,B,16.86,38,,
+68501,WA075,120,"Walla Walla silt loam, 30 to 40 percent slopes, eroded",1496.1,0.085,Walla Walla,100,Not prime farmland,Well drained,6,B,19,35,,
+68578,WA075,79,"Ritzville silt loam, 30 to 40 percent slopes",1493.8,0.085,Ritzville,100,Not prime farmland,Well drained,6,B,20,35,,
+68553,WA075,56,"Magallon loam, 3 to 20 percent slopes",1481.5,0.084,Magallon,100,Farmland of statewide importance,Somewhat excessively drained,3,B,11.72,12,,
+68580,WA075,80,"Ritzville silt loam, 40 to 65 percent slopes",1463.4,0.083,Ritzville,100,Not prime farmland,Well drained,7,B,20,53,,
+68589,WA075,89,"Schumacher silt loam, 25 to 40 percent slopes",1380.4,0.078,Schumacher,100,Not prime farmland,Well drained,6,C,17.06,33,,109
+69776,WA623,AlE,"Asotin silt loam, 25 to 40 percent slopes",1365.3,0.078,Asotin,100,Not prime farmland,Well drained,6,C,12.41,35,,68
+69790,WA623,ArD,"Athena silt loam, moderately shallow, 7 to 25 percent slopes",1363.7,0.077,Athena,80,Farmland of statewide importance,Well drained,4,B,20,16,,127
+68128,WA001,BCD,"Beckley coarse sandy loam, 5 to 30 percent slopes",1345.0,0.076,Beckley,100,Farmland of statewide importance,Somewhat excessively drained,4,A,7.18,18,,
+2487280,ID057,35,"Palouse silt loam, 3 to 7 percent slopes",1326.4,0.075,Palouse,90,All areas are prime farmland,Well drained,2,B,20,5,,
+68518,WA075,24,"Calouse silt loam, 25 to 40 percent slopes",1317.9,0.075,Calouse,100,Not prime farmland,Well drained,6,B,19.24,33,,
+68595,WA075,94,"Staley silt loam, 7 to 25 percent slopes",1313.5,0.075,Staley,100,Farmland of statewide importance,Well drained,4,B,17.28,16,,
+69841,WA623,WwB,"Walla Walla silt loam, 0 to 7 percent slopes",1299.1,0.074,Walla Walla,100,All areas are prime farmland,Well drained,2,B,19,4,,
+79571,ID611,107,"Palouse-Athena complex, 8 to 20 percent slopes",1258.9,0.072,Palouse,60,Not prime farmland,Well drained,4,B,19.58,14,,
+68130,WA001,BED,"Benge silt loam, 5 to 30 percent slopes",1250.8,0.071,Benge,50,Farmland of statewide importance,Well drained,4,B,11.06,18,,
+69665,WA613,FeC,"Farrell very fine sandy loam, 8 to 15 percent slopes",1245.1,0.071,Farrell,100,Farmland of statewide importance,Well drained,3,B,16.86,12,,
+806568,WA001,W,Water,1241.7,0.071,Water,100,Not prime farmland,,,,,,,
+2487310,ID057,65,"Westlake-Latahco complex, 0 to 3 percent slopes",1222.2,0.069,Westlake,55,Prime farmland if drained,Somewhat poorly drained,6,C/D,19.47,2,30,
+68285,WA001,WLF,"Walla Walla silt loam, 40 to 65 percent slopes",1220.4,0.069,Walla Walla,100,Not prime farmland,Well drained,7,B,19,53,,
+79601,ID611,134,"Thatuna-Naff, eroded complex, 10 to 25 percent slopes",1204.0,0.068,Thatuna,50,Not prime farmland,Moderately well drained,4,C,19.09,17.8,76,
+68523,WA075,29,"Cheney silt loam, 0 to 7 percent slopes",1199.4,0.068,Cheney,100,All areas are prime farmland,Well drained,2,B,17.15,4,,
+69826,WA623,OsD,"Oliphant-Spofford silt loams, 15 to 25 percent slopes",1196.8,0.068,Oliphant,75,Farmland of statewide importance,Well drained,4,B,17.65,20,,
+69727,WA613,WwB,"Walla Walla silt loam, 0 to 8 percent slopes",1192.1,0.068,Walla Walla,100,Farmland of statewide importance,Well drained,2,B,19,4,,
+68581,WA075,81,Riverwash,1152.6,0.065,Riverwash,100,Not prime farmland,,8,,,4,31,
+68179,WA001,HEA,"Hermiston silt loam, 0 to 2 percent slopes",1142.1,0.065,Hermiston,100,Prime farmland if irrigated,Well drained,3,B,19.2,1,,
+68554,WA075,57,"Magallon sandy loam, 20 to 40 percent slopes",1112.9,0.063,Magallon,100,Not prime farmland,Somewhat excessively drained,6,A,10.97,30,,
+68478,WA075,10,"Athena silt loam, 7 to 25 percent slopes, eroded",1074.8,0.061,Athena,85,Farmland of statewide importance,Well drained,4,A,18.39,15.5,,
+68567,WA075,69,"Palouse silt loam, 40 to 55 percent slopes",1066.9,0.061,Palouse,100,Not prime farmland,Well drained,7,B,20,48,,
+68509,WA075,16,"Beckley sandy loam, 20 to 40 percent slopes",1017.0,0.058,Beckley,100,Not prime farmland,Somewhat excessively drained,6,A,7.26,30,,
+68597,WA075,96,"Stratford loam, 0 to 15 percent slopes",1000.8,0.057,Stratford,100,Farmland of statewide importance,Well drained,3,B,10.3,8,,
+68566,WA075,68,"Palouse silt loam, 25 to 40 percent slopes, eroded",999.9,0.057,Palouse,100,Not prime farmland,Well drained,6,B,20,33,,
+68550,WA075,53,"Larkin silt loam, 40 to 55 percent slopes",986.2,0.056,Larkin,100,Not prime farmland,Well drained,7,C,20,48,,
+68503,WA075,122,"Walvan ashy silt loam, 7 to 25 percent slopes",957.6,0.054,Walvan,100,Farmland of statewide importance,Well drained,4,A,21.94,15,,
+69769,WA623,AaD,"Alpowa very stony silt loam, 10 to 25 percent slopes",946.6,0.054,Alpowa,100,Farmland of statewide importance,Well drained,6,B,12.18,18,,152
+68568,WA075,7,"Asotin silt loam, 25 to 65 percent slopes",946.5,0.054,Asotin,100,Not prime farmland,Well drained,7,C,14.08,45,,76
+68572,WA075,73,"Palouse-Thatuna silt loams, 40 to 55 percent slopes",919.0,0.052,Palouse,50,Not prime farmland,Well drained,7,B,20,48,104,
+68531,WA075,36,"Farrell very fine sandy loam, 0 to 7 percent slopes",902.5,0.051,Farrell,100,Farmland of statewide importance,Well drained,3,B,14.31,4,,
+68488,WA075,109,"Thatuna-Naff silt loams, 7 to 25 percent slopes",888.8,0.051,Thatuna,70,Farmland of statewide importance,Moderately well drained,4,C,19.5,16,99,
+69817,WA623,OlB,"Oliphant silt loam, 0 to 5 percent slopes",875.4,0.05,Oliphant,100,Farmland of statewide importance,Well drained,2,B,19.66,3,,
+2487282,ID057,37,"Palouse-Latahco complex, 0 to 3 percent slopes",868.7,0.049,Palouse,55,Prime farmland if drained,Well drained,2,B,19.47,2.3,30,
+69774,WA623,AlB,"Asotin silt loam, 0 to 7 percent slopes",865.6,0.049,Asotin,100,Farmland of statewide importance,Well drained,3,C,12.41,4,,68
+68150,WA001,CHB,"Chard silt loam, 0 to 5 percent slopes",862.0,0.049,Chard,100,Prime farmland if irrigated,Well drained,2,B,15.98,3,,
+68487,WA075,108,"Thatuna-Tilma silt loams, 25 to 40 percent slopes",851.7,0.048,Thatuna,65,Not prime farmland,Moderately well drained,6,C,19.37,33,41,
+69799,WA623,CeD,"Chard silt loam, moderately shallow, 7 to 25 percent slopes",836.2,0.048,Chard,80,Farmland of statewide importance,Well drained,4,B,15.74,16,,127
+69821,WA623,OnB,"Oliphant silt loam, moderately shallow, 0 to 5 percent slopes",819.0,0.047,Oliphant,100,Farmland of statewide importance,Well drained,2,B,20,3,,135
+68594,WA075,93,"Spofford silt loam, 0 to 15 percent slopes",811.5,0.046,Spofford,100,Not prime farmland,Moderately well drained,6,C,12.7,8,,
+69681,WA613,OlD,"Oliphant silt loam, 15 to 30 percent slopes",810.0,0.046,Oliphant,100,Farmland of statewide importance,Well drained,4,B,19.19,23,,127
+69778,WA623,AmD,"Asotin silt loam, high rainfall, 15 to 25 percent slopes",808.1,0.046,Asotin,100,Farmland of statewide importance,Well drained,4,C,15.71,20,,91
+69791,WA623,ArE,"Athena silt loam, moderately shallow, 25 to 40 percent slopes",807.2,0.046,Athena,100,Not prime farmland,Well drained,6,B,20,35,,127
+69663,WA613,FaE,"Farrell fine sandy loam, 30 to 45 percent slopes",805.1,0.046,Farrell,100,Not prime farmland,Well drained,6,A,16.8,38,,
+2487291,ID057,46,"Southwick silt loam, 25 to 35 percent slopes",780.0,0.044,Southwick,85,Not prime farmland,Moderately well drained,6,C,19.58,30,76,
+68286,WA001,WMB,"Walla Walla silt loam, moderately shallow, 0 to 5 percent slopes",775.9,0.044,Walla Walla,100,Prime farmland if irrigated,Well drained,2,B,19.54,3,,
+68584,WA075,84,"Roloff silt loam, 0 to 15 percent slopes",770.8,0.044,Roloff,100,Farmland of statewide importance,Well drained,3,C,13.77,8,,71
+69662,WA613,FaD2,"Farrell fine sandy loam, 15 to 30 percent slopes, eroded",749.4,0.043,Farrell,100,Farmland of statewide importance,Well drained,4,A,16.8,23,,
+68549,WA075,52,"Larkin silt loam, 25 to 40 percent slopes",745.8,0.042,Larkin,100,Not prime farmland,Well drained,6,C,20,33,,
+69827,WA623,Ox,Onyx silt loam,743.4,0.042,Onyx,90,All areas are prime farmland,Well drained,3,B,20,2,,
+68539,WA075,43,Konert silty clay loam,742.9,0.042,Konert,100,Farmland of statewide importance,Somewhat poorly drained,4,C/D,18.02,1,15,
+69682,WA613,OlE,"Oliphant silt loam, 30 to 40 percent slopes",712.6,0.04,Oliphant,100,Not prime farmland,Well drained,6,B,19.19,35,,127
+69648,WA613,ChE,"Chard silt loam, 30 to 40 percent slopes",705.5,0.04,Chard,100,Not prime farmland,Well drained,6,B,17.15,35,,
+68544,WA075,48,"Lance silt loam, 5 to 25 percent slopes",699.4,0.04,Lance,100,Farmland of statewide importance,Well drained,4,C,15,15,,
+69704,WA613,RsD,"Roloff silt loam, 0 to 30 percent slopes",691.7,0.039,Roloff,50,Farmland of statewide importance,Well drained,4,C,13.9,15,,71
+69796,WA623,CdB,"Chard silt loam, 0 to 7 percent slopes",687.6,0.039,Chard,100,Farmland of statewide importance,Well drained,2,B,15.74,4,,
+68288,WA001,WME,"Walla Walla silt loam, moderately shallow, 30 to 40 percent slopes",679.9,0.039,Walla Walla,100,Not prime farmland,Well drained,6,B,19.54,35,,
+1389859,ID620,417,"Naff-Palouse complex, 8 to 25 percent slopes",678.6,0.039,Naff,45,Farmland of statewide importance,Well drained,3,C,19.84,13.4,,
+68158,WA001,ENC,"Endicott silt loam, 5 to 15 percent slopes",671.2,0.038,Endicott,100,Farmland of statewide importance,Well drained,3,C,12.85,10,,
+69672,WA613,KuD,"Kuhl very rocky silt loam, 0 to 30 percent slopes",670.8,0.038,Kuhl,75,Not prime farmland,Well drained,6,D,6.25,15,,0
+69804,WA623,He,Henningsen cobbly silt loam,665.4,0.038,Henningsen,100,Not prime farmland,Somewhat poorly drained,4,B,4.56,2,153,
+68569,WA075,70,"Palouse-Thatuna silt loams, 3 to 7 percent slopes",664.2,0.038,Palouse,50,All areas are prime farmland,Well drained,2,B,20,5,104,
+1389854,ID620,410,"Palouse-Naff complex, 3 to 8 percent slopes",650.6,0.037,Palouse,50,All areas are prime farmland,Well drained,2,C,19.8,4.4,,
+68124,WA001,ACC,"Anders cobbly silt loam, 0 to 15 percent slopes",646.6,0.037,Anders,100,Farmland of statewide importance,Well drained,3,C,10.52,8,,64
+68492,WA075,112,"Tilma silt loam, 25 to 40 percent slopes",640.9,0.036,Tilma,100,Not prime farmland,Moderately well drained,6,C/D,17.72,33,42,
+68282,WA001,WLD2,"Walla Walla silt loam, 5 to 30 percent slopes, eroded",632.2,0.036,Walla Walla,100,Farmland of statewide importance,Well drained,4,B,20,18,,
+2487255,ID057,10,"Garfield silt loam, 3 to 30 percent slopes",594.8,0.034,Garfield,90,Farmland of statewide importance,Well drained,4,C,18,17,,
+68532,WA075,37,"Farrell very fine sandy loam, 7 to 25 percent slopes",589.5,0.033,Farrell,100,Farmland of statewide importance,Well drained,4,B,14.52,16,,
+69788,WA623,ApF,"Athena silt loam, calcareous substratum, 40 to 65 percent slopes",582.0,0.033,Athena,100,Not prime farmland,Well drained,7,B,20,53,,
+68479,WA075,100,"Tekoa gravelly silt loam, 25 to 55 percent slopes",581.3,0.033,Tekoa,100,Not prime farmland,Well drained,7,C,10.02,40,,96
+68480,WA075,101,"Tekoa gravelly silt loam, deep, 25 to 55 percent slopes",575.1,0.033,Tekoa,100,Not prime farmland,Well drained,7,B,9.75,40,,137
+68485,WA075,106,"Thatuna silt loam, 40 to 55 percent slopes",571.2,0.032,Thatuna,100,Not prime farmland,Moderately well drained,7,C,20,48,99,
+69683,WA613,OnA,"Onyx silt loam, 0 to 3 percent slopes",551.8,0.031,Onyx,100,All areas are prime farmland,Well drained,2,B,20,2,,
+68598,WA075,97,"Stratford very cobbly loam, 0 to 15 percent slopes",546.7,0.031,Stratford,100,Not prime farmland,Well drained,6,B,8.27,8,,
+69703,WA613,RrE,"Roloff rocky very fine sandy loam, 15 to 40 percent slopes",543.9,0.031,Roloff,65,Not prime farmland,Well drained,6,C,13.9,32.1,,0
+69824,WA623,OpE2,"Oliphant-Lance silt loams, 10 to 40 percent slopes, eroded",535.1,0.03,Oliphant,60,Farmland of statewide importance,Well drained,4,B,18.57,23.3,,
+69699,WA613,ReE,"Ritzville silt loam, 30 to 40 percent slopes",524.0,0.03,Ritzville,100,Not prime farmland,Well drained,6,B,20,35,,
+2487289,ID057,44,"Southwick silt loam, dry, 3 to 12 percent slopes",520.8,0.03,Southwick,85,Farmland of statewide importance,Moderately well drained,4,C,19.58,8,76,
+2487249,ID057,4,"Athena-Palouse complex, 7 to 25 percent slopes",519.6,0.03,Athena,40,Farmland of statewide importance,Well drained,3,B,20,14.9,,
+68547,WA075,50,"Larkin silt loam, 3 to 15 percent slopes",519.5,0.03,Larkin,100,Farmland of statewide importance,Well drained,3,C,20,9,,
+68533,WA075,38,"Garfield silty clay loam, 3 to 25 percent slopes",486.8,0.028,Garfield,100,Farmland of statewide importance,Well drained,3,C,15.8,14,,
+69801,WA623,ChE2,"Chard very fine sandy loam, 25 to 40 percent slopes, eroded",476.1,0.027,Chard,100,Not prime farmland,Well drained,6,B,14.39,35,,
+68137,WA001,BUD,"Burke silt loam, 5 to 30 percent slopes",468.1,0.027,Burke,100,Farmland of statewide importance,Well drained,6,C,11.2,18,,
+69709,WA613,SpC,"SPOFFORD VARIANT SILT LOAM, 8 TO 15 PERCENT SLOPES",467.7,0.027,Spofford variant,100,Farmland of statewide importance,Moderately well drained,3,D,17.22,12,,81
+1487720,ID057,Ls2,"Libertybutte-Schumacher complex, 25 to 45 percent slopes",456.6,0.026,Libertybutte,40,Not prime farmland,Well drained,6,C,12.58,33.5,,43
+2487298,ID057,53,"Thatuna silt loam, 3 to 7 percent slopes",445.1,0.025,Thatuna,85,All areas are prime farmland,Moderately well drained,3,C,20,5,92,
+69711,WA613,Tc,Terrace escarpments,440.2,0.025,Terrace escarpments,100,Not prime farmland,Well drained,8,,11.35,55,,79
+69659,WA613,EzA,"Esquatzel silt loam, 0 to 3 percent slopes",438.8,0.025,Esquatzel,100,Farmland of statewide importance,Well drained,3,B,21,2,,
+69654,WA613,CwA,"Covello silt loam, drained, 0 to 3 percent slopes",436.1,0.025,Covello,100,Farmland of statewide importance,Moderately well drained,3,B,19.75,2,,
+69701,WA613,Rn,Riverwash,400.3,0.023,Riverwash,100,Not prime farmland,,8,,,2,31,
+69680,WA613,OlC,"Oliphant silt loam, 0 to 15 percent slopes",389.0,0.022,Oliphant,100,Farmland of statewide importance,Well drained,3,B,19.19,8,,127
+1389768,ID620,118,"Thatuna-Cald complex, 0 to 8 percent slopes",387.2,0.022,Thatuna,50,Prime farmland if drained and either protected from flooding or not frequently flooded during the growing season,Moderately well drained,3,C,19.45,3.5,28,
+68123,WA001,ABC,"Anders silt loam, 5 to 20 percent slopes",382.4,0.022,Anders,100,Farmland of statewide importance,Well drained,3,C,12.16,13,,68
+69773,WA623,AeD,"Anders-Lickskillet complex, 5 to 25 percent slopes",366.3,0.021,Anders,60,Farmland of statewide importance,Well drained,3,C,10.12,15,,48
+68529,WA075,34,"Emdent silt loam, drained",361.1,0.021,Emdent,95,Farmland of statewide importance,Moderately well drained,3,B,18,2,122,
+2487293,ID057,48,"Spokane ashy loam, 5 to 25 percent slopes",357.7,0.02,Spokane,85,Not prime farmland,Well drained,4,B,11.98,20,,102
+68132,WA001,BGD,"Benge gravelly silt loam, 15 to 30 percent slopes",355.4,0.02,Benge,100,Farmland of statewide importance,Well drained,4,B,11.36,23,,
+68284,WA001,WLE2,"Walla Walla silt loam, 30 to 40 percent slopes, eroded",351.4,0.02,Walla Walla,100,Not prime farmland,Well drained,6,B,20,35,,
+79690,ID611,75,"Latahco-Thatuna complex, 0 to 3 percent slopes",343.4,0.02,Latahco,55,Prime farmland if drained,Somewhat poorly drained,4,C,19.06,1.4,69,
+2502083,ID057,Cd1,"Caldwell-Cald complex, 0 to 3 percent slopes",320.9,0.018,Caldwell,60,Prime farmland if drained and either protected from flooding or not frequently flooded during the growing season,Somewhat poorly drained,3,C,19.87,1.6,28,
+1689264,ID057,Jp3,"Carrico-Micapeak complex, 25 to 50 percent slopes",316.2,0.018,Carrico,45,Not prime farmland,Well drained,7,B,13.05,37.2,,53
+69631,WA613,AsD,"Asotin silt loam, 15 to 30 percent slopes",315.6,0.018,Asotin,100,Farmland of statewide importance,Well drained,4,C,15.09,23,,81
+2487300,ID057,55,"Tilma-Garfield complex, 7 to 25 percent slopes",315.6,0.018,Tilma,55,"Farmland of statewide importance, if drained",Moderately well drained,4,C/D,17.97,14.6,46,
+1389852,ID620,405,"Thatuna-Naff complex, 8 to 25 percent slopes",315.2,0.018,Thatuna,45,"Farmland of statewide importance, if drained",Moderately well drained,3,C,19.65,13.1,71,
+645304,ID057,Ty9,"Taney ashy silt loam, moist, 8 to 25 percent slopes",310.8,0.018,Taney,75,Farmland of statewide importance,Moderately well drained,4,C,20.08,15,60,
+69772,WA623,AdB,"Anders silt loam, 0 to 7 percent slopes",291.8,0.017,Anders,100,Farmland of statewide importance,Well drained,3,C,13.52,4,,76
+68122,WA001,ABB,"Anders silt loam, 0 to 5 percent slopes",291.1,0.017,Anders,100,Prime farmland if irrigated,Well drained,3,C,12.16,3,,68
+2502066,ID057,Sh1j,"Schumacher silt loam, 5 to 25 percent slopes",288.9,0.016,Schumacher,80,Farmland of statewide importance,Well drained,3,B,17.46,12,,119
+69833,WA623,Qu,Quincy loamy fine sand,286.0,0.016,Quincy,100,Farmland of statewide importance,Excessively drained,6,A,10.71,13,,
+1389956,ID620,610,"Schumacher silt loam, 5 to 25 percent slopes",284.9,0.016,Schumacher,80,Farmland of statewide importance,Well drained,3,B,17.46,12,,119
+68600,WA075,99,"Tekoa silt loam, 25 to 40 percent slopes",276.7,0.016,Tekoa,100,Not prime farmland,Well drained,6,C,11.78,33,,96
+1390050,ID620,712,"McCrosket-Tekoa association, 12 to 60 percent slopes",265.5,0.015,McCrosket,59,Not prime farmland,Well drained,7,B,10.04,36,,81
+1389858,ID620,416,"Naff-Thatuna complex, 8 to 25 percent slopes",259.8,0.015,Naff,45,"Farmland of statewide importance, if drained",Well drained,3,C,19.69,12.9,71,
+2487268,ID057,23,"Larkin silt loam, 3 to 12 percent slopes",252.9,0.014,Larkin,85,Farmland of statewide importance,Well drained,3,C,21.25,8,,
+1389857,ID620,415,"Naff-Tilma complex, 3 to 20 percent slopes",248.7,0.014,Naff,50,"Farmland of statewide importance, if drained",Well drained,3,C,19.48,10,51,
+1487721,ID057,Ls1,"Schumacher-Libertybutte complex, 5 to 25 percent slopes",240.5,0.014,Schumacher,55,Farmland of statewide importance,Well drained,3,C,12.86,10,,43
+69800,WA623,ChD2,"Chard very fine sandy loam, 7 to 25 percent slopes, eroded",240.4,0.014,Chard,80,Farmland of statewide importance,Well drained,4,B,14.39,16,,
+2487253,ID057,8,"Driscoll-Larkin complex, 7 to 25 percent slopes",238.2,0.014,Driscoll,40,Farmland of statewide importance,Moderately well drained,4,C,20.35,16,76,
+1389958,ID620,611,"Schumacher-Tekoa complex, 25 to 45 percent slopes",235.4,0.013,Schumacher,45,Not prime farmland,Well drained,6,B,13.14,31.4,,84
+1389771,ID620,124,"Caldwell-Cald complex, 0 to 3 percent slopes",232.2,0.013,Caldwell,60,Prime farmland if drained and either protected from flooding or not frequently flooded during the growing season,Somewhat poorly drained,3,C,19.87,1.6,28,
+69645,WA613,ChB,"Chard silt loam, 3 to 8 percent slopes",225.7,0.013,Chard,100,Farmland of statewide importance,Well drained,2,B,17.15,6,,
+1389845,ID620,360,"Larkin silt loam, 3 to 12 percent slopes",222.9,0.013,Larkin,80,Farmland of statewide importance,Well drained,2,B,18.31,6.9,,
+69657,WA613,EwB,"Ellisforde silt loam, 0 to 8 percent slopes",219.9,0.012,Ellisforde,100,Farmland of statewide importance,Well drained,3,C,18.24,4,,
+69700,WA613,ReF,"Ritzville silt loam, 40 to 65 percent slopes",218.0,0.012,Ritzville,100,Not prime farmland,Well drained,7,B,20,53,,
+68490,WA075,110,"Tilma silt loam, 3 to 7 percent slopes",216.2,0.012,Tilma,100,All areas are prime farmland,Moderately well drained,3,C,18.44,5,60,
+79705,ID611,89,"Naff-Palouse complex, 2 to 8 percent slopes",214.0,0.012,Naff,55,Farmland of statewide importance,Well drained,3,C,19.14,5,,
+1487708,ID057,Tk5,"McCrosket-Ardenvoir complex, 20 to 50 percent slopes",212.1,0.012,McCrosket,50,Not prime farmland,Well drained,6,B,12.99,30,,118
+1390047,ID620,711,"McCrosket-Ardenvoir association, 35 to 65 percent slopes",209.9,0.012,McCrosket,55,Not prime farmland,Well drained,7,B,10.89,40,,122
+1389824,ID620,301,"Taney ashy silt loam, 8 to 20 percent slopes",195.1,0.011,Taney,80,Farmland of statewide importance,Moderately well drained,3,C/D,16.93,12,41,
+1389853,ID620,406,"Thatuna-Naff complex, 25 to 40 percent slopes",191.2,0.011,Thatuna,50,Not prime farmland,Moderately well drained,6,C,19.63,30.2,71,
+68583,WA075,83,"Rock outcrop-Lithic Xerorthents complex, 0 to 30 percent slopes",190.0,0.011,Rock outcrop,65,Not prime farmland,,8,,2.57,15,,0
+69632,WA613,AsE,"Asotin silt loam, 30 to 40 percent slopes",188.3,0.011,Asotin,100,Not prime farmland,Well drained,6,C,15.09,35,,81
+68515,WA075,21,"Calouse silt loam, 3 to 7 percent slopes",178.4,0.01,Calouse,100,All areas are prime farmland,Well drained,2,B,19.24,5,,
+2487248,ID057,2vz59,"Athena silt loam, moist, 0 to 8 percent slopes",176.5,0.01,Athena,85,All areas are prime farmland,Well drained,2,A,16.67,4,,
+69664,WA613,FeB,"Farrell very fine sandy loam, 3 to 8 percent slopes",176.4,0.01,Farrell,100,Farmland of statewide importance,Well drained,3,B,16.86,6,,
+79620,ID611,151,"Westlake-Latahco complex, 0 to 3 percent slopes",170.8,0.01,Westlake,50,Prime farmland if drained,Somewhat poorly drained,4,C,19.36,2,61,
+69734,WA613,YmA,"Yakima silt loam, 0 to 3 percent slopes",169.6,0.01,Yakima,100,Prime farmland if irrigated,Well drained,3,B,12.4,2,,
+1389846,ID620,361,"Larkin silt loam, 12 to 20 percent slopes",166.2,0.009,Larkin,80,Farmland of statewide importance,Well drained,4,B,18.31,14.7,,
+69634,WA613,AsF,"Asotin silt loam, 40 to 65 percent slopes",163.3,0.009,Asotin,100,Not prime farmland,Well drained,7,C,15.09,53,,81
+69795,WA623,BeF,"Benge gravelly silt loam, 15 to 50 percent slopes",156.5,0.009,Benge,100,Not prime farmland,Well drained,6,B,9.36,33,,
+79628,ID611,19,"Calouse-Almota complex, 2 to 15 percent slopes",156.2,0.009,Calouse,55,Farmland of statewide importance,Well drained,3,B,18.62,9.4,,99
+68592,WA075,91,"Speigle-Rock outcrop complex, 3 to 30 percent slopes",156.1,0.009,Speigle,70,Not prime farmland,Well drained,6,B,12,17,,0
+1389855,ID620,411,"Palouse silt loam, 8 to 25 percent slopes",154.6,0.009,Palouse,80,Farmland of statewide importance,Well drained,3,C,19.66,12,,
+69789,WA623,ArB,"Athena silt loam, moderately shallow, 0 to 7 percent slopes",149.9,0.009,Athena,100,All areas are prime farmland,Well drained,2,B,20,4,,127
+69633,WA613,AsE3,"Asotin silt loam, 15 to 40 percent slopes, severely eroded",147.4,0.008,Asotin,50,Farmland of statewide importance,Well drained,4,C,13.19,28,,71
+69779,WA623,AmE,"Asotin silt loam, high rainfall, 25 to 40 percent slopes",142.4,0.008,Asotin,100,Not prime farmland,Well drained,6,C,15.71,33,,91
+68575,WA075,76,"Reardan silt loam, 3 to 15 percent slopes",136.4,0.008,Reardan,100,Farmland of statewide importance,Well drained,3,C,19.02,9,,
+2376092,ID620,116,"Thatuna-Caldwell complex, 0 to 4 percent slopes",132.4,0.008,Thatuna,45,Prime farmland if drained,Moderately well drained,3,C/D,19.63,2.4,41,
+1389856,ID620,414,"Naff-Thatuna complex, 3 to 8 percent slopes",130.2,0.007,Naff,45,Prime farmland if drained,Well drained,2,C,19.69,4.9,71,
+68504,WA075,123,"Xerofluvents, 0 to 15 percent slopes",128.9,0.007,Xerofluvents,100,Farmland of statewide importance,Excessively drained,4,B,6.2,8,145,
+1689265,ID057,Jp2,"Micapeak-Carrico-Micapeak, moist complex, 10 to 35 percent slopes",126.2,0.007,Micapeak,35,Not prime farmland,Well drained,6,C,11.98,18.7,,53
+69669,WA613,HmA,"Hermiston silt loam, 0 to 3 percent slopes",121.1,0.007,Hermiston,100,All areas are prime farmland,Well drained,2,B,19.53,2,,
+1389837,ID620,335,"Carlinton ashy silt loam, dry, 8 to 25 percent slopes",120.9,0.007,Carlinton,80,Farmland of statewide importance,Moderately well drained,3,C/D,15.2,13,36,
+2487250,ID057,5,"Bluesprin-Flybow complex, 35 to 65 percent slopes",120.8,0.007,Bluesprin,45,Not prime farmland,Well drained,7,C,6.46,50,,10
+69655,WA613,Du,Typic Xeropsamments,118.0,0.007,Typic Xeropsamments,100,Not prime farmland,Excessively drained,8,A,6,20,,
+1389848,ID620,400,"Driscoll silt loam, 10 to 25 percent slopes",117.6,0.007,Driscoll,80,"Farmland of statewide importance, if drained",Moderately well drained,3,C/D,17.38,11.7,56,
+68290,WA001,WND2,"Walvan ashy very fine sandy loam, 0 to 30 percent slopes",115.4,0.007,Walvan,100,Not prime farmland,Well drained,4,A,19,15,,
+2743096,WA075,405,"Thatuna-Naff complex, 8 to 25 percent slopes",111.8,0.006,Thatuna,45,Farmland of statewide importance,Well drained,3,C,19.62,12.7,71,
+69710,WA613,SrD,"Stratford very stony silt loam, 0 to 30 percent slopes",108.8,0.006,Stratford,100,Not prime farmland,Well drained,6,B,8.92,15,,
+2743086,WA075,118b,"Thatuna-Cald complex, 0 to 8 percent slopes",106.6,0.006,Thatuna,50,Prime farmland if drained,Moderately well drained,3,C,19.48,3.4,28,
+69706,WA613,RsF,"Roloff silt loam, 45 to 65 percent slopes",104.9,0.006,Roloff,100,Not prime farmland,Well drained,7,C,13.9,55,,71
+1390150,ID620,774,"Pinecreek ashy silt loam, moist, 35 to 65 percent slopes",100.8,0.006,Pinecreek,80,Not prime farmland,Well drained,7,B,15.09,55,,
+1389823,ID620,300,"Taney ashy silt loam, 3 to 8 percent slopes",96.7,0.005,Taney,80,All areas are prime farmland,Moderately well drained,3,C/D,16.93,5,41,
+69630,WA613,AsC,"Asotin silt loam, 0 to 15 percent slopes",95.3,0.005,Asotin,100,Farmland of statewide importance,Well drained,3,C,15.09,8,,81
+68213,WA001,RO,Rock outcrop,94.3,0.005,Rock outcrop,100,Not prime farmland,,8,,,30,,0
+1389959,ID620,612,"Libertybutte-Tekoa complex, 5 to 30 percent slopes",93.8,0.005,Libertybutte,45,Not prime farmland,Well drained,6,D,7.39,26.9,,41
+69736,WA613,YvB,"Yakima gravelly silt loam, 3 to 8 percent slopes",92.1,0.005,Yakima,100,Prime farmland if irrigated,Well drained,3,B,11.6,6,,
+68513,WA075,2,"Almota silt loam, 25 to 65 percent slopes",84.7,0.005,Almota,100,Not prime farmland,Well drained,7,C,15.8,45,,89
+2487262,ID057,17,"Joel silt loam, 25 to 35 percent slopes",80.4,0.005,Joel,95,Not prime farmland,Well drained,6,C,21.25,30,,
+2487292,ID057,47,"Southwick silt loam, 7 to 35 percent slopes, eroded",77.2,0.004,Southwick,90,Not prime farmland,Moderately well drained,4,C,14.12,21,76,
+1689277,ID057,Ty10,"Taney-Joel complex, moist, 25 to 35 percent slopes",74.9,0.004,Taney,70,Not prime farmland,Moderately well drained,6,C,20.34,25,60,
+69661,WA613,FaC2,"Farrell fine sandy loam, 3 to 15 percent slopes, eroded",72.4,0.004,Farrell,100,Farmland of statewide importance,Well drained,3,A,16.8,9,,
+79570,ID611,106,"Palouse-Athena complex, 2 to 8 percent slopes",71.8,0.004,Palouse,60,Farmland of statewide importance,Well drained,3,B,19.58,5,,
+68585,WA075,85,"Roloff cobbly silt loam, 0 to 15 percent slopes",68.0,0.004,Roloff,100,Farmland of statewide importance,Well drained,3,C,11.4,8,,61
+2743090,WA075,417,"Naff-Palouse complex, 8 to 25 percent slopes",61.4,0.003,Naff,45,Farmland of statewide importance,Well drained,3,C,19.73,13.4,,
+69660,WA613,FaA,"Farrell fine sandy loam, 0 to 3 percent slopes",59.7,0.003,Farrell,100,Farmland of statewide importance,Well drained,3,A,16.8,2,,
+1389860,ID620,420,"Garfield-Tilma complex, 5 to 20 percent slopes",58.4,0.003,Garfield,50,Farmland of statewide importance,Well drained,4,C,18.7,11.3,51,
+2502067,ID057,Tk6j,"Tekoa gravelly silt loam, deep, 25 to 55 percent slopes",56.2,0.003,Tekoa,100,Not prime farmland,Well drained,7,B,9.75,40,,137
+2743088,WA075,416,"Naff-Thatuna complex, 8 to 25 percent slopes",55.1,0.003,Naff,45,Farmland of statewide importance,Well drained,3,C,19.64,12.8,71,
+1390044,ID620,710,"McCrosket-Ardenvoir association, 15 to 35 percent slopes",52.0,0.003,McCrosket,50,Not prime farmland,Well drained,4,B,11.79,24.4,,107
+69834,WA623,Rw,Riverwash,51.3,0.003,Riverwash,100,Not prime farmland,,8,,,2,31,
+1389840,ID620,350,"Southwick ashy silt loam, 3 to 8 percent slopes",51.1,0.003,Southwick,80,Prime farmland if drained,Moderately well drained,3,C,19.05,4.9,67,
+69729,WA613,WwD3,"Walla Walla silt loam, 8 to 30 percent slopes, severely eroded",45.5,0.003,Walla Walla,50,Farmland of statewide importance,Well drained,4,B,22.19,19,,
+69735,WA613,YvA,"Yakima gravelly silt loam, 0 to 3 percent slopes",41.2,0.002,Yakima,100,Prime farmland if irrigated,Well drained,3,B,11.6,2,,
+68587,WA075,87,"Schumacher silt loam, 3 to 15 percent slopes",40.2,0.002,Schumacher,100,Farmland of statewide importance,Well drained,3,C,17.26,9,,109
+68210,WA001,RMD,"Ritzville silt loam, moderately shallow, 5 to 30 percent slopes",40.1,0.002,Ritzville,100,Farmland of statewide importance,Well drained,4,B,19,18,,114
+2501980,ID057,Mn2j,"Ardenvoir, dry-Ardenvoir complex, 15 to 35 percent slopes",39.8,0.002,Ardenvoir,45,Not prime farmland,Well drained,6,B,11.4,25,,122
+69653,WA613,CvA,"Covello silt loam, 0 to 3 percent slopes",39.1,0.002,Covello,100,Farmland of statewide importance,Somewhat poorly drained,3,C,19.75,2,92,
+1389836,ID620,330,"Carlinton-Carlinton, dry complex, 3 to 20 percent slopes",38.0,0.002,Carlinton,50,Farmland of statewide importance,Moderately well drained,3,C/D,15.2,10.8,36,
+2743094,WA075,411,"Palouse silt loam, 8 to 25 percent slopes",36.5,0.002,Palouse,80,Farmland of statewide importance,Well drained,3,C,19.65,12,,
+1390156,ID620,778,"Cassyhill-Lotuspoint complex, 5 to 35 percent slopes",36.3,0.002,Cassyhill,50,Not prime farmland,Well drained,6,D,4.88,22,,36
+68181,WA001,MGD2,"Magallon sandy loam, 5 to 30 percent slopes, eroded",34.4,0.002,Magallon,100,Farmland of statewide importance,Somewhat excessively drained,4,A,9.01,18,,
+1390035,ID620,703,"Ardenvoir, dry-Ardenvoir complex, 35 to 65 percent slopes",33.8,0.002,Ardenvoir,45,Not prime farmland,Well drained,7,B,11.4,50,,122
+68291,WA001,WNF2,"Walvan ashy very fine sandy loam, 30 to 65 percent slopes",32.7,0.002,Walvan,100,Not prime farmland,Well drained,7,A,19,45,,
+68176,WA001,FAD,"Farrell very fine sandy loam, 5 to 30 percent slopes",31.8,0.002,Farrell,100,Farmland of statewide importance,Well drained,4,B,13.86,18,,
+2487266,ID057,21,"Klickson cobbly ashy loam, 35 to 65 percent slopes",30.1,0.002,Klickson,85,Not prime farmland,Well drained,7,B,13.96,50,,
+79627,ID611,2vz55,"Caldwell-Latah complex, 0 to 3 percent slopes",29.0,0.002,Caldwell,50,Prime farmland if drained and either protected from flooding or not frequently flooded during the growing season,Somewhat poorly drained,3,C,19.3,1.9,46,
+2743092,WA075,410,"Palouse-Naff complex, 3 to 8 percent slopes",28.9,0.002,Palouse,50,All areas are prime farmland,Well drained,2,C,19.74,4.4,,
+1689263,ID057,Jo6,"Joel  silt loam, moist, 25 to 35 percent slopes",28.4,0.002,Joel,90,Not prime farmland,Well drained,6,B,20.75,30,,
+2487261,ID057,16,"Joel silt loam, 7 to 25 percent slopes",28.4,0.002,Joel,90,Farmland of statewide importance,Well drained,4,C,21.25,16,,
+1389968,ID620,617,"Tekoa gravelly ashy silt loam, 15 to 40 percent slopes",26.0,0.001,Tekoa,80,Not prime farmland,Well drained,6,C,9.42,28,,84
+1390036,ID620,704,"Ardenvoir, dry-Ardenvoir complex, 15 to 35 percent slopes",26.0,0.001,Ardenvoir,45,Not prime farmland,Well drained,6,B,11.4,25,,122
+1390164,ID620,800,Rock outcrop,25.9,0.001,Rock outcrop,100,Not prime farmland,,8,D,,50,,0
+68602,WA075,125,Dam,25.8,0.001,Dam,100,Not prime farmland,,,,,,,
+644242,ID057,Ac2,"Arson-Carlinton complex, dry, 8 to 35 percent slopes",25.8,0.001,Arson,45,Not prime farmland,Well drained,6,B,19.76,20,45,122
+69768,WA623,Du,Dune land,25.7,0.001,Dune land,100,Not prime farmland,Excessively drained,8,,4,20,,
+2927838,ID611,2vz59,"Athena silt loam, moist, 0 to 8 percent slopes",24.9,0.001,Athena,85,All areas are prime farmland,Well drained,2,A,16.67,4,,
+79602,ID611,135,"Thatuna-Naff complex, 25 to 40 percent slopes",23.4,0.001,Thatuna,60,Not prime farmland,Moderately well drained,6,C,19.38,33,76,
+69656,WA613,EvB2,"Ellisforde very fine sandy loam, 0 to 8 percent slopes, eroded",21.7,0.001,Ellisforde,100,Farmland of statewide importance,Well drained,3,C,18.06,4,,
+2487296,ID057,51,"Taney ashy silt loam, dry, 7 to 25 percent slopes",21.5,0.001,Taney,85,"Farmland of statewide importance, if drained",Moderately well drained,4,C,17.04,16,60,
+79709,ID611,92,"Naff, eroded-Palouse-Garfield complex, 8 to 20 percent slopes",21.3,0.001,Naff,45,Not prime farmland,Well drained,4,C,18.58,13.3,,
+806567,WA001,GP,Pits,20.9,0.001,Pits,100,Not prime farmland,Excessively drained,8,,,23,,
+654988,ID057,An4,"Arson-Minaloosa complex, 25 to 60 percent slopes",20.2,0.001,Arson,55,Not prime farmland,Well drained,7,B,17.7,43.7,,122
+68157,WA001,ENB,"Endicott silt loam, 0 to 5 percent slopes",20.0,0.001,Endicott,100,Prime farmland if irrigated,Well drained,3,C,12.85,3,,
+71687,WA021,220,Water,19.0,0.001,Water,100,Not prime farmland,,8,,,,,
+71507,WA021,119,Riverwash,18.9,0.001,Riverwash,100,Not prime farmland,,8,,,2,31,
+1389770,ID620,120,"Latahco silt loam, 0 to 2 percent slopes",18.9,0.001,Latahco,80,Prime farmland if drained,Somewhat poorly drained,3,B/D,18.62,1.9,41,
+68159,WA001,ENC2,"Endicott silt loam, 5 to 15 percent slopes, eroded",17.9,0.001,Endicott,100,Farmland of statewide importance,Well drained,3,C,12.85,10,,
+2743093,WA075,415,"Naff-Tilma complex, 3 to 20 percent slopes",17.2,0.001,Naff,50,Farmland of statewide importance,Well drained,3,C,19.47,10.1,51,
+693544,WA613,DAM,Dam,17.1,0.001,Dam,100,Not prime farmland,,,,,,,
+1389965,ID620,613,"Ardenvoir, dry-Lotuspoint complex, 5 to 25 percent slopes",16.3,0.001,Ardenvoir,50,Not prime farmland,Well drained,4,B,9.15,20,,66
+2487297,ID057,52,"Taney ashy silt loam, 25 to 35 percent slopes",15.8,0.001,Taney,90,Not prime farmland,Moderately well drained,6,C,17.04,30,60,
+69658,WA613,EyA2,"Esquatzel very fine sandy loam, 0 to 3 percent slopes, eroded",15.7,0.001,Esquatzel,100,Farmland of statewide importance,Well drained,3,A,14.36,2,,
+68500,WA075,12,"Athena silt loam, 25 to 40 percent slopes, eroded",15.2,0.001,Athena,85,Farmland of statewide importance,Well drained,6,A,18.39,30.5,,
+1390039,ID620,706,"Ardenvoir gravelly ashy silt loam, 35 to 65 percent slopes",12.6,0.001,Ardenvoir,80,Not prime farmland,Well drained,7,B,11.97,50,,122
+68505,WA075,2vz55,"Caldwell-Latah complex, 0 to 3 percent slopes",12.2,0.001,Caldwell,50,All areas are prime farmland,Somewhat poorly drained,3,C,19.31,2,46,
+69697,WA613,ReB,"Ritzville silt loam, 0 to 8 percent slopes",11.5,0.001,Ritzville,100,Prime farmland if irrigated,Well drained,3,B,20,4,,
+2743087,WA075,421,"Naff-Garfield complex, 5 to 25 percent slopes",11.5,0.001,Naff,55,Farmland of statewide importance,Well drained,3,C,19.47,12.9,,
+1689266,ID057,Jp1,"Micapeak-Carrico complex, 5 to 20 percent slopes",11.1,0.001,Micapeak,55,Farmland of statewide importance,Well drained,4,C,11.66,8.5,,53
+68180,WA001,MAD,"Magallon silt loam, 5 to 30 percent slopes",10.7,0.001,Magallon,100,Farmland of statewide importance,Somewhat excessively drained,4,B,10.01,18,,
+68538,WA075,42,"Hesseltine cobbly silt loam, 0 to 30 percent slopes",9.6,0.001,Hesseltine,100,Farmland of statewide importance,Well drained,4,B,11.21,15,,
+2487294,ID057,49,"Spokane-Rock outcrop complex, 25 to 65 percent slopes",9.1,0.001,Spokane,60,Not prime farmland,Well drained,7,B,11.98,40,,0
+69636,WA613,AtD,"Athena silt loam, 8 to 25 percent slopes",7.4,0.0,Athena,50,Farmland of statewide importance,Well drained,4,B,20,17,,
+2487272,ID057,27,"Latahco-Lovell complex, 0 to 3 percent slopes",7.0,0.0,Latahco,55,Prime farmland if drained,Somewhat poorly drained,4,C/D,18.85,2,30,
+2743085,WA075,122b,"Tilma-Latah complex, 0 to 8 percent slopes",6.3,0.0,Tilma,45,Prime farmland if drained,Moderately well drained,4,C/D,18.85,2.6,46,
+68162,WA001,ESA,"Esquatzel silt loam, 0 to 2 percent slopes",6.2,0.0,Esquatzel,100,Prime farmland if irrigated,Well drained,3,B,21,1,,
+2373738,ID620,122,"Tilma-Latah complex, 0 to 8 percent slopes",5.8,0.0,Tilma,45,Prime farmland if drained,Moderately well drained,4,C/D,18.76,2.4,46,
+2487260,ID057,15,"Joel silt loam, 3 to 7 percent slopes",5.7,0.0,Joel,90,All areas are prime farmland,Well drained,3,C,21.25,5,,
+68243,WA001,SNB,"Stanfield silt loam, 0 to 6 percent slopes",5.3,0.0,Stanfield,100,Not prime farmland,Moderately well drained,6,C,15.27,3,77,
+644241,ID057,Ac1,"Arson-Carlinton complex, 8 to 35 percent slopes",5.2,0.0,Arson,40,Not prime farmland,Well drained,6,B,19.83,22.7,45,122
+1544813,ID620,364,"Larkin-Southwick complex, 3 to 12 percent slopes",5.0,0.0,Larkin,50,"Farmland of statewide importance, if drained",Well drained,2,B,18.62,6.5,67,
+2743083,WA075,Ls2j,"Libertybutte-Schumacher complex, 25 to 45 percent slopes",4.2,0.0,Libertybutte,40,Not prime farmland,Well drained,6,C,12.63,32.9,,43
+68204,WA001,RED2,"Ritzville silt loam, 2 to 30 percent slopes, eroded",4.0,0.0,Ritzville,100,Farmland of statewide importance,Well drained,4,B,20,16,,
+1389841,ID620,351,"Southwick ashy silt loam, 8 to 20 percent slopes",4.0,0.0,Southwick,80,"Farmland of statewide importance, if drained",Moderately well drained,3,C,19.06,11.6,67,
+1390165,ID620,801,"Pits, gravel",3.2,0.0,Pits,100,Not prime farmland,,8,,,,,
+2651383,WA075,9610,"Schumacher silt loam, 5 to 25 percent slopes",3.0,0.0,Schumacher,80,Farmland of statewide importance,Well drained,3,B,15.97,13.1,,119
+68219,WA001,Ra,Riverwash,2.9,0.0,Riverwash,100,Not prime farmland,,8,,,2,31,
+2743091,WA075,406,"Thatuna-Naff complex, 25 to 40 percent slopes",2.9,0.0,Thatuna,50,Farmland of statewide importance,Moderately well drained,6,C,19.57,29.4,71,
+889560,WA623,DAM,Dam,2.3,0.0,Dam,100,Not prime farmland,,,,,,,
+2743095,WA075,710,"McCrosket-Ardenvoir association, 15 to 35 percent slopes",2.2,0.0,McCrosket,50,Not prime farmland,Well drained,6,B,11.54,24.3,,107
+2743089,WA075,414,"Naff-Thatuna complex, 3 to 8 percent slopes",1.8,0.0,Naff,45,All areas are prime farmland,Well drained,2,C,19.64,4.9,71,
+2373915,ID620,421,"Naff-Garfield complex, 5 to 25 percent slopes",1.6,0.0,Naff,55,Not prime farmland,Well drained,3,C,19.49,13.1,,
+2651338,WA075,1010,"Caldwell-Thatuna complex, 0 to 8 percent slopes",1.6,0.0,Caldwell,65,All areas are prime farmland,Somewhat poorly drained,3,C,19.83,2.3,61,
+71518,WA021,124,"Roloff-Rock outcrop complex, 30 to 70 percent slopes",1.4,0.0,Roloff,60,Not prime farmland,Well drained,6,C,12.92,50,,0
+71610,WA021,171,"Starbuck-Roloff-Rock outcrop complex, 15 to 30 percent slopes",1.2,0.0,Starbuck,40,Not prime farmland,Well drained,6,D,9.77,23,,0
+1689271,ID057,Kr3,"Kruse-Brodeer complex, 15 to 45 percent slopes",1.2,0.0,Kruse,60,Not prime farmland,Well drained,6,B,19.92,24.7,,
+79707,ID611,90,"Naff-Palouse complex, 8 to 20 percent slopes",0.8,0.0,Naff,50,Not prime farmland,Well drained,4,C,19.16,14,,
+2651379,WA075,9124,"Caldwell-Cald complex, 0 to 3 percent slopes",0.8,0.0,Caldwell,60,Prime farmland if drained and either protected from flooding or not frequently flooded during the growing season,Somewhat poorly drained,3,C,19.83,1.7,28,
+644912,ID057,Jo5,"Joel  silt loam, moist, 7 to 25 percent slopes",0.3,0.0,Joel,80,Farmland of statewide importance,Well drained,3,B,20.75,12,,
+2487311,ID057,66,Water,0.3,0.0,Water,100,Not prime farmland,,8,,,,,

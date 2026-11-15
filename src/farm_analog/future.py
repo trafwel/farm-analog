@@ -11,6 +11,18 @@ years and the future years, and apply that change to the farm's real PRISM clima
 Doing this per model, rather than averaging the models first, keeps each model's own
 pattern of change intact; M4 matches each model separately and counts how many agree.
 Like ``farm_today``, the Earth Engine fetch is kept apart from the pure, tested logic.
+
+Data flow:
+Inputs:  the farm's normal fingerprint (from farm_today); the field geometry; for each model
+         in config.CLIMATE_MODELS, NEX-GDDP-CMIP6 monthly climatologies (NASA/GDDP-CMIP6 in
+         Earth Engine) for 1995-2014 (historical) and 2041-2060 (the chosen scenario).
+         Offline, match.palouse_demo passes the team's ACCESS-CM2 CSV instead.
+Outputs: ``QuarterlyChange`` per model (temperature delta °C, precipitation ratio);
+         ``FarmFuture``: ``per_model`` (model -> future 8-value vector), ``median`` /
+         ``low`` / ``high`` across models, ``headline`` (contract fingerprint),
+         ``failed_models`` and ``changes``.
+Used by: match.match (``per_model``, ``median``), match.to_result (``headline``),
+         evidence.future_monthly (``changes``), pipeline.py (notes on failed models).
 """
 
 from dataclasses import dataclass, field
