@@ -126,6 +126,18 @@ def to_monthly_climate(normals: pd.DataFrame) -> MonthlyClimate:
     )
 
 
+def cdl_class_names(values, names) -> dict[int, str]:
+    """CDL class code -> name. Earth Engine stores both as comma-separated strings
+    ("0,1,2,..." and "Background,Corn,Cotton,..."); lists are accepted too."""
+    if isinstance(values, str):
+        values = values.split(",")
+    if isinstance(names, str):
+        names = names.split(",")
+    if len(values) != len(names):
+        raise ValueError(f"CDL has {len(values)} class codes but {len(names)} names")
+    return {int(v): n.strip() for v, n in zip(values, names, strict=True)}
+
+
 def place_name(county: str | None, state_fips: str | None) -> str | None:
     if not county:
         return None
@@ -199,12 +211,9 @@ def fetch_evidence(points: list[tuple[int, float, float]]) -> dict[int, AnalogEv
     first, last = config.CDL_YEARS
     cdl = ee.ImageCollection("USDA/NASS/CDL").filterDate(f"{first}-01-01", f"{last + 1}-01-01")
     first_image = cdl.first()
-    names = dict(
-        zip(
-            first_image.get("cropland_class_values").getInfo(),
-            first_image.get("cropland_class_names").getInfo(),
-            strict=True,
-        )
+    names = cdl_class_names(
+        first_image.get("cropland_class_values").getInfo(),
+        first_image.get("cropland_class_names").getInfo(),
     )
     counts = {rank: {} for rank, _, _ in points}
     for image in cdl.toList(cdl.size()).getInfo():

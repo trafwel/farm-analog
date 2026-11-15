@@ -42,7 +42,9 @@ def reduce_field(ee, image, area, projection, band):
     kwargs = {"crs": projection, "scale": projection.nominalScale(), "maxPixels": 1_000_000}
     mean = image.reduceRegion(ee.Reducer.mean(), area, **kwargs)
     cell = image.reduceRegion(ee.Reducer.first(), area.centroid(maxError=1), **kwargs)
-    inside = ee.Number(ee.Algorithms.IsEqual(mean.get(band), None)).Not()
-    values = ee.Dictionary(ee.Algorithms.If(inside, mean, cell))
-    support = ee.Algorithms.If(inside, "field_mean", "centroid_cell")
+    # IsEqual returns a server-side Boolean, which can't be negated as a Number, so branch on
+    # "empty" directly instead of on "not empty".
+    empty = ee.Algorithms.IsEqual(mean.get(band), None)
+    values = ee.Dictionary(ee.Algorithms.If(empty, cell, mean))
+    support = ee.Algorithms.If(empty, "centroid_cell", "field_mean")
     return values, support

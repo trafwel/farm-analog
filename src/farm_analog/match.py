@@ -128,7 +128,7 @@ def palouse_demo(top_n: int = config.DEFAULT_TOP_N) -> tuple[AnalogResult, pd.Da
     today = palouse_today_from_cache(payload)
     change = quarterly_change(pd.read_csv(TEAM_MODEL_CSV), "ACCESS-CM2")
     future = farm_future(fingerprint.from_contract(today.normal), [change])
-    candidates, candidate_note = cand.load_candidates()
+    candidates, candidate_note = cand.team_candidates()
     table = match(today, future, candidates)
     notes = [
         "Offline Palouse demo: the target is the Palouse-wide average climate from cached "

@@ -200,3 +200,58 @@ _Built in the same away batch. M8 was skipped for now (no UI changes)._
 2. In the backtest, "nothing changed" might score higher than the analogs. Why could that happen, and how would you present it to judges?
    - Answer:
 
+---
+
+## M11 — Live run + saved demo
+
+**Key concepts**
+- **The first live run found 5 bugs offline tests couldn't:** a server-side Boolean negation, a missing projection, CDL class names arriving as one string, cells sampled twice, and PRISM's 2021+ data labelled `AN91`.
+- **Saved results:** the 5 test fields, run live once and committed, so the demo works without Earth Engine. A field near a test field gets that result, labelled as such.
+- **Test fields moved onto cropland:** 4 of the 5 guide points were towns or station buildings.
+- **A weak backtest is still a result:** over 11 years, a place's own past predicts its crops far better than climate analogs do.
+
+**Questions**
+1. Why must a saved result say whose field it was computed for?
+   - Answer:
+2. The backtest shows analogs barely beat random farmland. What does that tell a judge, and what does it *not* tell them about the 2050 analogs?
+   - Answer:
+
+## M12 — Rotation strategies
+
+**Key concepts**
+- **Evidence from practice:** the Cropland Data Layer labels every 30 m pixel every year, so 8 years of labels show the rotation grown there.
+- **Cycles vs. flexible mixes:** a pixel repeating every 1–4 years has a cycle (winter wheat → fallow); otherwise it's a mix of its main crops.
+- **Current rotation first,** then the analog areas' most used rotations, each with why, evidence, benefits, risks and gaps, as the challenge asks.
+- **Written by code from a fixed traits table,** never by an LLM.
+
+**Questions**
+1. Cook's analog areas use more fallow than Cook does today. Is the tool telling the farmer to fallow more? What does it actually say?
+   - Answer:
+2. Why are "winter wheat → fallow" and "fallow → winter wheat" the same rotation?
+   - Answer:
+
+## M13 — Hazards and field conditions
+
+**Key concepts**
+- **An analog's hazards today preview the farm's future:** Cook's best match has 28 heat days a year vs. Cook's 18, and a frost-free season about 37 days longer.
+- **NASA sources:** GPM IMERG (extreme rain), SMAP (root-zone soil moisture), Landsat (NDVI, bare months), with PRISM daily for heat and frost.
+- **Each source can fail alone** without losing the others or the match.
+
+**Questions**
+1. Why is NDVI the only hazard number that really describes the farmer's own field?
+   - Answer:
+2. What does "bare months 8–10" mean for erosion, and why might it differ between wheat–pea and wheat–fallow fields?
+   - Answer:
+
+## M8 — Comparison panel, rotation cards, hazard outlook
+
+**Key concepts**
+- **Show the evidence next to the claim:** each rotation card carries its share of analog cropland and how many analog areas use it. The climate chart shows the matching place's climate today lying on the field's 2050s line.
+- **"A preview of your 2050s":** the hazard table compares the field today with the matching place today, because that place's present is our best picture of the field's future.
+- **Accessible by default:** every chart has a table version, Bill's text stays plain text (never HTML), and the glossary explains each term.
+
+**Questions**
+1. Why does the hazard table compare the field *today* with the matching place *today*, instead of using a forecast?
+   - Answer:
+2. A rotation card says "used in 0 of 5 analog areas" for the field's current rotation. What should a farmer take from that, and what shouldn't they?
+   - Answer:
