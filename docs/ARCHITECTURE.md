@@ -22,6 +22,9 @@ flowchart TD
     CAND["candidates.py: farmland cells, cached Parquet<br/>(falls back to team 20 km cache)<br/><b>built [M3]</b>"]
     SIGMA["sigma_dissimilarity()<br/><b>built</b>"]
     MATCH["match.py: per-model sigma, median, agreement,<br/>baseline, AnalogResult + offline Palouse demo<br/><b>built [M4]</b>"]
+    SAVED["saved.py: 5 test fields run live, saved for offline demos<br/><b>built [M11]</b>"]
+    ROT["rotations.py: CDL crop sequences 2016–2023 → rotation strategies<br/>(current first; why / evidence / benefits / risks / gaps)<br/><b>built [M12]</b>"]
+    HAZ["hazards.py: heat, frost (PRISM daily), extreme rain (GPM IMERG),<br/>soil moisture (SMAP), bare months (Landsat NDVI)<br/><b>built [M13]</b>"]
     PROOF["proof.py: self-check, sigma vs. baseline,<br/>crop backtest (live) + day-length check<br/><b>built [M10]</b>"]
     EVID["evidence.py: crops (CDL), soil (OpenLandMap), climograph,<br/>county names for the top 3 (live mode)<br/><b>built [M7]</b>"]
 
@@ -44,6 +47,12 @@ flowchart TD
     SIGMA --> MATCH
     MATCH --> EVID
     MATCH --> PROOF
+    MATCH --> ROT
+    CDL --> ROT
+    MATCH --> HAZ
+    ROT --> API
+    HAZ --> API
+    SAVED -. offline demo .-> API
     CAND --> PROOF
     CDL --> PROOF
     CDL --> EVID
@@ -80,6 +89,8 @@ flowchart TD
 Dotted arrows are build-time relationships (shared types and fake data), not runtime data flow.
 
 ## Changelog
+
+- 2026-11-15 (M11–M13): Live run with Earth Engine (candidate cache: 3,351 farmland cells; 5 test fields moved onto cropland and saved for offline use in `saved.py`; live backtest). `rotations.py` (M12) adds rotation strategies and `hazards.py` (M13) adds heat, frost, extreme rain, soil moisture and bare months; both are optional steps in the live pipeline. Contract gains `rotations`, `farm_hazards` and `Analog.hazards`.
 
 - 2026-11-14 (M10): Added `proof.py` (self-check, sigma vs. standardized-distance agreement, model agreement, crop-mix backtest with Earth Engine) and the day-length check in the live pipeline (`candidates.near_latitude`). M8 skipped for now (no UI changes).
 

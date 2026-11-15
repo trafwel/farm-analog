@@ -374,3 +374,136 @@ The "more climate models with an agreement count" and "standardized-Euclidean ba
 ### Moved to OPEN_ISSUES.md
 Run the backtest live; re-measure sigma vs. baseline with 8 models; the comparison panel (M8) is still to do.
 
+---
+
+## M11 — Live run + saved demo (2026-11-15)
+
+**Built:** the first live run with Earth Engine (project in `.env`, never committed).
+- **Candidate cache:** 3,351 farmland cells (~4.6 km PRISM cells, at least 30% cultivated, CDL 2019–2023) in `data/candidates/` (gitignored).
+- **`saved.py`:** runs the 5 test fields live for both scenarios and saves each result to `data/samples/live_<field>_<scenario>.json`, committed. In offline mode, a field within 8 km of a test field gets that saved result, with a first note saying whose field it was computed for. Other Palouse fields still get the regional demo.
+- **`config.TEST_FIELDS`:** the 5 fields, moved onto cropland. 4 of the 5 guide points were towns or station buildings (0–26% cultivated within 250 m). Each moved to the nearest spot, within about 1 km, that was ≥97% cultivated in 2016–2023.
+- **Offline demo pinned:** `candidates.team_candidates()` keeps the offline Palouse demo, and its regression tests, on the team's grid even when the 4 km cache exists.
+- **`config.PRISM_DATASET_TYPES`:** Earth Engine labels PRISM from 2021 on `AN91`, and the backtest needs 2019–2023.
+
+**Bugs the live run found** (none were catchable offline):
+1. `reduce_field` negated a server-side Boolean.
+2. The CDL mean had no projection.
+3. CDL class names arrive as one comma-separated string.
+4. Candidates were sampled at 4 km on a 4.6 km grid, so some cells appeared twice.
+5. PRISM's 2021+ months were filtered out.
+
+Fixes 1–4 were made and committed by the parallel session (`883d184`, `afe6be2`); fix 5 is here.
+
+### Live results (5 test fields, ~400 m squares, 8 models)
+
+| Field | Jul–Sep °C, today → 2041–2060 (SSP2-4.5) | Best matches, SSP2-4.5 | Best, SSP5-8.5 |
+|---|---|---|---|
+| Cook (Pullman) | 17.7 → 20.3 | Whitman Co. WA 0.30σ, Garfield 0.35, 0.37 (8/8) | Whitman 0.71 (8/8) |
+| Colfax | 18.3 → 21.0 | Whitman 0.31, Walla Walla 0.35, 0.38 (8/8) | Walla Walla 0.69 (8/8) |
+| LaCrosse | 20.0 → 22.6 | Garfield 0.49, 0.50, Walla Walla 0.57 (8/8) | Garfield 1.09 (5/8) |
+| Lind | 20.0 → 22.6 | Gilliam Co. OR 0.48, 0.51, Sherman Co. OR 0.56 (8/8) | Gilliam 1.10 (5/8) |
+| Dayton | 19.6 → 22.3 | Walla Walla 0.36, 0.37, 0.39 (8/8) | Walla Walla 1.02 (6/8) |
+
+- **The analogs stay in the inland Northwest,** answering the spec's first open question. Lind's go south across the Columbia into Oregon. Under SSP5-8.5 the matches weaken to "good" and fewer models agree, as expected.
+- **Cross-check:** the parallel session ran the same fields at slightly different points (1 km squares) and got the same counties and sigmas within about 0.03.
+- **Backtest, live** (200 test cells, 2008–2012 → 2019–2023, neighbors within 25 km excluded): crop-mix similarity is 0.529 for analog areas, 0.517 for random farmland and 0.818 for the cell's own past. Analogs beat random cells in 57% of test cells. **Weak.** Over 11 years, climate alone says little about crop mix in a wheat-dominated region. A place's own past says much more, as the M10 review expected.
+
+### Efficiency
+- Building the cache takes about 2.5 minutes (25 one-degree tiles). One field takes 30–70 s for M1–M4, about 10 s for evidence, about 5 s for rotations and about 35 s for hazards. The 10 saved results took about 25 minutes in all.
+- Offline mode reads one ~30 kB JSON file per request.
+
+### Integration (what was run and checked)
+- `ruff check .` passes, and `pytest` passes: 186 tests.
+- Frontend: types regenerated, typecheck, lint and 30 tests pass. Only the generated types and the demo-data copy changed.
+- New tests:
+  - saved results: nearest test field, radius, missing scenario;
+  - the API serving a saved result for both scenarios;
+  - the regional demo for fields away from the test fields;
+  - the pipeline's rotation and hazard steps, with fakes, including both failing.
+- `python -m farm_analog.proof` was run live; its numbers are above.
+
+### Security and privacy
+- `.env` (the Earth Engine project) stays gitignored.
+- Saved results describe the team's own test points, not any farmer's field.
+
+### Other flaws
+- Saved results go stale when the pipeline changes. Rerun `python -m farm_analog.saved`; the date is recorded in `data/samples/live_results.json`.
+- Sigma vs. the plain baseline hasn't been re-measured on a live 8-model table yet.
+
+### Moved to OPEN_ISSUES.md
+The weak backtest, the live sigma-vs-baseline check, saved results going stale, Owen's new importers on `main`, and the organic-carbon step size.
+
+---
+
+## M12 — Rotation strategies (2026-11-15)
+
+**Built:** `rotations.py`. Cropland Data Layer crops for 2016–2023 are sampled at 400 random 30 m pixels in the field and in a 2 km circle around each of the top 5 analogs.
+- Each pixel's sequence becomes a rotation: a repeating 1–4-year cycle, or a "flexible mix" of its main crops.
+- **`strategies`:** puts the field's current rotation first, then the analog areas' rotations used on ≥10% of an area's cropland, then rarer ones (labelled thin evidence) to reach at least 3.
+- Each strategy carries why, evidence (share of analog cropland, analog areas using it, model agreement), benefits and risks (from a fixed crop-traits table), and gaps, ending with "check with your county extension agent".
+- All text is written by code; no LLM is involved.
+- The contract gains `RotationStrategy` and `AnalogResult.rotations`.
+
+### What the live results show
+- **Lind:** grows a flexible wheat–fallow mix; its Oregon analogs grow winter wheat → fallow on 94–95% of cropland.
+- **Colfax:** its current winter wheat → barley → pulses rotation appears in none of its analog areas. They use flexible fallow mixes and winter wheat → spring wheat → pulses.
+- **Cook and Dayton:** the analog areas lean toward rotations with fallow.
+
+The drier 2050s analogs rotate with more fallow. This is an observed pattern, not advice.
+
+### Efficiency
+- One batched sample per area (6 requests), about 5 s per field.
+
+### Integration
+- 9 rotation tests: crop groups; cycles across start years and gap years; flexible mixes; shares; current-first ordering; rare fill-ins; contract validity.
+- Live check on all 10 saved results; each has 3–4 strategies.
+
+### Bugs found and fixed during the live check
+- A gap year shifted the cycle's order ("Winter wheat → Winter wheat").
+- Wheat-twice cycles read "Winter wheat → Fallow → Winter wheat".
+- Lind had only 2 strategies.
+
+### Other flaws
+- CDL label errors, only 8 years of history, and general (not local) crop traits; see OPEN_ISSUES.
+- Earth Engine's seeded sampling isn't exactly repeatable, so shares can move a point or two between runs.
+
+---
+
+## M13 — Hazards and field conditions (2026-11-15)
+
+**Built:** `hazards.py`, written by a helper agent from a brief and then reviewed and integrated here.
+- Pure functions: heat days, frost dates, extreme-rain days, monthly soil moisture, bare months, `compare`.
+- Earth Engine fetchers, each failing on its own, run in parallel:
+  - PRISM daily tmax/tmin, 1995–2014;
+  - NASA GPM IMERG V07, 2014–2023, as UTC daily sums;
+  - NASA SMAP L4 root-zone moisture, 2016–2023;
+  - Landsat 8/9 NDVI within 200 m, 2019–2023.
+- `add_hazards` attaches `farm_hazards` and `hazards` to the top 3 analogs. Only source names (not error text) go into the result.
+- The contract gains `Hazards`.
+
+### What the live results show (SSP2-4.5, farm today vs. its best analog)
+
+| Field | Heat days > 32 °C per year | Frost-free days | Farm's bare months (NDVI < 0.25) |
+|---|---|---|---|
+| Cook | 18 → 28 | 150 → 186 | Jan–Mar, Aug–Dec |
+| Colfax | 23 → 31 | 155 → 191 | Sep–Oct |
+| LaCrosse | 37 → 42 | 165 → 199 | Jul–Nov |
+| Lind | 32 → 32 | 164 → 192 | most of the year (wheat–fallow) |
+| Dayton | 27 → 37 | 172 → 211 | Sep–Oct |
+
+### Efficiency
+- About 35 s per field: 18 Earth Engine requests in parallel.
+- IMERG and SMAP were split by year and by quarter to stay under Earth Engine's memory limit.
+
+### Integration
+- 14 hazard tests (11 from the helper agent, 3 for the contract adapter).
+- Pipeline tests with faked fetchers.
+- Live on all 10 saved results; no source failed.
+
+### Other flaws
+- Different periods per source, coarse grids, the deprecated `AN81d` asset, UTC days for IMERG, and a fixed NDVI threshold; see OPEN_ISSUES.
+- The UI doesn't show hazards or rotations yet (M8).
+
+### Moved to OPEN_ISSUES.md
+All of the above, plus showing rotations and hazards in the UI (M8).
+
