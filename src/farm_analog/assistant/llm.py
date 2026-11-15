@@ -18,6 +18,9 @@ Used by: parser.parse_farmer_text, summarizer.summarize, api.make_bill_llm (buil
 """
 
 import os
+import random
+import time
+from collections.abc import Callable
 from typing import Any, Protocol
 
 from farm_analog import config
@@ -64,11 +67,15 @@ class GeminiLLM:
     """``LLM`` backed by the Gemini API.
 
     ``client`` can be injected (tests use a fake with ``.models.generate_content``); otherwise a
-    real ``genai.Client`` is built from ``GEMINI_API_KEY``.
+    real ``genai.Client`` is built from ``GEMINI_API_KEY``. Temporary server errors
+    (``config.GEMINI_RETRY_CODES``) are retried after ``config.GEMINI_RETRY_DELAYS_S``; ``sleep``
+    is injectable so tests don't wait.
     """
 
-    def __init__(self, client: Any = None, model: str = config.GEMINI_MODEL) -> None:
+    def __init__(self, client: Any = None, model: str = config.GEMINI_MODEL,
+                 sleep: Callable[[float], None] = time.sleep) -> None:
         self.model = model
+        self._sleep = sleep
         if client is None:
             from dotenv import find_dotenv, load_dotenv
             from google import genai
@@ -95,18 +102,25 @@ class GeminiLLM:
         if json_schema is not None:
             settings["response_mime_type"] = "application/json"
             settings["response_json_schema"] = gemini_schema(json_schema)
-        try:
-            response = self._client.models.generate_content(
-                model=self.model,
-                contents=prompt,
-                config=types.GenerateContentConfig(**settings),
-            )
-        except Exception as exc:  # network, quota, safety block, bad request
-            # Only the type and status code: SDK messages can echo the prompt, which holds farmer
-            # text, so we also drop the chained exception (``from None``) to keep it out of logs.
-            code = getattr(exc, "code", None)
-            detail = f"{type(exc).__name__}, code {code}" if code else type(exc).__name__
-            raise LLMError(f"Gemini call failed ({detail})") from None
+        request = types.GenerateContentConfig(**settings)
+        delays = (*config.GEMINI_RETRY_DELAYS_S, None)  # None = no attempts left
+        for attempt, delay in enumerate(delays, start=1):
+            try:
+                response = self._client.models.generate_content(
+                    model=self.model, contents=prompt, config=request,
+                )
+                break
+            except Exception as exc:  # network, quota, safety block, bad request, overload
+                code = getattr(exc, "code", None)
+                if code in config.GEMINI_RETRY_CODES and delay is not None:
+                    self._sleep(delay * random.uniform(0.8, 1.2))  # jitter: don't retry in step
+                    continue
+                # Only the type and status code: SDK messages can echo the prompt, which holds
+                # farmer text, so we also drop the chained exception (``from None``) to keep it
+                # out of logs.
+                detail = f"{type(exc).__name__}, code {code}" if code else type(exc).__name__
+                tries = f" after {attempt} attempts" if attempt > 1 else ""
+                raise LLMError(f"Gemini call failed ({detail}){tries}") from None
         text = getattr(response, "text", None)
         if not text:
             raise LLMError("Gemini returned an empty reply")

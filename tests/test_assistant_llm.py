@@ -65,3 +65,50 @@ def test_missing_key_is_a_clear_error(monkeypatch, tmp_path):
     monkeypatch.chdir(tmp_path)  # no .env here, so load_dotenv finds nothing
     with pytest.raises(LLMError, match="GEMINI_API_KEY"):
         GeminiLLM()
+
+
+class _ServerError(Exception):
+    def __init__(self, code: int) -> None:
+        super().__init__(f"{code} UNAVAILABLE. high demand: <farmer_text>secret</farmer_text>")
+        self.code = code
+
+
+class FlakyClient:
+    """Fails with the given status codes, in order, then answers."""
+
+    def __init__(self, codes: list[int], text: str = "ok") -> None:
+        self.models = self
+        self.codes, self.text, self.calls = list(codes), text, 0
+
+    def generate_content(self, **kwargs):
+        self.calls += 1
+        if self.codes:
+            raise _ServerError(self.codes.pop(0))
+        return type("Response", (), {"text": self.text})()
+
+
+def test_high_demand_503_is_retried_then_succeeds():
+    waits = []
+    client = FlakyClient([503, 503])
+    llm = GeminiLLM(client=client, sleep=waits.append)
+    assert llm.generate(system="s", prompt="p") == "ok"
+    assert client.calls == 3
+    assert len(waits) == 2 and all(0 < w <= 1.2 * max(config.GEMINI_RETRY_DELAYS_S) for w in waits)
+
+
+def test_retries_are_limited_and_the_error_stays_private():
+    client = FlakyClient([503] * 10)
+    with pytest.raises(LLMError) as info:
+        GeminiLLM(client=client, sleep=lambda s: None).generate(system="s", prompt="p")
+    assert client.calls == len(config.GEMINI_RETRY_DELAYS_S) + 1
+    assert "code 503" in str(info.value) and "after 3 attempts" in str(info.value)
+    assert "secret" not in str(info.value) and info.value.__cause__ is None
+
+
+@pytest.mark.parametrize("code", [400, 401, 403, 404, 429])
+def test_client_and_quota_errors_are_not_retried(code):
+    client = FlakyClient([code])
+    with pytest.raises(LLMError, match=f"code {code}"):
+        GeminiLLM(client=client, sleep=lambda s: pytest.fail("should not wait")).generate(
+            system="s", prompt="p")
+    assert client.calls == 1
