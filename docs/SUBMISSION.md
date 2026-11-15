@@ -22,7 +22,7 @@ Farm Analog shows a farmer where their field's 2050s climate already exists toda
 1. NASA's NEX-GDDP-CMIP6 projections from 8 climate models give the field's climate around 2050.
 2. The tool searches 3,351 farmland cells across the inland Northwest for places whose climate *today* matches it.
 3. For the best matches, it shows the crop rotations those farmers actually use (USDA Cropland Data Layer, 2016–2023). These are compared with the field's current rotation, with at least three options, each with why, evidence, benefits, risks and gaps.
-4. It also shows the hazards those places already live with: heat, frost, extreme rain (NASA GPM IMERG), soil moisture (NASA SMAP) and bare-field months (Landsat).
+4. It also shows the hazards those places already live with: heat, frost, extreme rain (NASA GPM IMERG), soil moisture (NASA SMAP), afternoon ground temperature at 70 m (NASA ECOSTRESS) and bare-field months (Landsat).
 
 Every number comes from data, and a plain-language summary and glossary make it readable. It supports the farmer's decision; it doesn't make it.
 
@@ -46,7 +46,7 @@ Every number comes from data, and a plain-language summary and glossary make it 
 4. **Matching:** sigma dissimilarity (Mahony et al., 2017) measures distance in units of the field's own year-to-year swings. Below 1 is a strong match; 4 or more means no real match exists, and the app warns about a "novel climate". Every place is scored under every model, and the tool reports how many models agree.
 5. **Evidence:** for the top matches, crops (CDL), topsoil (OpenLandMap) and a monthly climate chart comparing the field today, the field in the 2050s and the matching place today.
 6. **Rotation strategies:** 8 years of CDL labels per 30 m pixel show the rotation grown there. The field's current rotation comes first, then the rotations used in the matching places. Benefits and risks come from a fixed crop-traits table.
-7. **Hazard outlook:** hot days and frost dates (PRISM daily), heavy-rain days (GPM IMERG), root-zone soil moisture (SMAP) and months with little green cover (Landsat NDVI). Each is compared between the field today and the matching place today.
+7. **Hazard outlook:** hot days and frost dates (PRISM daily), heavy-rain days (GPM IMERG), root-zone soil moisture (SMAP), afternoon ground temperature over cropland (ECOSTRESS, 70 m; June with crops growing and July–August after harvest, shown apart) and months with little green cover (Landsat NDVI). Each is compared between the field today and the matching place today.
 
 **What we found (live runs, 5 Palouse test fields).** Under SSP2-4.5 every field's 2050s climate already exists nearby, with strong matches (0.30–0.49σ) in Whitman, Garfield and Walla Walla counties (WA) and Gilliam County (OR), and all 8 models agree. Under SSP5-8.5 the matches weaken (0.69–1.10σ) and only 5–6 of the 8 models agree for the drier fields. The matching places rotate with more fallow, and they have more hot days and a frost-free season about a month longer. For example, the Cook Agronomy Farm at Pullman has 18 hot days a year today against 28 at its best match.
 
@@ -81,7 +81,7 @@ Every number comes from data, and a plain-language summary and glossary make it 
 - **GPM IMERG V07** (Global Precipitation Measurement): half-hourly rain summed to days, 2014–2023, for extreme-rain days. Earth Engine `NASA/GPM_L3/IMERG_V07`. https://gpm.nasa.gov/data/imerg
 - **SMAP L4** (Soil Moisture Active Passive), version 8, root-zone soil moisture, 2016–2023. Earth Engine `NASA/SMAP/SPL4SMGP/008`. https://doi.org/10.5067/T5RUATAQREF8
 - **Landsat 8 and 9** (NASA/USGS), Collection 2 Level 2 surface reflectance, NDVI 2019–2023, for bare-field months. Earth Engine `LANDSAT/LC08/C02/T1_L2`, `LANDSAT/LC09/C02/T1_L2`.
-- **ECOSTRESS** land surface temperature (team importer, Streamlit preview). https://ecostress.jpl.nasa.gov/
+- **ECOSTRESS** (ECOsystem Spaceborne Thermal Radiometer Experiment on the Space Station), L2T LSTE version 2, land surface temperature at 70 m: clear summer afternoons 2018–2025 over cropland within 1 km of each place. Earth Engine `NASA/ECOSTRESS/L2T_LSTE/V2`. https://doi.org/10.5067/ECOSTRESS/ECO_L2T_LSTE.002
 
 ## Space agency partner data
 

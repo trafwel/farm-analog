@@ -638,3 +638,32 @@ All 10 summaries came back from Gemini and passed the number check, which only p
 
 ### Open
 Summaries must be regenerated after any rerun; the number check doesn't verify pairings or wording (see OPEN_ISSUES).
+
+---
+
+## M17 — ECOSTRESS afternoon ground temperature (2026-11-15)
+
+**Built:** NASA ECOSTRESS is now part of the hazard outlook, read in Earth Engine (`NASA/ECOSTRESS/L2T_LSTE/V2`) instead of the team's download script.
+- **What's measured** (`hazards.fetch_surface_temperature`): for the field and each top match, clear-sky (cloud mask 0) passes from June to August, 2018–2025, between 18 and 23 UTC (11 am–4 pm Pacific daylight time), averaged over cultivated pixels (USDA CDL, 2019–2023) within 1 km, keeping passes with at least 20 such pixels.
+- **Reported** (`hazards.surface_temperature`, pure and tested): the median for June and for July–August, and the number of distinct passes. Overlapping map tiles deliver the same pass twice; repeated times count once.
+- **Contract:** `Hazards` gains `surface_temp_june_c`, `surface_temp_julaug_c`, `surface_passes` (optional). Schema and types regenerated.
+- **Shown:** two hazard-table rows ("June, crops growing" and "July–August, mostly after harvest"), the source note, and a glossary entry saying it's the surface, not the air. Bill gets both numbers, and the template adds the July–August one.
+
+### Why these choices
+- **A probe first.** At Colfax and Whitman County, June medians were the same (37.0 vs. 36.9 °C), while July–August differed by about 4 °C. Most July–August readings are stubble and fallow after harvest, so one summer number would mostly measure bare ground. Splitting June from July–August keeps the crop-growing signal visible.
+- **Cropland within 1 km, not the point.** A match's location is the center of a ~4.6 km cell; a small circle there can land on a road or a draw. The same mask defines the candidate cells.
+- **No NDVI filter:** the ECOSTRESS NDVI product (STARS) doesn't pair one-to-one with the temperature passes, so it would need a time join. Left for later.
+
+### Integration (what was run and checked)
+- Backend: ruff, 199 tests (2 new: June vs. July–August with repeated passes; the fields reaching `compare` and the contract). Frontend: typecheck, lint, 56 tests (1 new).
+- **Live:** the fetch for Colfax and its top 3 matches took 26 s, in parallel with the other hazard sources.
+- **Rerun:** all 10 saved results rerun live in 12 minutes, no missing sources, 87–99 passes per field. Matches, sigmas, climate and the other hazards are unchanged; ranks 4–20 now have county names (from the place-name change on `main`); three Cook and Dayton rotation shares moved by up to 1 point (pixel sampling).
+- **Summaries:** regenerated; all 10 from Gemini; every ground-temperature pair checked by hand against the data, plus the quality words for SSP5-8.5.
+- **Browser** (static build, as deployed): both rows show (Colfax June 37.0 → 37.6 °C, July–August 40.3 → 44.2 °C), ranks 4–20 named, glossary entry present, no console errors, no horizontal scroll at 375 px.
+
+### What the numbers say
+After harvest the matches run hotter than the fields in most cases (Colfax +3.9 °C, Cook +4.7, Dayton +4.4); for the drier fields the difference is small (LaCrosse +0.3, Lind +0.1), since they're already mostly fallow and stubble. In June it's mixed: Dayton's match is 5.2 °C hotter, Colfax's about the same.
+
+### Security, efficiency, other flaws
+- No new secrets: Earth Engine runs under the existing project. One more server-side request per analysis, run in parallel.
+- Open (in OPEN_ISSUES): surface vs. air, land cover on the day, varying pass times, 2018 start, and the 1 km circle as a sample of the place.

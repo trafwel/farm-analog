@@ -20,7 +20,7 @@ Every unresolved item from a milestone review. See rule 3 in [HOW_WE_BUILD.md](H
 
 - **[M11] The backtest is weak, and that's the honest result.** Live, over 200 test cells: analog areas' 2008–2012 crop mix matched the test cell's 2019–2023 crop mix with similarity 0.529, random farmland cells 0.517, and the cell's own past 0.818; analogs beat random cells in 57% of cells. Over an 11-year gap, climate alone says little about crop mix in a wheat-dominated region. Present it as a limit, not a validation, and consider the alternative design under Team decision (M10).
 - **[M11 → live run] Sigma vs. the plain baseline, live.** Still only measured offline (Spearman 0.997). `proof.rank_agreement` on a live 8-model match table would settle it; the live tables aren't saved yet.
-- **[M11] Saved results go stale.** `data/samples/live_*.json` were computed on 2026-11-15. Rerun `python -m farm_analog.saved` after any change to the pipeline, the candidate cache, or the test-field points.
+- **[M11] Saved results go stale.** `data/samples/live_*.json` were last computed on 2026-11-15 (M17 rerun). Rerun `python -m farm_analog.saved` after any change to the pipeline, the candidate cache, or the test-field points, then `--summaries`. A rerun can shift rotation shares by about a point (Earth Engine samples pixels).
 - **[M12] Rotations come from 8 years of 30 m CDL labels.** CDL misclassifies some pixels (pulses vs. spring grains in particular), and 8 years show at most two cycles of a 4-year rotation. Many pixels have no clean cycle and are grouped as "flexible mixes". Treat shares as rough.
 - **[M12] Crop-traits text is general agronomy,** not local research. Have someone at WSU Extension (or a farmer on the team's contact list) read `rotations.TRAITS` before the demo.
 - **[M13] Hazard periods differ by source:** PRISM 1995–2014, IMERG 2014–2023, SMAP 2016–2023, Landsat 2019–2023. Coarse grids (PRISM ~4 km, IMERG ~10 km, SMAP ~9 km) are read at the point; only NDVI is field-scale.
@@ -54,7 +54,9 @@ Every unresolved item from a milestone review. See rule 3 in [HOW_WE_BUILD.md](H
 - **[M0 rebase → M7] No tests for the SMAP, ECOSTRESS and climate importers.** Their `validate_request` functions and the CSV/JSON writers can be tested with recorded responses; add tests when M7 wires them into the contract.
 
 - **[M18] Saved summaries go stale.** `data/samples/summaries/` describes the saved results as of 2026-11-15. After any rerun (M17 ECOSTRESS, M21 soil) run `python -m farm_analog.saved --summaries` and read all 10 again before committing.
-- **[M18] The number check doesn't check pairings or wording.** It confirms every number appears in the input, not that it's attached to the right thing, and not quality words. All 10 saved summaries were checked by hand against the input (pairs, shares, model counts, "good" vs. "strong"); one loose phrase remains (Lind SSP5-8.5 says the "projections" are based on the farmland cells, where the candidates are).
+- **[M18] The number check doesn't check pairings or wording.** It confirms every number appears in the input, not that it's attached to the right thing, and not quality words. All 10 saved summaries were checked by hand against the input (pairs, shares, model counts, "good" vs. "strong"); one loose phrase remains (after the M17 rerun: LaCrosse SSP5-8.5 says the "climate model projections" are based on the farmland cells, where the candidates are).
+
+- **[M17] Ground temperature is the surface, not the air, and reflects what was growing.** ECOSTRESS reads the crop, stubble or bare soil on each pass; July–August is mostly after harvest, and wheat–fallow land reads hotter than continuous crop. June and July–August are shown apart for that reason. Passes come at varying times inside 11 am–4 pm, and the data start in 2018, not 1995 like the climate baseline. The 1 km cropland circle is a sample of the place, not the farmer's field.
 
 ## Team decision
 

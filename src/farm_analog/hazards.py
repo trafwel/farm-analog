@@ -19,7 +19,8 @@ Data flow:
 Inputs:  a list of (key, lon, lat) points (the farm and its analogs); from Earth Engine:
          PRISM daily tmax/tmin (OREGONSTATE/PRISM/AN81d, 1995-2014), GPM IMERG V07
          (NASA/GPM_L3/IMERG_V07, 2014-2023), SMAP L4 sm_rootzone (NASA/SMAP/SPL4SMGP/008,
-         2016-2023) and Landsat 8/9 C2 L2 surface reflectance (2019-2023).
+         2016-2023), Landsat 8/9 C2 L2 surface reflectance (2019-2023) and ECOSTRESS
+         L2T LSTE V2 surface temperature (NASA/ECOSTRESS/L2T_LSTE/V2, 2018-2025, M17).
 Outputs: dict key -> HazardProfile (heat days, frost dates, extreme rain, 12 monthly soil
          moisture and NDVI values, bare months, and a ``missing`` list); ``compare`` turns a
          farm and an analog profile into farm/analog/change numbers.
@@ -70,6 +71,19 @@ NDVI_MIN_PIXELS = 30  # a 200 m circle holds ~140 Landsat pixels; skip mostly-cl
 LANDSAT_QA_MASK = 0b111111
 
 SOURCE_TIMEOUT_S = 180
+
+# ECOSTRESS (M17): land-surface temperature at 70 m from the space station, so the only
+# field-scale heat number here. Passes come at any hour; we keep clear-sky summer afternoons
+# (18-23 UTC = 11 am-4 pm Pacific daylight time) over cultivated pixels within 1 km of the
+# point. June (crops still green, grain fill) and July-August (mostly stubble and fallow
+# after harvest) are reported apart, because bare ground reads far hotter than a crop.
+ECOSTRESS_COLLECTION = "NASA/ECOSTRESS/L2T_LSTE/V2"
+ECOSTRESS_YEARS = (2018, 2025)  # data start in July 2018
+ECOSTRESS_HOURS_UTC = (18, 23)
+ECOSTRESS_BUFFER_M = 1000
+ECOSTRESS_MIN_PIXELS = 20  # cropland pixels with a clear reading, per pass and point
+CDL_CULTIVATED_YEARS = (2019, 2023)  # same years as the candidate cells' cropland mask
+
 
 
 # ---------------------------------------------------------------------------
@@ -155,6 +169,26 @@ def bare_months(monthly_ndvi: pd.Series, threshold: float = BARE_NDVI) -> list[i
     return [m for m, v in enumerate(medians, start=1) if v is not None and v < threshold]
 
 
+def surface_temperature(passes: pd.Series) -> dict:
+    """June and July-August median afternoon surface temperature (°C) from ECOSTRESS passes.
+
+    ``passes``: one mean cropland temperature per pass, indexed by pass time. Overlapping map
+    tiles deliver the same pass twice, so repeated times count once. Returns the two medians
+    (None for a period with no pass) and the number of distinct passes.
+    """
+    if passes.empty:
+        return {"surface_temp_june_c": None, "surface_temp_julaug_c": None, "surface_passes": 0}
+    s = passes[~passes.index.duplicated(keep="first")].dropna()
+    months = pd.DatetimeIndex(s.index).month
+    june, julaug = s[months == 6], s[(months == 7) | (months == 8)]
+
+    def median(x):
+        return round(float(x.median()), 1) if len(x) else None
+
+    return {"surface_temp_june_c": median(june), "surface_temp_julaug_c": median(julaug),
+            "surface_passes": int(len(s))}
+
+
 @dataclass
 class HazardProfile:
     """Hazard history and field conditions at one point; any number may be missing."""
@@ -168,6 +202,9 @@ class HazardProfile:
     soil_moisture_monthly: list[float | None] | None = None  # m3/m3, Jan-Dec
     ndvi_monthly: list[float | None] | None = None  # median NDVI, Jan-Dec
     bare_months: list[int] | None = None
+    surface_temp_june_c: float | None = None  # median afternoon cropland surface temp, June
+    surface_temp_julaug_c: float | None = None  # same, July-August
+    surface_passes: int | None = None  # clear afternoon ECOSTRESS passes used
     missing: list[str] = field(default_factory=list)  # "source: reason" for failed sources
 
 
@@ -178,8 +215,11 @@ SCALAR_FIELDS = (
     "frost_free_days",
     "extreme_rain_days",
     "max_1day_rain_mm",
+    "surface_temp_june_c",
+    "surface_temp_julaug_c",
 )
-DIGITS = {"extreme_rain_days": 1, "max_1day_rain_mm": 1}  # others: whole days
+DIGITS = {"extreme_rain_days": 1, "max_1day_rain_mm": 1, "surface_temp_june_c": 1,
+          "surface_temp_julaug_c": 1}  # others: whole days
 
 
 def _rounded(value, digits):
@@ -449,11 +489,61 @@ def fetch_greenness(ee, points, years=NDVI_YEARS) -> dict[str, HazardProfile]:
     return out
 
 
+def fetch_surface_temperature(ee, points, years=ECOSTRESS_YEARS) -> dict[str, HazardProfile]:
+    """ECOSTRESS afternoon surface temperature over cropland near each point (M17)."""
+    fc = _points_fc(ee, points)
+    buffered = fc.map(lambda f: f.buffer(ECOSTRESS_BUFFER_M))
+    cropland = (
+        ee.ImageCollection("USDA/NASS/CDL")
+        .filter(_years_filter(ee, CDL_CULTIVATED_YEARS))
+        .select("cultivated")
+        .mode()
+        .eq(2)
+    )
+    passes = (
+        ee.ImageCollection(ECOSTRESS_COLLECTION)
+        .filterBounds(fc.geometry())
+        .filter(_years_filter(ee, years))
+        .filter(ee.Filter.calendarRange(6, 8, "month"))
+        .filter(ee.Filter.calendarRange(*ECOSTRESS_HOURS_UTC, "hour"))
+    )
+    reducer = ee.Reducer.mean().combine(ee.Reducer.count(), sharedInputs=True)
+
+    def one_pass(img):
+        clear = img.select("cloud").eq(0)
+        lst = img.select("LST").subtract(273.15).rename("lst")
+        lst = lst.updateMask(clear).updateMask(cropland)
+        stats = lst.reduceRegions(collection=buffered, reducer=reducer, scale=70)
+        return stats.map(lambda f: f.set("t", img.get("system:time_start")).setGeometry(None))
+
+    rows = (
+        passes.map(one_pass)
+        .flatten()
+        .filter(ee.Filter.gte("count", ECOSTRESS_MIN_PIXELS))
+        .reduceColumns(ee.Reducer.toList(3), ["key", "t", "mean"])
+        .get("list")
+        .getInfo()
+    )
+    frame = pd.DataFrame(rows, columns=["key", "t", "lst"])
+    out = {}
+    for key, _, _ in points:
+        group = frame[frame["key"] == str(key)]
+        series = pd.Series(group["lst"].to_numpy(dtype=float),
+                           index=pd.to_datetime(group["t"], unit="ms")).sort_index()
+        values = surface_temperature(series)
+        if values["surface_passes"] == 0:
+            out[str(key)] = HazardProfile(missing=["ecostress_surface_temp: no clear passes"])
+        else:
+            out[str(key)] = HazardProfile(**values)
+    return out
+
+
 SOURCES = {
     "prism_heat_frost": fetch_heat_frost,
     "imerg_rain": fetch_extreme_rain,
     "smap_soil_moisture": fetch_soil_moisture,
     "landsat_ndvi": fetch_greenness,
+    "ecostress_surface_temp": fetch_surface_temperature,
 }
 
 

@@ -124,6 +124,15 @@ export function hazardRows(farm: Hazards | null | undefined, place: Hazards | nu
       change: diff === null ? '—' : diff === 0 ? 'same' : `${diff > 0 ? '+' : ''}${diff.toFixed(1)} points`,
     });
   }
+  const surface = (v: number) => `${v.toFixed(1)} °C`;
+  const surfaceChange = (a: number, b: number) => {
+    const d = Math.round((Math.round(b * 10) - Math.round(a * 10))) / 10; // from the values shown
+    return d === 0 ? 'same' : `${d > 0 ? '+' : ''}${d.toFixed(1)} °C`;
+  };
+  add('surface-june', 'Afternoon ground temperature in June, crops growing (ECOSTRESS)',
+    f.surface_temp_june_c, p.surface_temp_june_c, surface, surfaceChange);
+  add('surface-julaug', 'Afternoon ground temperature in July–August, mostly after harvest (ECOSTRESS)',
+    f.surface_temp_julaug_c, p.surface_temp_julaug_c, surface, surfaceChange);
   if (f.bare_months || p.bare_months) {
     rows.push({
       id: 'bare',

@@ -146,7 +146,8 @@ class SoilProfile(_Model):
 class Hazards(_Model):
     """Hazard history and field conditions at one place (M13), from PRISM daily (heat, frost;
     1995-2014), NASA GPM IMERG (extreme rain; 2014-2023), NASA SMAP L4 (root-zone soil
-    moisture; 2016-2023) and Landsat 8/9 (NDVI; 2019-2023). Any value may be missing."""
+    moisture; 2016-2023), Landsat 8/9 (NDVI; 2019-2023) and NASA ECOSTRESS (afternoon surface
+    temperature; 2018-2025). Any value may be missing."""
 
     heat_days: float | None = Field(default=None, ge=0)  # days/year above 32 °C (90 °F)
     last_spring_frost_doy: float | None = Field(default=None, ge=1, le=366)
@@ -157,6 +158,11 @@ class Hazards(_Model):
     soil_moisture_monthly: list[float | None] | None = None  # m³/m³, Jan-Dec
     ndvi_monthly: list[float | None] | None = None  # median NDVI, Jan-Dec
     bare_months: list[int] | None = None  # 1-12; median NDVI below 0.25
+    # NASA ECOSTRESS (M17): median clear-sky afternoon surface temperature over cropland
+    # within 1 km, 2018-2025; June (crops green) and July-August (mostly after harvest).
+    surface_temp_june_c: float | None = None
+    surface_temp_julaug_c: float | None = None
+    surface_passes: int | None = Field(default=None, ge=0)
     missing_sources: list[str] = Field(default_factory=list)  # e.g. ["imerg"]
 
     @model_validator(mode="after")

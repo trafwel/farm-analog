@@ -89,6 +89,9 @@
       11,
       12
     ],
+    "surface_temp_june_c": 41.1,
+    "surface_temp_julaug_c": 46.4,
+    "surface_passes": 92,
     "missing_sources": []
   },
   "novel_climate": false,
@@ -278,6 +281,9 @@
           9,
           10
         ],
+        "surface_temp_june_c": 39.7,
+        "surface_temp_julaug_c": 46.5,
+        "surface_passes": 99,
         "missing_sources": []
       }
     },
@@ -471,6 +477,9 @@
           10,
           11
         ],
+        "surface_temp_june_c": 41.3,
+        "surface_temp_julaug_c": 45.9,
+        "surface_passes": 100,
         "missing_sources": []
       }
     },
@@ -660,6 +669,9 @@
           9,
           10
         ],
+        "surface_temp_june_c": 40.8,
+        "surface_temp_julaug_c": 48.2,
+        "surface_passes": 98,
         "missing_sources": []
       }
     },
@@ -1086,9 +1098,9 @@
       "analog_share": 0.0,
       "analogs_using": 0,
       "analogs_checked": 5,
-      "why": "Your field's current rotation: 92% of its sampled cropland followed it in 2016\u20132023.",
+      "why": "Your field's current rotation: 92% of its sampled cropland followed it in 2016–2023.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016\u20132023: 0% of analog-area cropland; used in 0 of 5 analog areas."
+        "USDA Cropland Data Layer, 2016–2023: 0% of analog-area cropland; used in 0 of 5 analog areas."
       ],
       "benefits": [
         "Fallow: Stores soil water for the next crop in the driest areas.",
@@ -1118,7 +1130,7 @@
       }
     },
     {
-      "name": "Winter wheat \u2192 Fallow",
+      "name": "Winter wheat → Fallow",
       "crops": [
         "Winter wheat",
         "Fallow"
@@ -1131,7 +1143,7 @@
       "analogs_checked": 5,
       "why": "Used on 95% of sampled cropland across the top 5 analog areas, whose climate today matches your field's 2050s climate.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016\u20132023: 95% of analog-area cropland; used in 5 of 5 analog areas.",
+        "USDA Cropland Data Layer, 2016–2023: 95% of analog-area cropland; used in 5 of 5 analog areas.",
         "Those analog areas match your 2050s climate in up to 5 of 8 climate models."
       ],
       "benefits": [
@@ -1171,7 +1183,7 @@
       "analogs_checked": 5,
       "why": "Used on 1% of sampled cropland across the top 5 analog areas, whose climate today matches your field's 2050s climate.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016\u20132023: 1% of analog-area cropland; used in 0 of 5 analog areas."
+        "USDA Cropland Data Layer, 2016–2023: 1% of analog-area cropland; used in 0 of 5 analog areas."
       ],
       "benefits": [
         "Winter wheat: Main cash crop of the region; heavy residue protects the soil.",

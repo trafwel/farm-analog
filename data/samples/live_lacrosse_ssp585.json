@@ -83,6 +83,9 @@
       10,
       11
     ],
+    "surface_temp_june_c": 37.9,
+    "surface_temp_julaug_c": 45.6,
+    "surface_passes": 99,
     "missing_sources": []
   },
   "novel_climate": false,
@@ -267,6 +270,9 @@
           0.32
         ],
         "bare_months": [],
+        "surface_temp_june_c": 39.8,
+        "surface_temp_julaug_c": 46.6,
+        "surface_passes": 92,
         "missing_sources": []
       }
     },
@@ -455,6 +461,9 @@
           9,
           10
         ],
+        "surface_temp_june_c": 35.7,
+        "surface_temp_julaug_c": 46.5,
+        "surface_passes": 89,
         "missing_sources": []
       }
     },
@@ -643,6 +652,9 @@
           9,
           10
         ],
+        "surface_temp_june_c": 40.5,
+        "surface_temp_julaug_c": 45.9,
+        "surface_passes": 89,
         "missing_sources": []
       }
     },
@@ -1057,7 +1069,7 @@
   ],
   "rotations": [
     {
-      "name": "Winter wheat \u2192 Fallow",
+      "name": "Winter wheat → Fallow",
       "crops": [
         "Winter wheat",
         "Fallow"
@@ -1068,9 +1080,9 @@
       "analog_share": 0.51,
       "analogs_using": 4,
       "analogs_checked": 5,
-      "why": "Your field's current rotation: 98% of its sampled cropland followed it in 2016\u20132023.",
+      "why": "Your field's current rotation: 98% of its sampled cropland followed it in 2016–2023.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016\u20132023: 51% of analog-area cropland; used in 4 of 5 analog areas.",
+        "USDA Cropland Data Layer, 2016–2023: 51% of analog-area cropland; used in 4 of 5 analog areas.",
         "Those analog areas match your 2050s climate in up to 5 of 8 climate models."
       ],
       "benefits": [
@@ -1098,7 +1110,7 @@
       }
     },
     {
-      "name": "Winter wheat \u2192 Spring wheat \u2192 Fallow",
+      "name": "Winter wheat → Spring wheat → Fallow",
       "crops": [
         "Winter wheat",
         "Spring wheat",
@@ -1112,7 +1124,7 @@
       "analogs_checked": 5,
       "why": "Used on 16% of sampled cropland across the top 5 analog areas, whose climate today matches your field's 2050s climate.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016\u20132023: 16% of analog-area cropland; used in 2 of 5 analog areas.",
+        "USDA Cropland Data Layer, 2016–2023: 16% of analog-area cropland; used in 2 of 5 analog areas.",
         "Those analog areas match your 2050s climate in up to 5 of 8 climate models."
       ],
       "benefits": [
@@ -1155,7 +1167,7 @@
       "analogs_checked": 5,
       "why": "Used on 8% of sampled cropland across the top 5 analog areas, whose climate today matches your field's 2050s climate.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016\u20132023: 8% of analog-area cropland; used in 2 of 5 analog areas.",
+        "USDA Cropland Data Layer, 2016–2023: 8% of analog-area cropland; used in 2 of 5 analog areas.",
         "Those analog areas match your 2050s climate in up to 5 of 8 climate models."
       ],
       "benefits": [
@@ -1183,7 +1195,7 @@
       }
     },
     {
-      "name": "Winter wheat \u2192 Winter wheat \u2192 Fallow",
+      "name": "Winter wheat → Winter wheat → Fallow",
       "crops": [
         "Winter wheat",
         "Winter wheat",
@@ -1197,7 +1209,7 @@
       "analogs_checked": 5,
       "why": "Used on 3% of sampled cropland across the top 5 analog areas, whose climate today matches your field's 2050s climate.",
       "evidence": [
-        "USDA Cropland Data Layer, 2016\u20132023: 3% of analog-area cropland; used in 1 of 5 analog areas.",
+        "USDA Cropland Data Layer, 2016–2023: 3% of analog-area cropland; used in 1 of 5 analog areas.",
         "Those analog areas match your 2050s climate in up to 5 of 8 climate models."
       ],
       "benefits": [

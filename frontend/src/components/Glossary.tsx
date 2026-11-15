@@ -30,6 +30,11 @@ export const GLOSSARY: { term: string; meaning: string }[] = [
       'How much water the top 1 m of soil holds, as a share of its volume, from NASA’s SMAP satellite combined with a land model. It is an average over a ~9 km grid cell, not a reading from your field; a soil probe or your own records show your field’s soil.',
   },
   {
+    term: 'Afternoon ground temperature (ECOSTRESS)',
+    meaning:
+      'The temperature of the ground or crop surface, measured at 70 m by NASA’s ECOSTRESS instrument on the space station on clear summer afternoons. It is not air temperature: a dry or bare surface can be 10 °C hotter than the air, and a green, well-watered crop stays cooler. That is why June (crops growing) and July–August (mostly stubble and fallow after harvest) are shown separately.',
+  },
+  {
     term: 'Frost-free season',
     meaning: 'Days between the average last spring frost and first fall frost (minimum temperature at or below 0 °C).',
   },

@@ -168,7 +168,7 @@
     },
     "Hazards": {
       "additionalProperties": false,
-      "description": "Hazard history and field conditions at one place (M13), from PRISM daily (heat, frost;\n1995-2014), NASA GPM IMERG (extreme rain; 2014-2023), NASA SMAP L4 (root-zone soil\nmoisture; 2016-2023) and Landsat 8/9 (NDVI; 2019-2023). Any value may be missing.",
+      "description": "Hazard history and field conditions at one place (M13), from PRISM daily (heat, frost;\n1995-2014), NASA GPM IMERG (extreme rain; 2014-2023), NASA SMAP L4 (root-zone soil\nmoisture; 2016-2023), Landsat 8/9 (NDVI; 2019-2023) and NASA ECOSTRESS (afternoon surface\ntemperature; 2018-2025). Any value may be missing.",
       "properties": {
         "bare_months": {
           "anyOf": [
@@ -316,6 +316,43 @@
           ],
           "default": null,
           "title": "Soil Moisture Monthly"
+        },
+        "surface_passes": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Surface Passes"
+        },
+        "surface_temp_julaug_c": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Surface Temp Julaug C"
+        },
+        "surface_temp_june_c": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Surface Temp June C"
         }
       },
       "title": "Hazards",

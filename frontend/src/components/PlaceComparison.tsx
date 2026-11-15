@@ -78,7 +78,8 @@ export function HazardTable({ farm, place, placeLabel }: {
       </div>
       <p className="muted small">
         Heat and frost: PRISM daily, 1995–2014. Heavy rain: NASA GPM IMERG, 2014–2023. Soil water: NASA SMAP
-        L4 root zone, 2016–2023. Green cover:
+        L4 root zone, 2016–2023. Ground temperature: NASA ECOSTRESS, clear summer afternoons 2018–2025,
+        median over cropland within 1 km. Green cover:
         Landsat NDVI, 2019–2023 (below 0.25 counts as bare). Values are for the ~4–10 km grid cell
         around each point, except green cover, which is within 200 m.
         {missing.length > 0 && ` Not available: ${missing.join(', ')}.`}

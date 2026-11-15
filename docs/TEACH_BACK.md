@@ -294,3 +294,16 @@ _Built in the same away batch. M8 was skipped for now (no UI changes)._
    - Answer:
 2. Why do the saved summaries have to be regenerated after M17's rerun, and what goes wrong if nobody does?
    - Answer:
+
+## M17 — ECOSTRESS afternoon ground temperature
+
+**Key concepts**
+- **Surface, not air:** ECOSTRESS measures the temperature of whatever is on the ground: a green crop, stubble or bare soil.
+- **Split by season:** June (crops growing) and July–August (mostly after harvest) are shown apart, because bare ground reads far hotter.
+- **Field scale:** 70 m pixels over cropland within 1 km, the only hazard number that fine besides Landsat NDVI.
+
+**Questions**
+1. Lind's field and its match differ by only 0.1 °C in July–August, but Colfax's differ by 3.9 °C. Why might wheat–fallow country show almost no difference after harvest?
+   - Answer:
+2. Why does the app show June and July–August separately instead of one summer number?
+   - Answer:

@@ -62,6 +62,9 @@ export type Max1DayRainMm = number | null;
 export type MissingSources = string[];
 export type NdviMonthly = (number | null)[] | null;
 export type SoilMoistureMonthly = (number | null)[] | null;
+export type SurfacePasses = number | null;
+export type SurfaceTempJulaugC = number | null;
+export type SurfaceTempJuneC = number | null;
 export type Lat = number;
 export type Lon = number;
 export type MatchQuality = "strong" | "good" | "weak" | "none";
@@ -196,7 +199,8 @@ export interface SeasonalFingerprint {
 /**
  * Hazard history and field conditions at one place (M13), from PRISM daily (heat, frost;
  * 1995-2014), NASA GPM IMERG (extreme rain; 2014-2023), NASA SMAP L4 (root-zone soil
- * moisture; 2016-2023) and Landsat 8/9 (NDVI; 2019-2023). Any value may be missing.
+ * moisture; 2016-2023), Landsat 8/9 (NDVI; 2019-2023) and NASA ECOSTRESS (afternoon surface
+ * temperature; 2018-2025). Any value may be missing.
  */
 export interface Hazards {
   bare_months?: BareMonths;
@@ -209,6 +213,9 @@ export interface Hazards {
   missing_sources?: MissingSources;
   ndvi_monthly?: NdviMonthly;
   soil_moisture_monthly?: SoilMoistureMonthly;
+  surface_passes?: SurfacePasses;
+  surface_temp_julaug_c?: SurfaceTempJulaugC;
+  surface_temp_june_c?: SurfaceTempJuneC;
 }
 /**
  * Soil summary; any value can be missing where the soil survey has no data.
