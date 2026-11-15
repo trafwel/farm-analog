@@ -63,17 +63,27 @@ describe('ResultsPanel', () => {
     expect(headline.parentElement).not.toHaveTextContent(/70 to 84 good, 50 to 69 weak\./);
   });
 
-  it('allows collapsing and expanding the results section', () => {
+  it('allows collapsing and expanding individual sections', () => {
     render(<ResultsPanel result={getDemoResult('fake-colfax')} selectedRank={null} onSelect={() => {}} />);
-    const collapseBtn = screen.getByRole('button', { name: /Results section, click to collapse/i });
-    expect(collapseBtn).toHaveTextContent('Collapse');
+    // Matching places section is collapsible
+    const placesCollapse = screen.getByRole('button', { name: /Matching places, click to collapse/i });
+    expect(placesCollapse).toHaveTextContent('Collapse');
+    const list = screen.getByRole('list', { name: /Matching places/ });
+    expect(within(list).getAllByRole('button')).toHaveLength(20);
+
+    fireEvent.click(placesCollapse);
+    expect(screen.queryByRole('list', { name: /Matching places/ })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Matching places, click to expand/i })).toHaveTextContent('Expand');
+
+    fireEvent.click(screen.getByRole('button', { name: /Matching places, click to expand/i }));
+    expect(screen.getByRole('list', { name: /Matching places/ })).toBeInTheDocument();
+
+    // Fingerprint table section is collapsible
+    const fpCollapse = screen.getByRole('button', { name: /Climate fingerprint, click to collapse/i });
     expect(screen.getByText('Jan–Mar average temperature')).toBeInTheDocument();
-
-    fireEvent.click(collapseBtn);
-    expect(screen.getByRole('button', { name: /Results section, click to expand/i })).toHaveTextContent('Expand');
+    fireEvent.click(fpCollapse);
     expect(screen.queryByText('Jan–Mar average temperature')).not.toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole('button', { name: /Results section, click to expand/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Climate fingerprint, click to expand/i }));
     expect(screen.getByText('Jan–Mar average temperature')).toBeInTheDocument();
   });
 });

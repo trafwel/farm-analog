@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Analog, Hazards, SoilProfile } from '../types/contract';
 import { MATCH_QUALITY_STYLES, matchScore } from '../lib/matchQuality';
 import { hazardRows } from '../lib/hazards';
@@ -101,15 +102,26 @@ export interface PlaceComparisonProps {
 
 /** Everything known about one matching place, side by side with the farm. */
 export function PlaceComparison({ analog, farmSoil, farmHazards }: PlaceComparisonProps) {
+  const [open, setOpen] = useState(true);
   const s = MATCH_QUALITY_STYLES[analog.match_quality];
   const label = analog.place_name ?? `the rank ${analog.rank} place`;
   const hasDetails = analog.climograph || analog.crops?.length || analog.soil || analog.hazards;
+  const headingText = `Compare with rank ${analog.rank}${analog.place_name ? `: ${analog.place_name}` : ''}`;
   return (
     <section className="card comparison" aria-labelledby="comparison-heading">
-      <h3 id="comparison-heading">
-        Compare with rank {analog.rank}
-        {analog.place_name ? `: ${analog.place_name}` : ''}
-      </h3>
+      <div className="card-header">
+        <h3 id="comparison-heading">{headingText}</h3>
+        <button
+          type="button"
+          className="collapse-toggle"
+          aria-expanded={open}
+          aria-controls="comparison-content"
+          aria-label={open ? `${headingText}, click to collapse` : `${headingText}, click to expand`}
+          onClick={() => setOpen((o) => !o)}
+        >
+          {open ? 'Collapse' : 'Expand'}
+        </button>
+      </div>
       <div className="comparison-score">
         <ScoreRing score={matchScore(analog.sigma)} quality={analog.match_quality} size={64} />
         <p className="small">
@@ -119,36 +131,40 @@ export function PlaceComparison({ analog, farmSoil, farmHazards }: PlaceComparis
         </p>
       </div>
 
-      {!hasDetails && <p className="muted small">{NEEDS_LIVE}</p>}
+      {open && (
+        <div id="comparison-content">
+          {!hasDetails && <p className="muted small">{NEEDS_LIVE}</p>}
 
-      {analog.climograph && <ClimateChart climograph={analog.climograph} placeLabel={label} />}
+          {analog.climograph && <ClimateChart climograph={analog.climograph} placeLabel={label} />}
 
-      {analog.crops && analog.crops.length > 0 && (
-        <div>
-          <h4>What grows there (share of cropland, USDA Cropland Data Layer 2019–2023)</h4>
-          <ul className="crop-bars">
-            {analog.crops.map((c) => (
-              <li key={c.crop}>
-                <span className="crop-name">{c.crop}</span>
-                <span className="crop-bar" aria-hidden="true">
-                  <span style={{ width: `${Math.round(c.share * 100)}%` }} />
-                </span>
-                <span className="crop-share">{Math.round(c.share * 100)}%</span>
-              </li>
-            ))}
-          </ul>
+          {analog.crops && analog.crops.length > 0 && (
+            <div>
+              <h4>What grows there (share of cropland, USDA Cropland Data Layer 2019–2023)</h4>
+              <ul className="crop-bars">
+                {analog.crops.map((c) => (
+                  <li key={c.crop}>
+                    <span className="crop-name">{c.crop}</span>
+                    <span className="crop-bar" aria-hidden="true">
+                      <span style={{ width: `${Math.round(c.share * 100)}%` }} />
+                    </span>
+                    <span className="crop-share">{Math.round(c.share * 100)}%</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <SoilTable farm={farmSoil} place={analog.soil} />
+
+          <HazardTable farm={farmHazards} place={analog.hazards} placeLabel={label} />
+
+          <SoilMoistureChart
+            farm={farmHazards?.soil_moisture_monthly}
+            place={analog.hazards?.soil_moisture_monthly}
+            placeLabel={label}
+          />
         </div>
       )}
-
-      <SoilTable farm={farmSoil} place={analog.soil} />
-
-      <HazardTable farm={farmHazards} place={analog.hazards} placeLabel={label} />
-
-      <SoilMoistureChart
-        farm={farmHazards?.soil_moisture_monthly}
-        place={analog.hazards?.soil_moisture_monthly}
-        placeLabel={label}
-      />
     </section>
   );
 }
