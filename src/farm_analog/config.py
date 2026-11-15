@@ -49,10 +49,30 @@ CLIMATE_MODELS: Final = (
 # PRISM monthly grids in Earth Engine (~4 km). AN81 = the long-running monthly series.
 PRISM_COLLECTION: Final = "OREGONSTATE/PRISM/ANm"
 PRISM_DATASET_TYPE: Final = "AN81"
+# Earth Engine labels PRISM from 2021 on "AN91" (the newer PRISM version). Periods that reach
+# past 2020 (the M10 backtest's 2019-2023) accept both; the 1995-2014 baseline is all AN81.
+PRISM_DATASET_TYPES: Final = ("AN81", "AN91")
 
 # Approximate Washington Palouse demo extent as (west, south, east, north) in degrees.
 # Not an official regional boundary.
 PALOUSE_BOUNDS: Final = (-118.2, 46.5, -117.0, 47.2)
+
+# The 5 test fields (M11), across the Palouse rainfall gradient: name -> (label, lat, lon).
+# Starting from the approximate points in docs/IMPLEMENTATION_GUIDE.md, each was moved to the
+# nearest spot (within about 1 km) where a ~450 m square was cultivated in at least 97% of
+# Cropland Data Layer pixel-years 2016-2023; the original points were towns or station
+# buildings. Each is analyzed as a ~400 m square.
+TEST_FIELDS: Final = {
+    "cook": ("WSU Cook Agronomy Farm, Pullman", 46.7806, -117.0913),
+    "colfax": ("Colfax", 46.8820, -117.3482),
+    "lacrosse": ("LaCrosse", 46.8117, -117.8723),
+    "lind": ("Lind (near the WSU Dryland Research Station)", 46.9609, -118.6084),
+    "dayton": ("Dayton", 46.3271, -117.9860),
+}
+
+# Offline mode (M11) serves a test field's saved live result when the drawn field's center is
+# within this distance of it; farther fields fall back to the regional Palouse demo.
+SAVED_RESULT_RADIUS_KM: Final = 8.0
 
 # Candidate search area (M3) as (west, south, east, north) in degrees: the inland Pacific
 # Northwest, matching the team's search.py. Default chosen while the team was away; confirm.

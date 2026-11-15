@@ -127,6 +127,12 @@ def load_candidates(path: Path = CACHE_FILE, team_cache: Path = TEAM_CACHE):
     if path.exists():
         frame = validate_candidates(pd.read_parquet(path))
         return keep_farmland(frame), f"{len(frame)} farmland cells (~4 km, Cropland Data Layer)"
+    return team_candidates(team_cache)
+
+
+def team_candidates(team_cache: Path = TEAM_CACHE):
+    """The team's committed 20 km grid, always (the offline Palouse demo and its regression
+    tests use this so they give the same answer on every machine)."""
     frame = from_team_cache(json.loads(team_cache.read_text()))
     note = (
         f"{len(frame)} cells on the team's 20 km grid; not yet filtered to farmland "
@@ -167,7 +173,7 @@ def fetch_candidates(
     n_years = last - first + 1
     prism = (
         ee.ImageCollection(config.PRISM_COLLECTION)
-        .filter(ee.Filter.eq("dataset_type", config.PRISM_DATASET_TYPE))
+        .filter(ee.Filter.inList("dataset_type", list(config.PRISM_DATASET_TYPES)))
         .filterDate(f"{first}-01-01", f"{last + 1}-01-01")
     )
     count = prism.size().getInfo()
@@ -219,7 +225,7 @@ def build_cache(path: Path = CACHE_FILE) -> Path:
     ``python -m farm_analog.candidates``."""
     frame = fetch_candidates()
     metadata = {
-        "prism": f"{config.PRISM_COLLECTION} ({config.PRISM_DATASET_TYPE})",
+        "prism": f"{config.PRISM_COLLECTION} ({'/'.join(config.PRISM_DATASET_TYPES)})",
         "baseline_years": list(config.BASELINE_YEARS),
         "cdl": "USDA/NASS/CDL cultivated band",
         "cdl_years": list(config.CDL_YEARS),

@@ -5,8 +5,9 @@ Two modes:
 
 - **live** (Earth Engine configured: ``EE_PROJECT`` set, ``FARM_ANALOG_OFFLINE`` not "1"):
   the real per-field analysis across every climate model.
-- **offline demo** (no Earth Engine): the Palouse result computed from the team's committed
-  data. It only answers for fields inside the Palouse demo area and only for SSP2-4.5, and
+- **offline demo** (no Earth Engine): a saved live result when the field is near one of the 5
+  test fields (M11, ``saved.py``); otherwise the Palouse result computed from the team's
+  committed data. It only answers for fields inside the Palouse demo area and only for SSP2-4.5, and
   says so in the result's notes; anything else is refused rather than faked.
 
 Data flow:
@@ -86,9 +87,17 @@ def analyze(request: AnalogRequest) -> AnalogResult:
 
 def _analyze_offline(request: AnalogRequest) -> AnalogResult:
     from farm_analog.match import palouse_demo
+    from farm_analog.saved import nearest_saved
 
+    saved = nearest_saved(request.field, request.scenario, request.top_n)
+    if saved is not None:
+        result, _ = saved
+        return result.model_copy(update={"field_id": field_id(request.field)})
     if request.scenario != "ssp245":
-        raise FieldNotSupported("The offline demo only covers SSP2-4.5 (moderate emissions).")
+        raise FieldNotSupported(
+            "Without Earth Engine, high emissions (SSP5-8.5) is only available near the 5 test "
+            "fields; the regional demo covers SSP2-4.5 (moderate emissions)."
+        )
     west, south, east, north = config.PALOUSE_BOUNDS
     centroid = Polygon(*_rings(request.field)).centroid
     if not (west <= centroid.x <= east and south <= centroid.y <= north):

@@ -26,8 +26,10 @@ def test_health_reports_mode(client):
     assert client.get("/health").json() == {"status": "ok", "mode": "offline-demo"}
 
 
+# square(-117.60, 47.10) is a Palouse field more than 8 km from every test field, so offline
+# mode answers it with the regional demo rather than a saved test-field result.
 def test_palouse_field_gets_a_real_offline_result(client):
-    response = client.post("/analogs", json={"field": COLFAX, "top_n": 5})
+    response = client.post("/analogs", json={"field": square(-117.60, 47.10), "top_n": 5})
     assert response.status_code == 200
     result = AnalogResult.model_validate(response.json())
     assert result.source == "computed" and len(result.analogs) == 5
@@ -47,7 +49,7 @@ def test_same_field_is_served_from_cache(client, monkeypatch):
         ({"field": square(-100.0, 40.0)}, "Palouse demo area"),  # offline: outside Palouse
         ({"field": square(10.0, 50.0)}, "outside the area"),  # outside the US
         ({"field": square(-117.6, 46.8, size=0.5)}, "limit is"),  # far too big
-        ({"field": COLFAX, "scenario": "ssp585"}, "only covers SSP2-4.5"),  # offline: one scenario
+        ({"field": square(-117.60, 47.10), "scenario": "ssp585"}, "only available near"),
     ],
 )
 def test_unsupported_fields_get_a_clear_400(client, body, message):

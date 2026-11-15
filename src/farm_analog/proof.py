@@ -100,7 +100,7 @@ def palouse_proof() -> dict:
 
     _, table = palouse_demo()
     today = palouse_today_from_cache(json.loads(cand.TEAM_CACHE.read_text()))
-    candidates, note = cand.load_candidates()
+    candidates, note = cand.team_candidates()
     return {
         "data": f"offline Palouse demo; candidates: {note}",
         "self_check": self_check(today, candidates),
