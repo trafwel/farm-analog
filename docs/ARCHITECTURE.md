@@ -21,7 +21,7 @@ flowchart TD
     EEH["earthengine.py: field averaging helper<br/><b>built [M2]</b>"]
     CAND["candidates.py: farmland cells, cached Parquet<br/>(falls back to team 20 km cache)<br/><b>built [M3]</b>"]
     SIGMA["sigma_dissimilarity()<br/><b>built</b>"]
-    MATCH["Match + novel-climate flag<br/><i>planned [M4]</i>"]
+    MATCH["match.py: per-model sigma, median, agreement,<br/>baseline, AnalogResult + offline Palouse demo<br/><b>built [M4]</b>"]
     EVID["Evidence: crops, soil, climograph<br/><i>planned [M7]</i>"]
 
     CONTRACT["JSON contract: schema.py + contract/*.schema.json<br/><b>built [M0]</b>"]
@@ -73,6 +73,8 @@ flowchart TD
 Dotted arrows are build-time relationships (shared types and fake data), not runtime data flow.
 
 ## Changelog
+
+- 2026-11-14 (M4): Added `match.py` (sigma per model, median, model agreement, standardized-distance baseline, `AnalogResult` output) and an offline Palouse demo from the team's data that reproduces the team's rankings. Contract gains optional `notes`.
 
 - 2026-11-14 (M3): Added `candidates.py`: farmland PRISM cells in the inland Northwest with the shared fingerprint and cultivated share, fetched in tiles from Earth Engine and cached as Parquet; offline fallback to the team's 20 km cache. Search area set in `config.SEARCH_BBOX`.
 

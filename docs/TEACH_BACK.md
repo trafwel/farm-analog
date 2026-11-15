@@ -93,3 +93,19 @@ _Built while the team was away (asked to do M3–M7 in one go); the teach-back g
 2. What could go wrong if we didn't filter to farmland?
    - Answer:
 
+## M4 — Match
+
+_Built in the same away batch as M3–M7._
+
+**Key concepts**
+- **One score per model, then the median.** Each model's version of the farm's future is matched separately; the headline is the middle model's score, and `models_agree` says how many models call the place a good analog (below 2σ).
+- **A baseline to beat.** Plain standardized distance is computed beside sigma dissimilarity, so we can show the more careful method changes the ranking.
+- **Regression against the team's work.** With one model on the team's data, M4 reproduces the team's 784 rankings exactly, so the new code is provably the same method.
+- **Notes travel with the result.** Caveats (regional demo, one model, unfiltered grid) are part of the contract, so the app and Bill can't drop them.
+
+**Questions**
+1. A place has median sigma 1.8 but only 3 of 8 models agree. How should the app describe it?
+   - Answer:
+2. Why match each model separately instead of matching against the average future?
+   - Answer:
+

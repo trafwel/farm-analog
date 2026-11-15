@@ -8,6 +8,9 @@ _None._ (M0's fixable items were fixed inside M0; see REVIEWS.md.)
 
 ## Waits for a milestone
 
+- **[M4 → M7/M8] Analogs have no place names.** `place_name` is empty; a farmer needs "near Walla Walla, WA". Add a reverse-geocoding step (for example nearest town from a public gazetteer) when evidence is added.
+- **[M4 → M10] The latitude (day-length) check isn't applied.** Within the inland Northwest every candidate is within 3° of the Palouse, so it has no effect yet; add it if the search area grows.
+
 - **[M3 → team member with Earth Engine] Build the candidate cache.** Run `python -m farm_analog.candidates` once to create `data/candidates/candidates.parquet` (~4 km farmland cells). Until then the app uses the team's 20 km grid, which isn't filtered to farmland, and says so in the result notes.
 - **[M3 → M7] No irrigation filter yet.** Irrigated farmland can look like a match on climate while its crops depend on irrigation. Add an irrigated-lands mask (for example LANID) to the candidate build.
 
@@ -18,15 +21,15 @@ _None._ (M0's fixable items were fixed inside M0; see REVIEWS.md.)
 - **[M0 → M9] The environment installs the Anthropic SDK, but the spec now uses Gemini.** Swap to the Gemini SDK when Bill is built.
 - **[M0 rebase → M1–M4] `search.py` is a working regional prototype of M1–M4, not the full milestones.** It matches the Palouse box's *regional mean* (not a farm), uses quarterly mean temperature (not highs and lows), one model (ACCESS-CM2, which runs warm: July +4.3°C), a sparse 20 km grid over `[-121, 44, -116, 49]`, and no cropland, irrigation or soil filter. Its best match is near Walla Walla (0.50σ), which is plausible. Still needed: farm-level target, `tasmax`/`tasmin`, a cropland mask, several models with an agreement count, output in the `AnalogResult` contract, and tests for `search.py`.
 - **[M0 rebase → M3] `search.py` writes its outputs into `data/samples/`, which is committed.** Rerunning it changes tracked files (new timestamps, possibly new rankings). Write to `data/` (ignored) and copy to `data/samples/` deliberately.
-- **[M0 rebase → M4] `zip(..., strict=False)` in `search.py`.** Added as an explicit default to satisfy lint without changing behavior. `strict=True` would catch a feature-count mismatch; switch when M4 reworks this code.
 - **[M1 → team member with Earth Engine] The live field download is untested.** `fetch_prism_monthly` / `farm_today_for_field` couldn't run here (no Earth Engine credentials on this machine). Run it once on the 5 test fields; check `support` (most fields will report `centroid_cell`, since a field is smaller than a ~4 km PRISM cell) and that the normal fingerprint is close to the regional values in `palouse_analog_summary.json`.
 - **[M1 → M9] Bill's summarizer reads the old fingerprint names** (`tmax_djf`, `tmin_djf`, ...) in `src/farm_analog/assistant/summarizer.py` on `m9-bill`. After M1 merges, M9 must rebase onto it and switch to `tmean_jfm`... / `ppt_jfm`... (temperature becomes one average instead of high and low).
-- **[M1 → M4] `search.py` still targets the Palouse regional mean with one model.** M2 now provides the farm-level future for any field and model (`future.farm_future_for_field`); M4 should match against that instead of the regional prototype.
 - **[M2 → team member with Earth Engine] The model download is untested live,** like M1's PRISM download (no credentials here). Run `farm_future_for_field` on the 5 test fields and check that all 8 models in `config.CLIMATE_MODELS` exist in `NASA/GDDP-CMIP6` with an `ssp245` run; any that don't are reported in `failed_models` instead of stopping the run.
 - **[M2 → M8] The contract carries only the ensemble median future** (`AnalogResult.farm_future`). The low-high range across models (`FarmFuture.low` / `.high`) should reach the frontend for the climograph's uncertainty band; add it to the contract in M8.
 - **[M0 rebase → M7] No tests for the SMAP, ECOSTRESS and climate importers.** Their `validate_request` functions and the CSV/JSON writers can be tested with recorded responses; add tests when M7 wires them into the contract.
 
 ## Team decision
+
+- **[M4] Retire `search.py`?** `match.py` now does everything it did (and reproduces its rankings exactly), per model and in the contract format. Keep `search.py` as the team's reference script, or delete it once everyone has switched?
 
 - **[M3] Confirm the search area.** Built with the recommended default while the team was away: the inland Northwest (`-121, 44, -116, 49`) at ~4 km, farmland only (≥30% cultivated in the Cropland Data Layer, 2019–2023). The western US would need an Earth Engine export to Drive.
 
@@ -40,6 +43,9 @@ _None._ (M0's fixable items were fixed inside M0; see REVIEWS.md.)
 - **[M0] 3-D GeoJSON positions are rejected.** Leaflet drawing produces 2-D positions only; supporting altitude adds complexity for no benefit.
 
 ## Resolved
+
+- **[M4]** Matching against the farm's future across every model: `match.py` scores each model separately, reports the median and how many models agree, keeps the standardized-distance baseline, and produces the contract's `AnalogResult` (with a new optional `notes` field for caveats).
+- **[M0]** `zip(..., strict=False)` in `search.py`: no longer on the main path; `match.py` uses `strict=True`.
 
 - **[M3]** One search area, in `config.SEARCH_BBOX`, used by the candidate builder.
 

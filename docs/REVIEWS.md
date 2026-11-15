@@ -175,3 +175,28 @@ Live model download and model availability (Earth Engine), the ensemble range in
 
 ### Moved to OPEN_ISSUES.md
 Confirm the search area, build the candidate cache with Earth Engine, add an irrigation filter.
+
+## M4 — Match (2026-11-14)
+
+**Built:** `match.py` (sigma per model, median, `models_agree`, standardized-distance baseline, ranking, `to_result` in the contract, `palouse_demo` offline from the team's data), optional `notes` in `AnalogResult` (fixture and JSON Schemas regenerated), 5 new tests (73 total).
+
+### Efficiency
+- The farm's year-to-year statistics are fit once per model; all candidates are scored in one vectorized call per model.
+- The full ranked table stays on the server; only the top `top_n` go into the result.
+
+### Integration (what was run and checked)
+- `ruff check .` passes; `pytest`: 73 passed.
+- **Regression:** with ACCESS-CM2 on the team's cached data, M4's sigma and baseline scores equal the team's committed `palouse_analog_candidates.csv` for all 784 cells (relative tolerance 1e-12), in the same order.
+- Demo result: best matches near Walla Walla (0.50σ) and Lewiston–Clarkston (0.69σ); 6 strong, 18 good, 122 weak, 638 none.
+- The result round-trips through JSON and passes all contract consistency rules.
+
+### Security and privacy
+- No new inputs; matching uses already-validated data.
+
+### Other flaws
+- One model offline means `models_agree` is 0 or 1 in the demo; meaningful agreement needs the live 8-model run.
+- No place names yet; no latitude check (no effect in the inland Northwest).
+- The demo target is the Palouse-wide average, not a drawn field; the notes say so.
+
+### Moved to OPEN_ISSUES.md
+Place names (M7/M8), latitude check (M10), retiring `search.py` (team decision).
