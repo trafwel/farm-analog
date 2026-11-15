@@ -88,5 +88,11 @@ Each milestone is small enough to build, review and teach back in about an hour.
 | **M8** | Comparison panel | Click an analog: climograph, crop table, soil side by side | M6, M7 |
 | **M9** | Bill (Gemini) | Text → key-value parser; plain-language summary of the result JSON only, no reasoning; prompt-injection guardrails | M5 |
 | **M10** | Proof | More climate models with an agreement count, standardized-Euclidean baseline, backtest numbers | M4, M7 |
+| **M11** | Live run + saved demo | Candidate cache built live, the 5 test fields run live and saved so the demo works offline, live backtest numbers | M10 |
+| **M12** | Rotation strategies | At least 3 rotation strategies (the field's current one first) from Cropland Data Layer crop sequences in the analog areas, each with why, evidence, benefits, risks and gaps | M7, M11 |
+| **M13** | Hazards and field conditions | Heat days and frost dates (PRISM daily), extreme rain (GPM IMERG), soil moisture (SMAP), bare-field months (Landsat NDVI) for the farm and its top analogs | M7, M11 |
+| **M14** | Farmer priorities | Water, income, soil and equipment priorities (typed or parsed by Bill) rank the rotation strategies with visible scoring | M9, M12 |
+| **M15** | Submission package | 30-second video or 7 slides, SI-use statement, references, README, backtest slide | all |
+| **M16** | Profit and process models (stretch) | NASS yields and AMS/NASS prices per strategy; APSIM / LSTM / Elastic Net from the spec | M12 |
 
-Two streams can run in parallel tonight: **backend** (M1 → M2 → M3 → M4 → M5 → M7 → M10) and **frontend + Bill** (M6 on fake data → M8 → M9), joining at M5.
+After M10, the order is M11 → M12 and M13 (in parallel) → M8 (now including rotation and hazard cards) → M14 → M15. Two streams can run in parallel tonight: **backend** (M1 → M2 → M3 → M4 → M5 → M7 → M10) and **frontend + Bill** (M6 on fake data → M8 → M9), joining at M5.
