@@ -612,3 +612,29 @@ For Colfax, the field's current rotation is already the best fit for erosion and
 - Scores rest on the general `TRAITS` table, which still needs a WSU Extension read (open since M12).
 - Erosion uses crop residue only; tillage, slope and timing matter as much in the Palouse and aren't measured.
 - Typed priorities ("I want to save water") through Bill's parser would need the server, so they're left for later.
+
+---
+
+## M18 — Plain-language summaries in the online demo (2026-11-15)
+
+**Built:** the online demo now shows Bill's summary for each of the 10 saved results.
+- **Gemini retry** (cherry-picked from `bill-retry`): temporary 500/503/504 errors are retried twice; timeouts and quota errors aren't.
+- **More facts for Bill** (`summarizer.summary_input`): the field's current rotation against the matching places' rotations (how many areas use it), and the best match's hot days, frost-free season and driest-month soil water next to the field's. All computed in code; differences use the same rounded-values rule as the hazard table. The template got matching lines ("used in 0 of 5 matching areas"; "31 days a year above 32°C (this field: 23, +8)").
+- **Prompt:** a fixed order (best match with its quality word and model agreement, then rotations, hazards, a short climate line, caveats), and "never call a good match strong". Unnamed places are "an unnamed place", not "Match 4".
+- **Saved summaries:** `python -m farm_analog.saved --summaries` writes `data/samples/summaries/live_<field>_<scenario>.json` (text, source, notices, model, date) through the same number check as `POST /bill/summary`.
+- **Frontend:** in static mode the app loads the saved summary for the matched test field and scenario; the card says it was written ahead of time, by which model, on which date, and that every number was checked.
+
+### What was checked by hand
+All 10 summaries came back from Gemini and passed the number check, which only proves each number appears somewhere in the input. So the riskiest claims were traced to the input: hot-day and frost-free pairs (field vs. match), rotation shares and area counts, model agreement, and "good" vs. "strong" for the SSP5-8.5 matches (Dayton 6/8, Lind 5/8, LaCrosse 5/8, all "good"). All matched. The first run had two problems, fixed before saving: places without a county read "Match 4", and most summaries buried the best match under season-by-season numbers (LaCrosse SSP5-8.5 never said its matches were only "good"). One loose phrase remains: Lind SSP5-8.5 says the "projections" are based on the farmland cells.
+
+### Integration
+- Backend: ruff, 197 tests (new: summary facts from a saved result, the generator falling back on an unchecked number).
+- Frontend: typecheck, lint, 55 tests (new: a summary exists for every test field and scenario and names the best match; the saved-summary label). Built with `VITE_STATIC=1` like `pages.yml` and checked in the browser: Lind shows its summary; switching to SSP5-8.5 swaps it ("5 of 8 … good match"); no console errors.
+
+### Security and privacy
+- Gemini gets derived numbers, place and crop names only; no coordinates, no farmer text. The key stays in `.env` on the machine that runs `--summaries`; nothing secret is in the bundle.
+- The text is rendered as plain text (React escapes it).
+- Free-tier prompts may be used by Google; here they hold only public-data summaries of the 5 test fields.
+
+### Open
+Summaries must be regenerated after any rerun; the number check doesn't verify pairings or wording (see OPEN_ISSUES).

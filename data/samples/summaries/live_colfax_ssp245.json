@@ -1,0 +1,7 @@
+{
+  "text": "The best climate match for your farm in the 2050s is Whitman County, WA, which has a strong match quality with 8 out of 8 climate models in agreement. Lower sigma values mean the place's climate today is closer to the farm's future climate, and this top match has a sigma of 0.3. \n\nRegarding crop rotations, 0 matching areas out of 5 use your field's current rotation of Winter wheat to Barley to Pulses. The matching places instead use three other rotations: flexible mix of fallow, spring wheat, winter wheat used in 2 analog areas; winter wheat to spring wheat to pulses used in 3 analog areas; and winter wheat to fallow used in 2 analog areas. \n\nWhen comparing hazards for the best match, Whitman County today experiences 31 days above 32 degrees Celsius per year compared to 23 days at your field today. It has 191 frost-free days compared to 155 days at your field today. For the driest month soil water percentage in September, it is 21.1 percent in the match location compared to 18.9 percent at your field today. \n\nLooking at the overall climate change projected for the 2050s under middle-of-the-road emissions, temperatures are expected to increase across all quarters while precipitation shows mixed changes. \n\nThese results come with the caveat that they are based on 3351 farmland cells at approximately 4 kilometers using the Cropland Data Layer.",
+  "source": "gemini",
+  "notices": [],
+  "model": "gemini-3.5-flash-lite",
+  "generated": "2026-11-15"
+}

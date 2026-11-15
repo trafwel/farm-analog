@@ -39,3 +39,20 @@ describe('static demo', () => {
     expect(distanceKm(46.88, -117.36, 46.78, -117.09)).toBeCloseTo(23.3, 0);
   });
 });
+
+describe('saved summaries (M18)', () => {
+  it('has a checked summary for every test field and scenario, matched by field id', async () => {
+    const { savedSummary } = await import('./staticDemo');
+    for (const f of TEST_FIELDS) {
+      for (const scenario of ['ssp245', 'ssp585'] as const) {
+        const r = analyzeStatic(buildAnalogRequest(testFieldRing(f), scenario));
+        const s = savedSummary(r.field_id, r.scenario);
+        expect(s, `${f.id} ${scenario}`).not.toBeNull();
+        expect(s!.text).toContain(r.analogs[0]!.place_name!.split(',')[0]!);
+        expect(s!.generated).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      }
+    }
+    expect(savedSummary('fake-colfax', 'ssp245')).toBeNull();
+    expect(savedSummary('static-nowhere', 'ssp245')).toBeNull();
+  });
+});

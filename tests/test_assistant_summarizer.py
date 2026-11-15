@@ -167,3 +167,29 @@ def test_template_shows_the_results_caveats():
     assert text.endswith(f"About these results:\n- {note}")
     assert grounding_problems(text, data) == []
     assert "About these results" not in template_summary(summary_input(COLFAX))
+
+
+def test_summary_input_adds_rotations_and_hazards_from_a_saved_result():
+    """M18: the field's rotation vs. the matches', and the best match's hazards, from code."""
+    from pathlib import Path
+
+    from farm_analog.schema import AnalogResult as _Result
+
+    path = Path(__file__).resolve().parents[1] / "data/samples/live_colfax_ssp245.json"
+    data = summary_input(_Result.model_validate_json(path.read_text()))
+    rot = data["rotations"]
+    assert rot["current"]["name"] == "Winter wheat → Barley → Pulses"
+    assert rot["current"]["used_in_analog_areas"] == 0
+    assert rot["current"]["share_of_field_pct"] == 67
+    assert len(rot["at_matching_places"]) == 3
+    hz = data["hazards_vs_best_match"]
+    assert hz["place_name"] == "Whitman County, WA"
+    assert hz["days_above_32c_per_year"] == {"field_today": 23, "match_today": 31, "difference": 8}
+    assert hz["frost_free_days"]["difference"] == 36
+    assert hz["driest_month_soil_water_pct"]["difference_points"] == 2.2
+    text = template_summary(data)
+    assert "used in 0 of 5 matching areas" in text and "(this field: 23, +8)" in text
+    assert grounding_problems(
+        "Whitman County has 31 hot days a year against 23 here, 8 more, and 36 more "
+        "frost-free days.",
+        data) == []

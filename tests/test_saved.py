@@ -40,3 +40,26 @@ def test_far_field_or_missing_scenario_gets_nothing(folder):
 def test_distance_km():
     # Colfax to the Cook Farm near Pullman is about 23 km.
     assert saved.distance_km(46.88, -117.36, 46.78, -117.09) == pytest.approx(23, abs=3)
+
+
+def test_write_summaries_uses_the_number_check(tmp_path):
+    """M18: summaries for the online demo; a reply with an unchecked number falls back."""
+    import json as _json
+
+    from farm_analog import saved
+
+    src = saved.path_for("colfax", "ssp245")
+    (tmp_path / src.name).write_text(src.read_text())
+
+    class Fake:
+        def generate(self, system, prompt):
+            return "The best match gets 99 more hot days."  # 99 is not in the input
+
+    report = saved.write_summaries(Fake(), folder=tmp_path)
+    assert report == [{"file": "colfax_ssp245", "source": "template",
+                       "error": "number not in the input: 99"}]
+    out = saved.summary_path("colfax", "ssp245", tmp_path / "summaries")
+    written = _json.loads(out.read_text())
+    assert written["source"] == "template" and written["model"] is None
+    assert "used in 0 of 5 matching areas" in written["text"]
+    assert set(written) == {"text", "source", "notices", "model", "generated"}

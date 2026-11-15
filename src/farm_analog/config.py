@@ -120,5 +120,9 @@ GEMINI_MODEL: Final = "gemini-3.5-flash-lite"
 GEMINI_THINKING_LEVEL: Final = "MINIMAL"  # Bill restates, he doesn't reason
 GEMINI_TIMEOUT_MS: Final = 20_000
 GEMINI_MAX_OUTPUT_TOKENS: Final = 1024
+# Gemini sometimes answers 503 "high demand" (seen in the first live check). Retry server
+# errors briefly; never retry timeouts (each already waited GEMINI_TIMEOUT_MS) or quota (429).
+GEMINI_RETRY_CODES: Final = (500, 503, 504)
+GEMINI_RETRY_DELAYS_S: Final = (1.0, 3.0)  # waits before the 2nd and 3rd attempts
 MAX_FARMER_TEXT_CHARS: Final = 2000  # longer free text is cut before it reaches Gemini
 BILL_TOP_ANALOGS: Final = 5  # how many analogs the summary describes

@@ -26,6 +26,8 @@ data/*
 data/samples/*
 !data/samples/*.csv
 !data/samples/*.json
+!data/samples/summaries/
+!data/samples/summaries/*.json
 *.tif
 *.nc
 *.parquet

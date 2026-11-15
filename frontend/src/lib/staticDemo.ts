@@ -8,7 +8,7 @@
  */
 import type { AnalogRequest, AnalogResult } from '../types/contract';
 import type { AnalogResultView } from '../types/extensions';
-import { ApiError } from './api';
+import { ApiError, type BillSummary } from './api';
 import type { LonLat } from './request';
 
 export const IS_STATIC = import.meta.env.VITE_STATIC === '1';
@@ -27,6 +27,13 @@ const SAVED = import.meta.glob<AnalogResult>('../../../data/samples/live_*_ssp*.
 const INDEX = Object.values(
   import.meta.glob<SavedIndex>('../../../data/samples/live_results.json', { eager: true, import: 'default' }),
 )[0];
+
+/** Bill's summary of each saved result, written ahead of time with the same number check as
+ * POST /bill/summary (`python -m farm_analog.saved --summaries`, M18). */
+const SUMMARIES = import.meta.glob<BillSummary>('../../../data/samples/summaries/live_*_ssp*.json', {
+  eager: true,
+  import: 'default',
+});
 
 export interface TestField {
   id: string;
@@ -105,4 +112,13 @@ export function analyzeStatic(body: AnalogRequest): AnalogResultView {
     analogs: saved.analogs.slice(0, body.top_n ?? saved.analogs.length),
     notes: [note, ...(saved.notes ?? [])],
   };
+}
+
+/** The saved summary for a static result (field_id "static-<test field>"), or null. */
+export function savedSummary(fieldId: string, scenario: string): BillSummary | null {
+  const id = fieldId.startsWith('static-') ? fieldId.slice('static-'.length) : '';
+  const key = Object.keys(SUMMARIES).find((k) => k.endsWith(`/live_${id}_${scenario}.json`));
+  const s = key ? SUMMARIES[key] : undefined;
+  if (!id || !s || typeof s.text !== 'string' || (s.source !== 'gemini' && s.source !== 'template')) return null;
+  return { text: s.text, source: s.source, notices: Array.isArray(s.notices) ? s.notices : [], model: s.model ?? null, generated: s.generated };
 }

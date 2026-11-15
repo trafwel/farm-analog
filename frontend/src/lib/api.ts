@@ -126,6 +126,9 @@ export interface BillSummary {
   source: 'gemini' | 'template';
   notices: string[];
   error?: string | null;
+  /** Saved summaries only (online demo, M18): the Gemini model and the date it was written. */
+  model?: string | null;
+  generated?: string;
 }
 
 /** Ask Bill to restate a result. Resolves null on any failure: the summary is optional. */

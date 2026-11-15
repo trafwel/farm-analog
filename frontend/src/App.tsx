@@ -3,6 +3,8 @@ import type { Scenario } from './types/contract';
 import type { AnalogResultView } from './types/extensions';
 import { API_BASE, ApiError, type BillSummary, checkHealth, fetchAnalogs, fetchBillSummary } from './lib/api';
 import { DEMO_CASES, type DemoCaseId, getDemoResult } from './lib/fixtures';
+import { buildAnalogRequest, EXAMPLE_FIELD, type LonLat } from './lib/request';
+import { analyzeStatic, IS_STATIC, savedSummary, TEST_FIELDS, testFieldRing } from './lib/staticDemo';
 import { buildAnalogRequest, EXAMPLE_FIELD, type LonLat, validatePolygon } from './lib/request';
 import { analyzeStatic, IS_STATIC, TEST_FIELDS, testFieldRing } from './lib/staticDemo';
 import { DEFAULT_SCENARIO, SCENARIO_LABELS, SCENARIOS } from './lib/scenario';
@@ -125,7 +127,9 @@ export default function App() {
     try {
       const body = buildAnalogRequest(f, s);
       if (IS_STATIC) {
-        showResult(analyzeStatic(body), null);
+        const r = analyzeStatic(body);
+        showResult(r, null);
+        setBillSummary(savedSummary(r.field_id, r.scenario));
         return;
       }
       const r = await fetchAnalogs(body, { signal: ctrl.signal });

@@ -32,7 +32,7 @@ flowchart TD
     FIX["Fake results fixture<br/><b>built [M0]</b>"]
     API["api.py + pipeline.py: FastAPI GET /health, POST /analogs<br/>field checks, live or offline-demo mode<br/><b>built [M5]</b>"]
     UI["frontend/: React + Leaflet map, list, fingerprint table<br/><b>built [M6]</b> · comparison, rotation cards, hazard outlook, glossary <b>built [M8]</b> · SMAP soil-water chart <b>built [M16]</b> · farmer priorities <b>built [M19]</b>"]
-    BILL["assistant/: Bill (Gemini) parse + summarize, grounding check, template fallback<br/>POST /bill/parse, /bill/summary<br/><b>built [M9]</b> · <i>UI not wired yet</i>"]
+    BILL["assistant/: Bill (Gemini) parse + summarize, grounding check, template fallback<br/>POST /bill/parse, /bill/summary<br/><b>built [M9]</b> · summary in the UI and saved for the online demo <b>built [M18]</b>"]
     GEMINI[("Gemini API: gemini-3.5-flash-lite<br/>server-side key, optional")]
     FARMER(["Farmer"])
 
@@ -89,6 +89,8 @@ flowchart TD
 Dotted arrows are build-time relationships (shared types and fake data), not runtime data flow.
 
 ## Changelog
+
+- 2026-11-15 (M18): Bill's summary input gains rotations and the best match's hazards; `saved.py --summaries` writes Gemini summaries of the saved results to `data/samples/summaries/`, which the online demo shows. Gemini temporary errors are retried.
 
 - 2026-11-15 (M19): Farmer priorities. `rotations.traits_summary` adds `RotationStrategy.traits` (shares of years with each crop trait); the frontend scores and sorts rotation options by the farmer's chosen priorities. Saved results got traits offline (`saved.py --traits-only`).
 
