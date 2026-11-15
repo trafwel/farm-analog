@@ -230,3 +230,29 @@ Place names (M7/M8), latitude check (M10), retiring `search.py` (team decision).
 
 ### Moved to OPEN_ISSUES.md
 Rate limiting, live end-to-end test.
+
+## M6 — Map (2026-11-14)
+
+**Built:** `frontend/` — Vite + React 18 + TypeScript; react-leaflet with Geoman drawing (polygon or rectangle; the field shows in green; "Use example field" for keyboard and demo use); scenario select; `POST /analogs` client with plain-language errors (400 reasons, 422 field messages, network failure); demo-data fallback from the fixture with a banner; analogs as blue markers by match quality with a legend; an accessible results list; novel-climate warning; today-vs-future fingerprint table in °C/°F and mm/inches; result notes; server status from `/health`. Types generated from `contract/` (with a `prefixItems` fix). 30 frontend tests, including one that fails if the bundled demo fixture drifts from `fixtures/fake_results.json` (it already had: the copy predated M4's `notes` field, so it was refreshed). CI frontend job (install, types-up-to-date check, typecheck, lint, test, build). SETUP.md gains "Run the app". Drafted by a helper agent from a written brief, then reviewed, moved into the repo and tested end to end here.
+
+### Efficiency
+- One request per search; an in-flight search is aborted if a new one starts.
+- Bundle is ~600 kB (173 kB gzipped), mostly Leaflet and Geoman; code-splitting logged for M8.
+
+### Integration (what was run and checked)
+- `pnpm install --frozen-lockfile`, `gen:types` (from the repo's real `contract/`, now including `notes`), `typecheck`, `lint`, `test` (30 passed), `build`: all pass.
+- **End to end in a browser** against the real API (offline mode) and the Vite dev server: example field → Find analogs → 20 real analogs on the map between Walla Walla, Lewiston and Pullman, headline "Best match: rank 1, strong match", notes shown, server online, no console errors. Switching to high emissions shows the API's refusal ("The offline demo only covers SSP2-4.5").
+- **Bug found and fixed** in that test: stale results stayed visible under an error. Now cleared at the start of each search and when the field changes; re-tested in the browser.
+- The CI frontend job is new and has not run on GitHub yet (it runs on the next pull request).
+
+### Security and privacy
+- No secrets in the frontend; `VITE_API_BASE` is only the API's address.
+- The field is sent only to the configured API.
+- API responses get a runtime shape check before display; server text is rendered as text (React escapes it), never as HTML.
+
+### Other flaws
+- Drawing needs a mouse (example field is the keyboard route); the legend can cover markers; bundle size. Logged for M8.
+- Clicking an analog doesn't open a comparison panel yet (M8).
+
+### Moved to OPEN_ISSUES.md
+Map polish and comparison panel (M8); whether to retire the Streamlit preview (team decision).

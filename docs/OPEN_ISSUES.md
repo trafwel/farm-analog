@@ -8,6 +8,9 @@ _None._ (M0's fixable items were fixed inside M0; see REVIEWS.md.)
 
 ## Waits for a milestone
 
+- **[M6 → M8] Map polish:** the legend can cover markers in the bottom-right corner; drawing needs a mouse ("Use example field" is the keyboard route); the JavaScript bundle is ~600 kB (Leaflet + Geoman), so consider code-splitting the map.
+- **[M6 → M8] Comparison panel.** Clicking an analog highlights it but doesn't yet show its climograph, crops and soil side by side (M7 supplies the data; M8 shows it).
+
 - **[M5 → deployment] No rate limiting.** Each live request runs about 10 Earth Engine jobs. Before a public deployment, add a per-client limit so one user can't exhaust the team's Earth Engine quota.
 - **[M5 → team member with Earth Engine] Live mode untested end to end.** With `EE_PROJECT` set, `POST /analogs` runs M1 + M2 + M4 for real; run it once on the 5 test fields.
 
@@ -18,7 +21,6 @@ _None._ (M0's fixable items were fixed inside M0; see REVIEWS.md.)
 - **[M3 → M7] No irrigation filter yet.** Irrigated farmland can look like a match on climate while its crops depend on irrigation. Add an irrigated-lands mask (for example LANID) to the candidate build.
 
 - **[M0 → first PR] CI workflow never run.** It only runs on a pull request. Check it goes green when the M0 pull request is opened.
-- **[M0 → M6] TypeScript generation from `contract/*.schema.json` untested.** Pydantic writes 2020-12 JSON Schema (tuples use `prefixItems`); confirm the chosen generator handles it, or adjust.
 - **[M0 → M9] The environment installs the Anthropic SDK, but the spec now uses Gemini.** Swap to the Gemini SDK when Bill is built.
 - **[M0 rebase → M1–M4] `search.py` is a working regional prototype of M1–M4, not the full milestones.** It matches the Palouse box's *regional mean* (not a farm), uses quarterly mean temperature (not highs and lows), one model (ACCESS-CM2, which runs warm: July +4.3°C), a sparse 20 km grid over `[-121, 44, -116, 49]`, and no cropland, irrigation or soil filter. Its best match is near Walla Walla (0.50σ), which is plausible. Still needed: farm-level target, `tasmax`/`tasmin`, a cropland mask, several models with an agreement count, output in the `AnalogResult` contract, and tests for `search.py`.
 - **[M0 rebase → M3] `search.py` writes its outputs into `data/samples/`, which is committed.** Rerunning it changes tracked files (new timestamps, possibly new rankings). Write to `data/` (ignored) and copy to `data/samples/` deliberately.
@@ -29,6 +31,8 @@ _None._ (M0's fixable items were fixed inside M0; see REVIEWS.md.)
 - **[M0 rebase → M7] No tests for the SMAP, ECOSTRESS and climate importers.** Their `validate_request` functions and the CSV/JSON writers can be tested with recorded responses; add tests when M7 wires them into the contract.
 
 ## Team decision
+
+- **[M6] Retire the Streamlit preview?** The React app now covers the analog map. `app/app.py` still shows SMAP and the 2050 charts, which React doesn't (yet). Keep both for now, or move those charts into React (M8)?
 
 - **[M4] Retire `search.py`?** `match.py` now does everything it did (and reproduces its rankings exactly), per model and in the contract format. Keep `search.py` as the team's reference script, or delete it once everyone has switched?
 
@@ -44,6 +48,9 @@ _None._ (M0's fixable items were fixed inside M0; see REVIEWS.md.)
 - **[M0] 3-D GeoJSON positions are rejected.** Leaflet drawing produces 2-D positions only; supporting altitude adds complexity for no benefit.
 
 ## Resolved
+
+- **[M6]** TypeScript types are generated from the repo's `contract/` JSON Schema. The generator didn't understand Pydantic's `prefixItems` tuples (it produced `[unknown, unknown]`); `frontend/scripts/gen-types.mjs` rewrites them first and fails if any `unknown` tuple remains. CI checks the committed types are up to date.
+- **[M6]** Found and fixed during the end-to-end test: after a refused request (for example a scenario the offline demo doesn't cover), the previous results stayed on screen under the error, looking like results for the new settings. Results are now cleared when a new search starts or the field changes.
 
 - **[M5]** Field checks deferred from M0: the API rejects self-crossing outlines, fields outside the contiguous US, and fields over 50 km², each with a plain-language reason (HTTP 400).
 - **[M5]** Without Earth Engine, the API serves the real offline Palouse result only for Palouse fields and SSP2-4.5, and refuses anything else instead of faking it.

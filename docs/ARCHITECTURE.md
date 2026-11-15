@@ -27,7 +27,7 @@ flowchart TD
     CONTRACT["JSON contract: schema.py + contract/*.schema.json<br/><b>built [M0]</b>"]
     FIX["Fake results fixture<br/><b>built [M0]</b>"]
     API["api.py + pipeline.py: FastAPI GET /health, POST /analogs<br/>field checks, live or offline-demo mode<br/><b>built [M5]</b>"]
-    UI["React + Leaflet map and panels<br/><i>planned [M6, M8]</i>"]
+    UI["frontend/: React + Leaflet map, list, fingerprint table<br/><b>built [M6]</b> · <i>comparison panel planned [M8]</i>"]
     BILL["Bill (Gemini): parse + summarize<br/><i>planned [M9]</i>"]
     FARMER(["Farmer"])
 
@@ -73,6 +73,8 @@ flowchart TD
 Dotted arrows are build-time relationships (shared types and fake data), not runtime data flow.
 
 ## Changelog
+
+- 2026-11-14 (M6): Added `frontend/` (Vite + React + TypeScript, react-leaflet + Geoman drawing, types generated from `contract/`, demo-data fallback, accessible results list) and a frontend CI job.
 
 - 2026-11-14 (M5): Added `pipeline.py` (field checks, live analysis with Earth Engine, offline Palouse demo otherwise) and `api.py` (FastAPI `GET /health`, `POST /analogs`, CORS, privacy-safe caching and errors). Environment gains fastapi, uvicorn, httpx, shapely, pyproj.
 

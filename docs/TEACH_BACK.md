@@ -126,3 +126,19 @@ _Built in the same away batch._
 2. Why cache by a hash of the field instead of by its coordinates?
    - Answer:
 
+## M6 — Map
+
+_Built in the same away batch._
+
+**Key concepts**
+- **Types from the contract.** The frontend's TypeScript types are generated from the backend's JSON Schema, so a renamed field is a compile error, not a silent bug. CI fails if they drift.
+- **The list is the accessible map.** Every marker is also a row in a text list; selecting a row shows it on the map.
+- **Honest states.** Demo data carries a "Demo data" banner; a novel climate replaces the "best match" headline with a warning; refusals show the server's plain-language reason; old results are cleared so they can't be mistaken for new ones.
+- **Colors carry meaning.** Darker blue = closer match, with a legend, chosen from a colorblind-friendly blue scale.
+
+**Questions**
+1. The backend renames `models_agree` to `agreeing_models`. What happens, and where do you find out?
+   - Answer:
+2. Why clear the old results when a new search starts?
+   - Answer:
+
