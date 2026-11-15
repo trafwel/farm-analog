@@ -19,9 +19,33 @@ const HEALTH_TEXT: Record<Health, string> = {
     'Online demo: real Earth Engine results saved for 5 Palouse test fields. No server needed.',
 };
 
+function parseInitialState(): { field: LonLat[] | null; scenario: Scenario } {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const scen = params.get('scenario');
+    const scenario: Scenario = scen === 'ssp585' ? 'ssp585' : DEFAULT_SCENARIO;
+    const fieldParam = params.get('field');
+    if (fieldParam) {
+      const coords = fieldParam.split(';').map((pt) => {
+        const [lonStr, latStr] = pt.split(',');
+        const lon = lonStr !== undefined ? parseFloat(lonStr) : NaN;
+        const lat = latStr !== undefined ? parseFloat(latStr) : NaN;
+        return [lon, lat] as LonLat;
+      });
+      if (coords.length >= 3 && coords.every(([lon, lat]) => Number.isFinite(lon) && Number.isFinite(lat))) {
+        return { field: coords, scenario };
+      }
+    }
+    return { field: null, scenario };
+  } catch {
+    return { field: null, scenario: DEFAULT_SCENARIO };
+  }
+}
+
 export default function App() {
-  const [field, setField] = useState<LonLat[] | null>(null);
-  const [scenario, setScenario] = useState<Scenario>(DEFAULT_SCENARIO);
+  const [initial] = useState(parseInitialState);
+  const [field, setField] = useState<LonLat[] | null>(initial.field);
+  const [scenario, setScenario] = useState<Scenario>(initial.scenario);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ApiError | null>(null);
   const [result, setResult] = useState<AnalogResultView | null>(null);
@@ -31,6 +55,24 @@ export default function App() {
   const [health, setHealth] = useState<Health>(IS_STATIC ? 'static' : 'checking');
   const [billSummary, setBillSummary] = useState<BillSummary | null>(null);
   const abortRef = useRef<AbortController | null>(null);
+
+  // Sync field and scenario to URL query params so they survive reload and are shareable
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (field && field.length > 0) {
+      params.set('field', field.map(([lon, lat]) => `${lon.toFixed(4)},${lat.toFixed(4)}`).join(';'));
+    } else {
+      params.delete('field');
+    }
+    if (scenario !== DEFAULT_SCENARIO) {
+      params.set('scenario', scenario);
+    } else {
+      params.delete('scenario');
+    }
+    const newQuery = params.toString();
+    const newUrl = newQuery ? `${window.location.pathname}?${newQuery}` : window.location.pathname;
+    window.history.replaceState(null, '', newUrl);
+  }, [field, scenario]);
 
   useEffect(() => {
     if (IS_STATIC) return;
@@ -60,8 +102,8 @@ export default function App() {
 
   const useExampleField = () => onFieldDrawn(EXAMPLE_FIELD);
 
-  const findAnalogs = async () => {
-    if (!field) return;
+  const findAnalogs = async (f: LonLat[] | null = field, s: Scenario = scenario) => {
+    if (!f) return;
     abortRef.current?.abort();
     const ctrl = new AbortController();
     abortRef.current = ctrl;
@@ -72,7 +114,7 @@ export default function App() {
     setResult(null);
     setSelectedRank(null);
     try {
-      const body = buildAnalogRequest(field, scenario);
+      const body = buildAnalogRequest(f, s);
       if (IS_STATIC) {
         showResult(analyzeStatic(body), null);
         return;
@@ -88,6 +130,14 @@ export default function App() {
       setError(err instanceof ApiError ? err : new ApiError('bad_response', (err as Error).message));
     } finally {
       if (abortRef.current === ctrl) setLoading(false);
+    }
+  };
+
+  const handleScenarioChange = (newScenario: Scenario) => {
+    setScenario(newScenario);
+    // If a result is currently showing, re-run with the new scenario automatically
+    if (result && field) {
+      findAnalogs(field, newScenario);
     }
   };
 
@@ -120,8 +170,19 @@ export default function App() {
             onSelect={setSelectedRank}
           />
           <p className="muted small">
-            Use the polygon or rectangle tool at the top left of the map to draw your field. Drawing again replaces it.
-            No mouse? Use “Use example field”.
+            Use the tools at the top left of the map to draw your field:
+            <br />
+            • <strong>Rectangle:</strong> click once for the first corner, move mouse, then click again (click-click, not click-and-drag).
+            <br />
+            • <strong>Polygon:</strong> click each corner, then click the starting corner again (or double-click) to close.
+            <br />
+            {IS_STATIC && (
+              <>
+                • <strong>Demo range:</strong> must be within 8 km of one of the 5 test fields (green boxes on the map).
+                <br />
+              </>
+            )}
+            Drawing again replaces the field. No mouse? Use “Use example field”.
           </p>
         </div>
 
@@ -158,7 +219,7 @@ export default function App() {
             </div>
 
             <label htmlFor="scenario">Emissions scenario</label>
-            <select id="scenario" value={scenario} onChange={(e) => setScenario(e.target.value as Scenario)}>
+            <select id="scenario" value={scenario} onChange={(e) => handleScenarioChange(e.target.value as Scenario)}>
               {SCENARIOS.map((s) => (
                 <option key={s} value={s}>
                   {SCENARIO_LABELS[s]}
@@ -169,7 +230,7 @@ export default function App() {
             <button
               type="button"
               className="primary"
-              onClick={findAnalogs}
+              onClick={() => findAnalogs()}
               disabled={!field || loading}
               aria-describedby={!field ? 'find-hint' : undefined}
             >

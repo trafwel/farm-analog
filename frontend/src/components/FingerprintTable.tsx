@@ -40,34 +40,36 @@ export function FingerprintTable({ today, future, baselineYears, futureYears }: 
     }),
   ];
   return (
-    <table className="fp-table">
-      <caption>Your field's climate fingerprint: today vs. future</caption>
-      <thead>
-        <tr>
-          <th scope="col">Season</th>
-          <th scope="col">
-            Today
-            <br />
-            <span className="muted">{baselineYears.join('–')}</span>
-          </th>
-          <th scope="col">
-            Future
-            <br />
-            <span className="muted">{futureYears.join('–')}</span>
-          </th>
-          <th scope="col">Change</th>
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((r) => (
-          <tr key={r.id}>
-            <th scope="row">{r.label}</th>
-            <td>{r.now}</td>
-            <td>{r.then}</td>
-            <td>{r.change}</td>
+    <div className="table-scroll">
+      <table className="fp-table">
+        <caption>Your field's climate fingerprint: today vs. future</caption>
+        <thead>
+          <tr>
+            <th scope="col">Season</th>
+            <th scope="col">
+              Today
+              <br />
+              <span className="muted">{baselineYears.join('–')}</span>
+            </th>
+            <th scope="col">
+              Future
+              <br />
+              <span className="muted">{futureYears.join('–')}</span>
+            </th>
+            <th scope="col">Change</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.id}>
+              <th scope="row">{r.label}</th>
+              <td>{r.now}</td>
+              <td>{r.then}</td>
+              <td>{r.change}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
