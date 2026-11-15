@@ -112,3 +112,37 @@ CI speed, CI not yet run, TypeScript generation untested, region and area checks
 
 ### Moved to OPEN_ISSUES.md
 Live Earth Engine test for fields, Bill's summarizer field names (M9), two different search areas (M3), the delta applied to the regional mean instead of the farm (M2).
+
+## M2 — Farm in 2050 (2026-11-14)
+
+**Team decisions going in:** M1 understanding confirmed in chat; order chosen as M2 → M3 → M4, one per round.
+
+**Built:** `future.py` (quarterly change per model, delta method onto the farm's normal fingerprint, `FarmFuture` with per-model futures plus median, low and high; Earth Engine fetch of a model's monthly climatology at the field), `earthengine.py` (login, field polygon, field averaging with the center-cell fall-back, now shared with M1), `config.CLIMATE_MODELS` (8 models spanning cooler- to warmer-running), `search.py` switched to the shared delta functions, 12 new tests (56 total).
+
+### Efficiency
+- One Earth Engine request per model for both periods (24 monthly values in a single `getInfo`), plus one count check per period.
+- Each model's change is computed once and reused for every candidate in M4, not per candidate.
+- The M1 field-averaging code moved into `earthengine.py` instead of being copied into M2.
+
+### Integration (what was run and checked)
+- `ruff check .` passes; `pytest`: 56 passed.
+- **Regression:** `search.py` now uses `quarterly_change` + `apply_delta`; its test still reproduces all 784 committed rankings exactly, so the shared delta matches the team's original calculation.
+- **Real data:** on the team's ACCESS-CM2 sample, the quarterly change is +1.65 / +2.14 / +4.04 / +2.26 °C and rain ×1.11 / ×1.15 / ×0.79 / ×1.11 (a test checks this against a hand calculation).
+- Streamlit preview: runs, all 5 sections (AppTest).
+- **Not run:** the live model download (no Earth Engine credentials here), and whether all 8 models exist with an `ssp245` run in Earth Engine. Logged.
+
+### Security and privacy
+- The field polygon goes only to Earth Engine; nothing is logged or written to disk.
+- Inputs are the validated `PolygonGeometry`; model names come from `config`, not user input, so they can't be used to inject filters.
+
+### Other flaws
+- **Model grid cells are about 25 km**, so the *change* is effectively regional even for a field. That's expected: the field-level detail comes from PRISM (M1); the models supply only the change.
+- **`farm_future_for_field` catches every exception per model** so one bad model doesn't stop the run. The reason is kept in `failed_models` and should be shown to the team, not silently dropped.
+- **Model temperature is daily mean air temperature (`tas`), PRISM's is `tmean`.** The delta method uses only the model's change, which limits the effect of the difference.
+
+### Fixed in this milestone
+- The future is built at the farm, per model, rather than only for the regional mean with one model.
+- Field averaging is shared code.
+
+### Moved to OPEN_ISSUES.md
+Live model download and model availability (Earth Engine), the ensemble range in the contract (M8), `search.py` still on the regional prototype (M4).

@@ -40,6 +40,8 @@ _Team confirmed understanding in chat on 2026-11-14 and asked to continue to M1.
 
 ## M1 — Farm today
 
+_Team confirmed understanding in chat on 2026-11-14 and chose to do M2 next._
+
 **Key concepts**
 - **One definition of the fingerprint.** `fingerprint.py` defines the 8 values once; the farm, the candidate places, the future climate and the contract all use it. Before M1, the contract and the team's search disagreed (12 vs. 8 values).
 - **Why 8 values and not 12.** Sigma dissimilarity learns how the values vary *together* from the reference years. With 20 years, estimating that for 12 values is shaky; 8 is comfortably fewer than 20.
@@ -54,5 +56,22 @@ _Team confirmed understanding in chat on 2026-11-14 and asked to continue to M1.
 2. If someone changes `QUARTERS` to meteorological seasons (Dec–Feb, ...), which committed files would stop matching, and which test would catch it?
    - Answer:
 3. A farmer draws a 40-acre field. Where does its "today" climate actually come from, and what does `support` tell you?
+   - Answer:
+
+## M2 — Farm in 2050
+
+**Key concepts**
+- **The delta method.** Climate models are biased, so we use only their *change* (future minus reference) and apply it to the farm's real PRISM climate: add it for temperature, multiply by the ratio for precipitation.
+- **Why a ratio for rain.** Adding "−20 mm" to a place that only gets 10 mm would give negative rain; multiplying by 0.8 can't.
+- **One future per model, not one blended model.** Each model's change keeps its own pattern; M4 matches each separately and counts how many agree. The headline future is the *median* model, which one extreme model can't drag around the way it can drag an average.
+- **Robust to model calendars.** Some models use 360- or 365-day years, so the code checks for "about enough days" and converts daily rain to monthly totals with a fixed days-per-month table.
+- **A failing model doesn't sink the run.** It's recorded in `failed_models`; at least 3 must succeed.
+
+**Questions**
+1. A model says the Palouse's Jul–Sep rain goes from 36 mm to 29 mm. What future rain does the farm get if its own Jul–Sep normal is 50 mm, and why not 43 mm?
+   - Answer:
+2. Why is the headline future the median of the models rather than their average?
+   - Answer:
+3. ACCESS-CM2 warms Jul–Sep by about 4 °C. Should we drop it as an outlier? What would change in M4 if we did?
    - Answer:
 

@@ -19,7 +19,9 @@ _None._ (M0's fixable items were fixed inside M0; see REVIEWS.md.)
 - **[M1 → team member with Earth Engine] The live field download is untested.** `fetch_prism_monthly` / `farm_today_for_field` couldn't run here (no Earth Engine credentials on this machine). Run it once on the 5 test fields; check `support` (most fields will report `centroid_cell`, since a field is smaller than a ~4 km PRISM cell) and that the normal fingerprint is close to the regional values in `palouse_analog_summary.json`.
 - **[M1 → M9] Bill's summarizer reads the old fingerprint names** (`tmax_djf`, `tmin_djf`, ...) in `src/farm_analog/assistant/summarizer.py` on `m9-bill`. After M1 merges, M9 must rebase onto it and switch to `tmean_jfm`... / `ppt_jfm`... (temperature becomes one average instead of high and low).
 - **[M1 → M3] Two search areas.** `config.SEARCH_BBOX` is the western US (`-125, 31, -100, 49`); the team's `search.py` uses the inland Northwest (`-121, 44, -116, 49`). M3 decides which and uses `config` for it.
-- **[M1 → M2] `search.py` applies the climate-model change to the regional mean, not to the farm.** M2 should apply the delta to `FarmToday.normal` for the drawn field.
+- **[M1 → M4] `search.py` still targets the Palouse regional mean with one model.** M2 now provides the farm-level future for any field and model (`future.farm_future_for_field`); M4 should match against that instead of the regional prototype.
+- **[M2 → team member with Earth Engine] The model download is untested live,** like M1's PRISM download (no credentials here). Run `farm_future_for_field` on the 5 test fields and check that all 8 models in `config.CLIMATE_MODELS` exist in `NASA/GDDP-CMIP6` with an `ssp245` run; any that don't are reported in `failed_models` instead of stopping the run.
+- **[M2 → M8] The contract carries only the ensemble median future** (`AnalogResult.farm_future`). The low-high range across models (`FarmFuture.low` / `.high`) should reach the frontend for the climograph's uncertainty band; add it to the contract in M8.
 - **[M0 rebase → M7] No tests for the SMAP, ECOSTRESS and climate importers.** Their `validate_request` functions and the CSV/JSON writers can be tested with recorded responses; add tests when M7 wires them into the contract.
 
 ## Team decision
@@ -34,6 +36,9 @@ _None._ (M0's fixable items were fixed inside M0; see REVIEWS.md.)
 - **[M0] 3-D GeoJSON positions are rejected.** Leaflet drawing produces 2-D positions only; supporting altitude adds complexity for no benefit.
 
 ## Resolved
+
+- **[M2]** The future climate is now built at the farm, per model: `future.py` applies each model's quarterly change (temperature added, precipitation multiplied) to the farm's present-day fingerprint. `search.py` uses the same functions; its regression test confirms identical rankings.
+- **[M2]** Earth Engine field averaging (with the fall-back to the cell under the field's center) is written once, in `earthengine.py`, and shared by M1 and M2.
 
 - **[M1]** Time periods: team chose the IPCC AR6 periods. `config.py` now uses 1995–2014 (PRISM reference and model baseline) and 2041–2060 (future), matching the team's code.
 - **[M1]** Fingerprint: team chose the 8-value quarterly fingerprint (mean temperature and precipitation per calendar quarter) used by `search.py`. One shared definition in `fingerprint.py`; the contract, fixture and JSON Schemas updated to match.

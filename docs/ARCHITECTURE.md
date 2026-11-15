@@ -7,7 +7,7 @@ Legend: **built** = exists in code; _planned_ = not yet built (milestone in brac
 ```mermaid
 flowchart TD
     PRISM["PRISM monthly (Earth Engine)<br/><b>built [M1, field]</b> · <i>search grid: team prototype</i>"]
-    CMIP["NEX-GDDP-CMIP6 (Earth Engine)<br/><i>planned [M2]</i>"]
+    CMIP["NEX-GDDP-CMIP6 (Earth Engine)<br/><b>built [M2, field, 8 models]</b>"]
     CDL["Cropland Data Layer + SSURGO<br/><i>planned [M3, M7]</i>"]
     SMAP["SMAP soil moisture importer (data.py)<br/><b>built (team)</b>"]
     ECO["ECOSTRESS surface temperature importer<br/><b>built (team)</b>"]
@@ -17,7 +17,8 @@ flowchart TD
 
     FT["Farm today: farm_today.py<br/>fingerprint + year-to-year (20 yrs)<br/><b>built [M1]</b>"]
     FPRINT["Shared 8-value fingerprint: fingerprint.py<br/><b>built [M1]</b>"]
-    F50["Farm 2050: delta method<br/><i>planned [M2]</i>"]
+    F50["Farm 2050: future.py<br/>delta method per model + median/range<br/><b>built [M2]</b>"]
+    EEH["earthengine.py: field averaging helper<br/><b>built [M2]</b>"]
     CAND["Candidate points (cached Parquet)<br/><i>planned [M3]</i>"]
     SIGMA["sigma_dissimilarity()<br/><b>built</b>"]
     MATCH["Match + novel-climate flag<br/><i>planned [M4]</i>"]
@@ -42,6 +43,8 @@ flowchart TD
     MATCH --> EVID
     CDL --> EVID
     MATCH --> API
+    EEH -. used by .-> FT
+    EEH -. used by .-> F50
     FPRINT -. defines .-> FT
     FPRINT -. defines .-> CAND
     FPRINT -. defines .-> CONTRACT
@@ -70,6 +73,8 @@ flowchart TD
 Dotted arrows are build-time relationships (shared types and fake data), not runtime data flow.
 
 ## Changelog
+
+- 2026-11-14 (M2): Added `future.py` (per-model delta method at the farm, ensemble median and range, Earth Engine fetch of model climatologies) and `earthengine.py` (shared field averaging). `config.CLIMATE_MODELS` lists 8 models. `search.py` uses the shared delta functions (rankings unchanged).
 
 - 2026-11-14 (M1): Added `fingerprint.py` (one 8-value quarterly definition) and `farm_today.py` (PRISM for a drawn field via Earth Engine, plus offline-tested processing). Contract switched to the 8 values; settings switched to IPCC AR6 periods; the Palouse box moved to `config.py`; `search.py` uses the shared definitions and runs from cache without Earth Engine.
 
