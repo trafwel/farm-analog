@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { SeasonalFingerprint } from '../types/contract';
 import { formatPrecip, formatPrecipChange, formatTemp, formatTempChange } from '../lib/units';
 
@@ -17,6 +18,7 @@ export interface FingerprintTableProps {
 }
 
 export function FingerprintTable({ today, future, baselineYears, futureYears }: FingerprintTableProps) {
+  const [open, setOpen] = useState(true);
   const rows = [
     ...QUARTERS.map((q) => {
       const k = `tmean_${q.key}` as const;
@@ -40,36 +42,53 @@ export function FingerprintTable({ today, future, baselineYears, futureYears }: 
     }),
   ];
   return (
-    <div className="table-scroll">
-      <table className="fp-table">
-        <caption>Your field's climate fingerprint: today vs. future</caption>
-        <thead>
-          <tr>
-            <th scope="col">Season</th>
-            <th scope="col">
-              Today
-              <br />
-              <span className="muted">{baselineYears.join('–')}</span>
-            </th>
-            <th scope="col">
-              Future
-              <br />
-              <span className="muted">{futureYears.join('–')}</span>
-            </th>
-            <th scope="col">Change</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r) => (
-            <tr key={r.id}>
-              <th scope="row">{r.label}</th>
-              <td>{r.now}</td>
-              <td>{r.then}</td>
-              <td>{r.change}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <section className="card" aria-labelledby="fingerprint-heading">
+      <div className="card-header">
+        <h3 id="fingerprint-heading">Climate fingerprint: today vs. future</h3>
+        <button
+          type="button"
+          className="collapse-toggle"
+          aria-expanded={open}
+          aria-controls="fingerprint-content"
+          aria-label={open ? 'Climate fingerprint, click to collapse' : 'Climate fingerprint, click to expand'}
+          onClick={() => setOpen((o) => !o)}
+        >
+          {open ? 'Collapse' : 'Expand'}
+        </button>
+      </div>
+      {open && (
+        <div id="fingerprint-content" className="table-scroll">
+          <table className="fp-table">
+            <caption>Your field's climate fingerprint: today vs. future</caption>
+            <thead>
+              <tr>
+                <th scope="col">Season</th>
+                <th scope="col">
+                  Today
+                  <br />
+                  <span className="muted">{baselineYears.join('–')}</span>
+                </th>
+                <th scope="col">
+                  Future
+                  <br />
+                  <span className="muted">{futureYears.join('–')}</span>
+                </th>
+                <th scope="col">Change</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.id}>
+                  <th scope="row">{r.label}</th>
+                  <td>{r.now}</td>
+                  <td>{r.then}</td>
+                  <td>{r.change}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </section>
   );
 }

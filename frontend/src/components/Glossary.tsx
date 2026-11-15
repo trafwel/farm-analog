@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 export const GLOSSARY: { term: string; meaning: string }[] = [
   {
     term: 'Analog (matching place)',
@@ -35,18 +37,35 @@ export const LOCAL_EXPERT =
   'This tool shows patterns in public data. It does not replace your judgment or local expertise: check any change with your county extension agent, crop adviser or neighbors who farm the matching places.';
 
 export function Glossary() {
+  const [open, setOpen] = useState(true);
   return (
     <section className="card" aria-labelledby="glossary-heading">
-      <h3 id="glossary-heading">Words used here</h3>
-      <dl className="glossary">
-        {GLOSSARY.map((g) => (
-          <div key={g.term}>
-            <dt>{g.term}</dt>
-            <dd>{g.meaning}</dd>
-          </div>
-        ))}
-      </dl>
-      <p className="small local-expert">{LOCAL_EXPERT}</p>
+      <div className="card-header">
+        <h3 id="glossary-heading">Words used here</h3>
+        <button
+          type="button"
+          className="collapse-toggle"
+          aria-expanded={open}
+          aria-controls="glossary-content"
+          aria-label={open ? 'Words used here, click to collapse' : 'Words used here, click to expand'}
+          onClick={() => setOpen((o) => !o)}
+        >
+          {open ? 'Collapse' : 'Expand'}
+        </button>
+      </div>
+      {open && (
+        <div id="glossary-content">
+          <dl className="glossary">
+            {GLOSSARY.map((g) => (
+              <div key={g.term}>
+                <dt>{g.term}</dt>
+                <dd>{g.meaning}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="small local-expert">{LOCAL_EXPERT}</p>
+        </div>
+      )}
     </section>
   );
 }

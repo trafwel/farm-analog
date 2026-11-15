@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { AnalogResultView } from '../types/extensions';
 import { MATCH_QUALITY_STYLES, matchScore } from '../lib/matchQuality';
 import { getHeadline } from '../lib/headline';
@@ -26,6 +27,7 @@ export interface ResultsPanelProps {
 }
 
 export function ResultsPanel({ result, selectedRank, onSelect, onShowOnMap, billSummary, chosenGoals, onGoalsChange }: ResultsPanelProps) {
+  const [placesOpen, setPlacesOpen] = useState(true);
   const headline = getHeadline(result);
   const analogs = [...result.analogs].sort((a, b) => a.rank - b.rank);
   const notes = result.notes?.filter((n) => n.trim() !== '') ?? [];
@@ -66,33 +68,51 @@ export function ResultsPanel({ result, selectedRank, onSelect, onShowOnMap, bill
         <PlaceComparison onShowOnMap={onShowOnMap} analog={compared} farmSoil={result.farm_soil} farmHazards={result.farm_hazards} />
       )}
 
-      <h3 id="analog-list-heading">Matching places ({analogs.length})</h3>
-      <p className="muted small">Select a place to show it on the map and compare it above.</p>
-      <ol className="analog-list" aria-labelledby="analog-list-heading">
-        {analogs.map((a) => {
-          const s = MATCH_QUALITY_STYLES[a.match_quality];
-          const selected = a.rank === selectedRank;
-          return (
-            <li key={a.rank}>
-              <button
-                type="button"
-                className={`analog-item${selected ? ' selected' : ''}`}
-                aria-pressed={selected}
-                onClick={() => onSelect(a.rank)}
-              >
-                <ScoreRing score={matchScore(a.sigma)} quality={a.match_quality} />
-                <span className="analog-text">
-                  <strong>
-                    Rank {a.rank}
-                    {a.place_name ? `: ${a.place_name}` : ''}
-                  </strong>
-                  <span>{s.label}</span>
-                </span>
-              </button>
-            </li>
-          );
-        })}
-      </ol>
+      <section className="card analog-list-card" aria-labelledby="analog-list-heading">
+        <div className="card-header">
+          <h3 id="analog-list-heading">Matching places ({analogs.length})</h3>
+          <button
+            type="button"
+            className="collapse-toggle"
+            aria-expanded={placesOpen}
+            aria-controls="analog-list-content"
+            aria-label={placesOpen ? 'Matching places, click to collapse' : 'Matching places, click to expand'}
+            onClick={() => setPlacesOpen((o) => !o)}
+          >
+            {placesOpen ? 'Collapse' : 'Expand'}
+          </button>
+        </div>
+        {placesOpen && (
+          <div id="analog-list-content">
+            <p className="muted small">Select a place to show it on the map and compare it above.</p>
+            <ol className="analog-list" aria-labelledby="analog-list-heading">
+              {analogs.map((a) => {
+                const s = MATCH_QUALITY_STYLES[a.match_quality];
+                const selected = a.rank === selectedRank;
+                return (
+                  <li key={a.rank}>
+                    <button
+                      type="button"
+                      className={`analog-item${selected ? ' selected' : ''}`}
+                      aria-pressed={selected}
+                      onClick={() => onSelect(a.rank)}
+                    >
+                      <ScoreRing score={matchScore(a.sigma)} quality={a.match_quality} />
+                      <span className="analog-text">
+                        <strong>
+                          Rank {a.rank}
+                          {a.place_name ? `: ${a.place_name}` : ''}
+                        </strong>
+                        <span>{s.label}</span>
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+        )}
+      </section>
 
       {billSummary && <BillSummaryCard summary={billSummary} />}
 
