@@ -192,6 +192,14 @@ export default function App() {
     showResult(getDemoResult(id), id);
   };
 
+  const selectedPreset = TEST_FIELDS.find((preset) => {
+    const ring = testFieldRing(preset);
+    return field?.length === ring.length && ring.every(([lon, lat], index) => {
+      const point = field[index];
+      return point && Math.abs(point[0] - lon) < 1e-6 && Math.abs(point[1] - lat) < 1e-6;
+    });
+  });
+
   const resultKey = result ? `${result.field_id}-${result.scenario}-${resultCount}` : '';
 
   return (
@@ -267,6 +275,7 @@ export default function App() {
                 {TEST_FIELDS.map((preset) => (
                   <button
                     key={preset.id}
+                    aria-pressed={selectedPreset?.id === preset.id}
                     type="button"
                     onClick={() => {
                       setCancelDrawKey((k) => k + 1);
