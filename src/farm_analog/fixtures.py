@@ -3,6 +3,14 @@
 The numbers are believable but invented, and every result is marked ``source="fixture"``
 so the app can show that it's demo data. Generation is deterministic (fixed random seed),
 so rerunning the script produces exactly the committed file; a test checks that.
+
+Data flow:
+Inputs:  schema.py models and config.py thresholds; a fixed random seed.
+Outputs: fixtures/fake_results.json (several invented ``AnalogResult`` cases, all marked
+         ``source="fixture"``).
+Used by: scripts/make_fake_results.py (writes the file); tests/test_fixtures.py (checks the
+         file is reproducible); the frontend's demo data (frontend/src/fixtures/
+         fake_results.json is a copy, checked by fixtures.sync.test.ts); Bill's tests.
 """
 
 import json

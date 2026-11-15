@@ -119,3 +119,34 @@ export async function checkHealth(base = API_BASE, timeoutMs = 4000): Promise<bo
     clearTimeout(t);
   }
 }
+
+/** Bill's plain-language summary (POST /bill/summary). Not part of the generated contract. */
+export interface BillSummary {
+  text: string;
+  source: 'gemini' | 'template';
+  notices: string[];
+  error?: string | null;
+}
+
+/** Ask Bill to restate a result. Resolves null on any failure: the summary is optional. */
+export async function fetchBillSummary(
+  result: AnalogResultView,
+  { base = API_BASE, signal, fetchImpl = fetch }: { base?: string; signal?: AbortSignal; fetchImpl?: typeof fetch } = {},
+): Promise<BillSummary | null> {
+  try {
+    const res = await fetchImpl(`${base}/bill/summary`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(result),
+      signal,
+    });
+    if (!res.ok) return null;
+    const data = (await readJson(res)) as Partial<BillSummary> | undefined;
+    if (!data || typeof data.text !== 'string' || (data.source !== 'gemini' && data.source !== 'template')) {
+      return null;
+    }
+    return { text: data.text, source: data.source, notices: Array.isArray(data.notices) ? data.notices : [] };
+  } catch {
+    return null;
+  }
+}
