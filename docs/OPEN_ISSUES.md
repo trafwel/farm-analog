@@ -8,6 +8,15 @@ Every unresolved item from a milestone review. See rule 3 in [HOW_WE_BUILD.md](H
 
 ## Waits for a milestone
 
+- **[M15 → team, before 11:59 p.m. tonight] Submit.**
+  1. Make the demo: up to 7 slides, or a video of 30 seconds at most.
+  2. Paste each section of `docs/SUBMISSION.md` into the project form, adding the demo link and a deployed link if there is one.
+  3. Check that every team member is registered for the same Local Event.
+  4. Tick both confirmation boxes.
+
+- **[M8] The farm's own soil isn't fetched.** `evidence.add_evidence` never passes `farm_soil`, so the comparison's soil table shows only the matching place. Add the field's center as one more point in `fetch_evidence`, then rerun `python -m farm_analog.saved`.
+- **[M8] The results panel is long on phones.** Rotation cards, comparison, list, summary, fingerprint and glossary stack in one column. Consider collapsing sections or using tabs.
+
 - **[M11] The backtest is weak, and that's the honest result.** Live, over 200 test cells: analog areas' 2008–2012 crop mix matched the test cell's 2019–2023 crop mix with similarity 0.529, random farmland cells 0.517, and the cell's own past 0.818; analogs beat random cells in 57% of cells. Over an 11-year gap, climate alone says little about crop mix in a wheat-dominated region. Present it as a limit, not a validation, and consider the alternative design under Team decision (M10).
 - **[M11 → live run] Sigma vs. the plain baseline, live.** Still only measured offline (Spearman 0.997). `proof.rank_agreement` on a live 8-model match table would settle it; the live tables aren't saved yet.
 - **[M11] Saved results go stale.** `data/samples/live_*.json` were computed on 2026-11-15. Rerun `python -m farm_analog.saved` after any change to the pipeline, the candidate cache, or the test-field points.
@@ -17,12 +26,10 @@ Every unresolved item from a milestone review. See rule 3 in [HOW_WE_BUILD.md](H
 - **[M13] `OREGONSTATE/PRISM/AN81d` is deprecated** in Earth Engine (superseded by `OREGONSTATE/PRISM/ANd`). It still serves 1995–2014. Switch `hazards.PRISM_DAILY_COLLECTION` and check the band names before the asset goes away.
 - **[M13] IMERG days are UTC days,** so a storm can be split across two days; extreme-rain counts may be slightly low.
 - **[M13] Bare months use a fixed NDVI threshold (0.25)** on a 200 m circle that includes field edges; in wheat–fallow areas half the years are fallow, pulling medians down.
-- **[M13 → M8] The UI doesn't show rotations or hazards yet.** They're in the API result (and `/docs`); M8 adds the cards.
 
 - **[M9 → M8 / UI] The frontend doesn't call Bill yet** (team instruction: leave the UI as it is for now). When it does, render `text` and `notices` as plain text, never as HTML (no `dangerouslySetInnerHTML`), and show the notices prominently.
 - **[M9 → M8 / UI] Bill's models are deliberately not in the contract.** `ParseResult` and `BillSummary` live in `assistant/` and appear only in the API's OpenAPI schema, so `contract/*.schema.json` and the frontend's generated types are unchanged (a test checks this). When the UI uses Bill, add them to `contract.MODELS` and regenerate the types in the same change.
 - **[M10 → live run] Sigma vs. the plain baseline.** Offline (one model, 20 km grid) the two rankings almost agree (Spearman 0.997; 17 of the top 20 the same). Re-measure on the live 8-model, 4 km run before claiming sigma adds something.
-- **[M10] M8 (comparison panel and map polish) skipped for now** at the user's request (no UI changes this round). Its items below are still open.
 
 - **[M7 → team member with Earth Engine] Evidence untested live.** Crops (CDL), soil (OpenLandMap), monthly PRISM normals and county names are fetched for the top 3 analogs in live mode only. Run once on the test fields and check the numbers look sensible.
 - **[M7 → before demo] Check the OpenLandMap organic-carbon unit.** The code assumes the catalog's "x 5 g/kg" storage unit (`evidence.OLM_OC_UNIT_G_PER_KG`); confirm on the catalog page, or organic matter will be off by that factor.

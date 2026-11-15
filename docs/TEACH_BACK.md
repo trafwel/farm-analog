@@ -242,3 +242,16 @@ _Built in the same away batch. M8 was skipped for now (no UI changes)._
    - Answer:
 2. What does "bare months 8–10" mean for erosion, and why might it differ between wheat–pea and wheat–fallow fields?
    - Answer:
+
+## M8 — Comparison panel, rotation cards, hazard outlook
+
+**Key concepts**
+- **Show the evidence next to the claim:** each rotation card carries its share of analog cropland and how many analog areas use it. The climate chart shows the matching place's climate today lying on the field's 2050s line.
+- **"A preview of your 2050s":** the hazard table compares the field today with the matching place today, because that place's present is our best picture of the field's future.
+- **Accessible by default:** every chart has a table version, Bill's text stays plain text (never HTML), and the glossary explains each term.
+
+**Questions**
+1. Why does the hazard table compare the field *today* with the matching place *today*, instead of using a forecast?
+   - Answer:
+2. A rotation card says "used in 0 of 5 analog areas" for the field's current rotation. What should a farmer take from that, and what shouldn't they?
+   - Answer:
