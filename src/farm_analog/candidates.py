@@ -190,6 +190,9 @@ def fetch_candidates(
         cdl.select("cultivated")
         .map(lambda img: img.eq(2))
         .mean()
+        # A collection's mean has no projection of its own; give it CDL's 30 m grid back so
+        # reduceResolution knows what it is averaging from.
+        .setDefaultProjection(cdl.first().select("cultivated").projection())
         .reduceResolution(ee.Reducer.mean(), maxPixels=65535)
         .reproject(native)
         .rename("cultivated_fraction")
