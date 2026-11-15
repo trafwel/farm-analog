@@ -255,3 +255,16 @@ _Built in the same away batch. M8 was skipped for now (no UI changes)._
    - Answer:
 2. A rotation card says "used in 0 of 5 analog areas" for the field's current rotation. What should a farmer take from that, and what shouldn't they?
    - Answer:
+
+## M16 — SMAP soil moisture on screen
+
+**Key concepts**
+- **Root-zone soil moisture** is the water held in the top 1 m of soil as a share of its volume; SMAP Level 4 combines satellite readings with a land model on a ~9 km grid.
+- **The driest month matters most** in dryland farming: late-summer soil water decides whether there's moisture for the next crop.
+- **"Points", not percent:** 18.9% → 21.1% is +2.2 percentage points.
+
+**Questions**
+1. The Colfax field's best match is warmer in summer but has *wetter* soil in September. Give one reason that can happen, and what it means for how a farmer should read this row.
+   - Answer:
+2. Why does the glossary say this number is "not a reading from your field", and what would give the farmer their field's own value?
+   - Answer:

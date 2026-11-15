@@ -1,4 +1,4 @@
-import { doyToDate, formatMonths, hazardRows } from './hazards';
+import { doyToDate, driestMonth, formatMonths, hazardRows, soilWaterPct } from './hazards';
 
 describe('hazard helpers', () => {
   it('turns day of year into a date', () => {
@@ -28,6 +28,31 @@ describe('hazard helpers', () => {
     expect(byId.bare).toMatchObject({ farm: 'Aug–Sep', place: 'Apr' });
     expect(byId.rain).toBeUndefined();
     expect(hazardRows(null, null)).toEqual([]);
+  });
+});
+
+describe('soil water (SMAP)', () => {
+  const farm = [0.287, 0.319, 0.333, 0.326, 0.295, 0.257, 0.201, 0.17, 0.166, 0.187, 0.228, 0.254];
+  const place = [0.3, 0.329, 0.339, 0.328, 0.294, 0.256, 0.205, 0.177, 0.172, 0.193, 0.236, 0.263];
+
+  it('finds the driest month, skipping missing ones', () => {
+    expect(driestMonth(farm)).toEqual({ month: 9, value: 0.166 });
+    expect(driestMonth([null, 0.3, null, 0.2, ...Array(8).fill(null)])).toEqual({ month: 4, value: 0.2 });
+    expect(driestMonth(Array(12).fill(null))).toBeNull();
+    expect(driestMonth(undefined)).toBeNull();
+  });
+
+  it('shows percent by volume and the change in points', () => {
+    expect(soilWaterPct(0.166)).toBe('16.6%');
+    const row = hazardRows({ soil_moisture_monthly: farm, missing_sources: [] },
+      { soil_moisture_monthly: place, missing_sources: [] }).find((r) => r.id === 'soil');
+    expect(row).toMatchObject({ farm: '16.6% (Sep)', place: '17.2% (Sep)', change: '+0.6 points' });
+  });
+
+  it('keeps the row when only one side has soil water', () => {
+    const row = hazardRows({ soil_moisture_monthly: farm, missing_sources: [] }, { missing_sources: ['smap'] })
+      .find((r) => r.id === 'soil');
+    expect(row).toMatchObject({ farm: '16.6% (Sep)', place: '—', change: '—' });
   });
 });
 

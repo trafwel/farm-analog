@@ -55,6 +55,8 @@ Every unresolved item from a milestone review. See rule 3 in [HOW_WE_BUILD.md](H
 
 ## Team decision
 
+- **[M16] Soil water is context, not part of the match.** In 8 of 10 saved results the best match's driest-month soil is wetter than or about the same as the field's, because SMAP is a ~9 km land-model product and soil water isn't in the climate fingerprint. Options: keep it as context (current), add a note when the match is wetter, or add a soil-water term to matching (changes every result and needs a rerun).
+
 - **[M11] OpenLandMap organic carbon is stored in 5 g/kg steps,** so organic matter can only be about 1.7, 2.6, 3.4 or 4.3%. Coarse, not wrong; another reason to weigh SSURGO (Owen's new `ssurgo.py` on `main`) for soil.
 - **[M11] Owen's importers on `main` (SSURGO, an 8-model NEX-GDDP ensemble, GPM IMERG daily)** arrived after this stack branched. Merge `main` in before M8 and decide whether `hazards.py` should reuse `imerg.py` and whether soil should switch to `ssurgo.py`.
 

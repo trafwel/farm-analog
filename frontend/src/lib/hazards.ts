@@ -33,6 +33,20 @@ export function formatMonths(months: number[] | null | undefined): string {
   return parts.join(', ');
 }
 
+/** Volumetric soil water (m³/m³) as percent by volume, one decimal: 0.166 → "16.6%". */
+export function soilWaterPct(v: number): string {
+  return `${(v * 100).toFixed(1)}%`;
+}
+
+/** The driest month (lowest value) in a 12-month series, skipping missing months. */
+export function driestMonth(values: (number | null)[] | null | undefined): { month: number; value: number } | null {
+  let best: { month: number; value: number } | null = null;
+  (values ?? []).forEach((v, i) => {
+    if (typeof v === 'number' && Number.isFinite(v) && (best === null || v < best.value)) best = { month: i + 1, value: v };
+  });
+  return best;
+}
+
 export interface HazardRow {
   id: string;
   label: string;
@@ -82,6 +96,20 @@ export function hazardRows(farm: Hazards | null | undefined, place: Hazards | nu
     (v) => v.toFixed(1), (a, b) => `${b - a > 0 ? '+' : ''}${(b - a).toFixed(1)}`);
   add('wettest', 'Wettest day of the year (average)', f.max_1day_rain_mm, p.max_1day_rain_mm,
     (v) => `${Math.round(v)} mm`, (a, b) => signed(b - a, ' mm'));
+  const fd = driestMonth(f.soil_moisture_monthly);
+  const pd = driestMonth(p.soil_moisture_monthly);
+  if (fd || pd) {
+    const fmt = (d: { month: number; value: number } | null) =>
+      d ? `${soilWaterPct(d.value)} (${MONTHS[d.month - 1]})` : '—';
+    const diff = fd && pd ? Math.round((pd.value - fd.value) * 1000) / 10 : null;
+    rows.push({
+      id: 'soil',
+      label: 'Soil water in the driest month (top 1 m, % by volume)',
+      farm: fmt(fd),
+      place: fmt(pd),
+      change: diff === null ? '—' : diff === 0 ? 'same' : `${diff > 0 ? '+' : ''}${diff.toFixed(1)} points`,
+    });
+  }
   if (f.bare_months || p.bare_months) {
     rows.push({
       id: 'bare',
