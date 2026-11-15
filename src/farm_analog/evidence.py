@@ -210,9 +210,13 @@ def attach(
 
 def fetch_place_names(points: list[tuple[int, float, float]]) -> dict[int, str | None]:
     """County name for each (rank, lon, lat) — cheap TIGER lookup only."""
+    if not points:
+        return {}
     from farm_analog.earthengine import initialize
 
     ee = initialize()
+    if not hasattr(ee, "FeatureCollection"):
+        return {}
     fc = ee.FeatureCollection(
         [ee.Feature(ee.Geometry.Point([lon, lat]), {"rank": rank}) for rank, lon, lat in points]
     )
@@ -349,7 +353,12 @@ def add_evidence(
     extra_points = [
         (a.rank, a.lon, a.lat) for a in result.analogs if a.rank not in covered_ranks
     ]
-    extra_names = fetch_place_names(extra_points) if extra_points else {}
+    extra_names = {}
+    if extra_points:
+        try:
+            extra_names = fetch_place_names(extra_points)
+        except Exception:
+            extra_names = {}
     farm_months = monthly_normals(farm_monthly_table)
     return attach(
         result, evidence, farm_months, future_monthly(farm_months, changes),

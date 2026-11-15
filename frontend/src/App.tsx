@@ -28,7 +28,9 @@ function parseInitialState(): { field: LonLat[] | null; scenario: Scenario } {
     if (fieldParam) {
       const coords = fieldParam.split(';').map((pt) => {
         const [lonStr, latStr] = pt.split(',');
-        return [parseFloat(lonStr), parseFloat(latStr)] as LonLat;
+        const lon = lonStr !== undefined ? parseFloat(lonStr) : NaN;
+        const lat = latStr !== undefined ? parseFloat(latStr) : NaN;
+        return [lon, lat] as LonLat;
       });
       if (coords.length >= 3 && coords.every(([lon, lat]) => Number.isFinite(lon) && Number.isFinite(lat))) {
         return { field: coords, scenario };
