@@ -152,7 +152,7 @@ export default function App() {
                   ))}
                 </select>
               )}
-              <button type="button" onClick={() => setField(null)} disabled={!field}>
+              <button type="button" onClick={() => { setField(null); setResult(null); setSelectedRank(null); setBillSummary(null); setError(null); }} disabled={!field}>
                 Clear field
               </button>
             </div>
