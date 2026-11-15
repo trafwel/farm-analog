@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import '@geoman-io/leaflet-geoman-free';
-import { CircleMarker, MapContainer, Polygon, TileLayer, Tooltip, useMap } from 'react-leaflet';
+import { CircleMarker, MapContainer, Polygon, Rectangle, TileLayer, Tooltip, useMap } from 'react-leaflet';
+import type { TestField } from '../lib/staticDemo';
 import type { Analog } from '../types/contract';
 import { matchQualityStyle } from '../lib/matchQuality';
 import { agreementText } from '../lib/headline';
@@ -92,9 +93,11 @@ export interface MapViewProps {
   resultKey: string;
   selectedRank: number | null;
   onSelect: (rank: number) => void;
+  /** Static demo: the test fields that have saved results, outlined so people can find them. */
+  testFields?: TestField[];
 }
 
-export function MapView({ field, onFieldDrawn, analogs, resultKey, selectedRank, onSelect }: MapViewProps) {
+export function MapView({ field, onFieldDrawn, analogs, resultKey, selectedRank, onSelect, testFields = [] }: MapViewProps) {
   const selected = analogs.find((a) => a.rank === selectedRank);
   // Draw the best matches on top.
   const ordered = [...analogs].sort((a, b) => b.rank - a.rank);
@@ -106,6 +109,20 @@ export function MapView({ field, onFieldDrawn, analogs, resultKey, selectedRank,
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <DrawControl onDraw={onFieldDrawn} />
+        {testFields.map((t) => (
+          <Rectangle
+            key={t.id}
+            bounds={[
+              [t.lat - 0.02, t.lon - 0.027],
+              [t.lat + 0.02, t.lon + 0.027],
+            ]}
+            pathOptions={{ color: FIELD_COLOR, weight: 3, fillColor: FIELD_COLOR, fillOpacity: 0.25, pmIgnore: true } as L.PathOptions}
+          >
+            <Tooltip permanent direction="top" offset={[0, -6]}>
+              {t.label.split(' (')[0]}
+            </Tooltip>
+          </Rectangle>
+        ))}
         {field && (
           <Polygon
             positions={field.map(([lon, lat]) => [lat, lon] as [number, number])}

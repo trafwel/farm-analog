@@ -1,5 +1,7 @@
 # Farm Analog
 
+[![ci](https://github.com/trafwel/farm-analog/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/trafwel/farm-analog/actions/workflows/ci.yml) **[Try the online demo](https://trafwel.github.io/farm-analog/)** (no install: real Earth Engine results saved for 5 Palouse test fields)
+
 **Your field's 2050s climate already exists somewhere today. Farm Analog finds it, and shows the crop rotations farmers there grow and the hazards they already face.**
 
 NASA Space Apps Challenge 2026 · *Field Shift: Adapting Farms with NASA Data* · Region: the Palouse, eastern Washington.
@@ -31,6 +33,10 @@ The tool supports a farmer's decision; it doesn't make it.
 - **Limit:** a crop backtest (2008–2012 → 2019–2023) shows that climate alone predicts crop mix only slightly better than random farmland (similarity 0.53 vs. 0.52). That's why rotations are shown as evidence to discuss, not predictions. Details: [docs/REVIEWS.md](docs/REVIEWS.md).
 
 ## Run it
+
+**Online:** https://trafwel.github.io/farm-analog/ runs in the browser with no server. Pick a test field under "Try a test field", or draw near one of the green squares, and press Find analogs. It serves the saved Earth Engine results for the 5 test fields. Anything else gets a clear "not covered" message.
+
+**Locally:**
 
 Setup (conda environment, Earth Engine login) is in [SETUP.md](SETUP.md). Then:
 

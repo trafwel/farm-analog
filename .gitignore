@@ -13,8 +13,12 @@ dist/
 .venv/
 venv/
 
-# secrets
+# secrets (and editor swap files, which can hold their contents)
 .env
+.env.*
+!.env.example
+env
+*.swp
 
 # data: never commit rasters or large exports
 data/*
