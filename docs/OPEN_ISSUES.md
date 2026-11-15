@@ -8,13 +8,16 @@ _None._ (M0's fixable items were fixed inside M0; see REVIEWS.md.)
 
 ## Waits for a milestone
 
+- **[M7 → team member with Earth Engine] Evidence untested live.** Crops (CDL), soil (OpenLandMap), monthly PRISM normals and county names are fetched for the top 3 analogs in live mode only. Run once on the test fields and check the numbers look sensible.
+- **[M7 → before demo] Check the OpenLandMap organic-carbon unit.** The code assumes the catalog's "x 5 g/kg" storage unit (`evidence.OLM_OC_UNIT_G_PER_KG`); confirm on the catalog page, or organic matter will be off by that factor.
+- **[M7 → M8] The map doesn't show the evidence yet.** Crops, soil and climographs are in the API response; M8's comparison panel displays them.
+
 - **[M6 → M8] Map polish:** the legend can cover markers in the bottom-right corner; drawing needs a mouse ("Use example field" is the keyboard route); the JavaScript bundle is ~600 kB (Leaflet + Geoman), so consider code-splitting the map.
 - **[M6 → M8] Comparison panel.** Clicking an analog highlights it but doesn't yet show its climograph, crops and soil side by side (M7 supplies the data; M8 shows it).
 
 - **[M5 → deployment] No rate limiting.** Each live request runs about 10 Earth Engine jobs. Before a public deployment, add a per-client limit so one user can't exhaust the team's Earth Engine quota.
 - **[M5 → team member with Earth Engine] Live mode untested end to end.** With `EE_PROJECT` set, `POST /analogs` runs M1 + M2 + M4 for real; run it once on the 5 test fields.
 
-- **[M4 → M7/M8] Analogs have no place names.** `place_name` is empty; a farmer needs "near Walla Walla, WA". Add a reverse-geocoding step (for example nearest town from a public gazetteer) when evidence is added.
 - **[M4 → M10] The latitude (day-length) check isn't applied.** Within the inland Northwest every candidate is within 3° of the Palouse, so it has no effect yet; add it if the search area grows.
 
 - **[M3 → team member with Earth Engine] Build the candidate cache.** Run `python -m farm_analog.candidates` once to create `data/candidates/candidates.parquet` (~4 km farmland cells). Until then the app uses the team's 20 km grid, which isn't filtered to farmland, and says so in the result notes.
@@ -32,6 +35,8 @@ _None._ (M0's fixable items were fixed inside M0; see REVIEWS.md.)
 
 ## Team decision
 
+- **[M7] Soil source.** Evidence uses OpenLandMap (global, 250 m, in Earth Engine) for clay, sand and organic matter, because SSURGO/gNATSGO isn't in the Earth Engine catalog. SSURGO is more detailed for US farms; switch if someone can provide it as an Earth Engine asset.
+
 - **[M6] Retire the Streamlit preview?** The React app now covers the analog map. `app/app.py` still shows SMAP and the 2050 charts, which React doesn't (yet). Keep both for now, or move those charts into React (M8)?
 
 - **[M4] Retire `search.py`?** `match.py` now does everything it did (and reproduces its rankings exactly), per model and in the contract format. Keep `search.py` as the team's reference script, or delete it once everyone has switched?
@@ -48,6 +53,9 @@ _None._ (M0's fixable items were fixed inside M0; see REVIEWS.md.)
 - **[M0] 3-D GeoJSON positions are rejected.** Leaflet drawing produces 2-D positions only; supporting altitude adds complexity for no benefit.
 
 ## Resolved
+
+- **[M7]** Place names: in live mode each top analog gets its county ("Walla Walla County, WA") from US Census TIGER boundaries.
+- **[M7]** Evidence never costs the match: if fetching crops, soil or climate details fails, the result is returned without them and a note says so (tested).
 
 - **[M6]** TypeScript types are generated from the repo's `contract/` JSON Schema. The generator didn't understand Pydantic's `prefixItems` tuples (it produced `[unknown, unknown]`); `frontend/scripts/gen-types.mjs` rewrites them first and fails if any `unknown` tuple remains. CI checks the committed types are up to date.
 - **[M6]** Found and fixed during the end-to-end test: after a refused request (for example a scenario the offline demo doesn't cover), the previous results stayed on screen under the error, looking like results for the new settings. Results are now cleared when a new search starts or the field changes.

@@ -22,7 +22,7 @@ flowchart TD
     CAND["candidates.py: farmland cells, cached Parquet<br/>(falls back to team 20 km cache)<br/><b>built [M3]</b>"]
     SIGMA["sigma_dissimilarity()<br/><b>built</b>"]
     MATCH["match.py: per-model sigma, median, agreement,<br/>baseline, AnalogResult + offline Palouse demo<br/><b>built [M4]</b>"]
-    EVID["Evidence: crops, soil, climograph<br/><i>planned [M7]</i>"]
+    EVID["evidence.py: crops (CDL), soil (OpenLandMap), climograph,<br/>county names for the top 3 (live mode)<br/><b>built [M7]</b>"]
 
     CONTRACT["JSON contract: schema.py + contract/*.schema.json<br/><b>built [M0]</b>"]
     FIX["Fake results fixture<br/><b>built [M0]</b>"]
@@ -73,6 +73,8 @@ flowchart TD
 Dotted arrows are build-time relationships (shared types and fake data), not runtime data flow.
 
 ## Changelog
+
+- 2026-11-14 (M7): Added `evidence.py` (crop shares from CDL, OpenLandMap soil, monthly climographs, county names) attached to the top 3 analogs in live mode; `FarmToday` keeps its monthly table and `FarmFuture` its per-model changes; the live pipeline returns the match even if evidence fails.
 
 - 2026-11-14 (M6): Added `frontend/` (Vite + React + TypeScript, react-leaflet + Geoman drawing, types generated from `contract/`, demo-data fallback, accessible results list) and a frontend CI job.
 

@@ -256,3 +256,29 @@ Rate limiting, live end-to-end test.
 
 ### Moved to OPEN_ISSUES.md
 Map polish and comparison panel (M8); whether to retire the Streamlit preview (team decision).
+
+## M7 — Evidence (2026-11-14)
+
+**Built:** `evidence.py` — pure functions (crop shares of cropland with small crops grouped, OpenLandMap soil conversion with range checks, monthly normals, the farm's future months from each model's change with the median, attaching evidence to a result, county place names) and an Earth Engine fetch for the top 3 analogs (CDL 2019–2023 within 2 km, topsoil clay/sand/organic carbon, monthly PRISM normals, TIGER county). `FarmToday.monthly` and `FarmFuture.changes` added (both optional, no behavior change). Live pipeline attaches evidence and falls back to the bare match with a note; offline results note that evidence needs Earth Engine. 10 new tests (97 total), including two that run the whole live pipeline with fakes built from real data.
+
+### Efficiency
+- Evidence only for the top 3 analogs. Soil, county and each month's normals are fetched for all 3 points in one request each; CDL is one request per year (5).
+- Monthly futures reuse the per-model changes already computed in M2.
+
+### Integration (what was run and checked)
+- `ruff check .` passes; `pytest`: 97 passed.
+- **Live wiring tested offline:** with Earth Engine replaced by fakes (real Palouse PRISM years, the team's real ACCESS-CM2 change, real candidates), `pipeline.analyze` in live mode returns 20 analogs with place name, crops, soil and climograph on the top 3; reports a skipped model and the centroid-cell caveat; and survives an evidence timeout with a note.
+- Enriched results still pass every contract rule.
+- **Not run:** the real Earth Engine fetches (no credentials). The organic-carbon unit needs checking against the catalog.
+
+### Security and privacy
+- Only analog locations (public places, not the farm) are sent for evidence.
+- Failures surface only the exception type in the note, not internal messages.
+
+### Other flaws
+- Soil comes from OpenLandMap (250 m, modelled) rather than SSURGO; logged as a team decision.
+- No irrigation filter yet: crops at an irrigated analog may not suit a dryland farm (open since M3).
+- The frontend doesn't display the evidence yet (M8).
+
+### Moved to OPEN_ISSUES.md
+Live evidence test, organic-carbon unit check, soil source decision, showing evidence in the UI (M8).

@@ -142,3 +142,20 @@ _Built in the same away batch._
 2. Why clear the old results when a new search starts?
    - Answer:
 
+## M7 — Evidence
+
+_Built in the same away batch._
+
+**Key concepts**
+- **Evidence for the top 3 only.** Each analog costs several Earth Engine requests; farmers mostly look at the best few.
+- **Shares of cropland, not of land.** Crop shares leave out forest, towns and grassland, so "45% winter wheat" means 45% of the farmed land.
+- **The farm's future months come from the same model changes** as the fingerprint: each month gets its quarter's change, then the median model.
+- **Optional by design.** If evidence fails, the match still comes back, with a note.
+- **Wiring tested without the network.** The live pipeline runs end to end in tests with Earth Engine replaced by fakes built from real data.
+
+**Questions**
+1. Why compute crop shares over 2019–2023 instead of one year?
+   - Answer:
+2. Evidence failed for a request. What does the farmer see, and why is that better than an error?
+   - Answer:
+
